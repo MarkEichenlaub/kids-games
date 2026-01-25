@@ -1,0 +1,385 @@
+import { useState, useEffect } from 'react';
+
+// 7-segment display patterns for digits 0-9
+// Segments: top, top-right, bottom-right, bottom, bottom-left, top-left, middle
+const SEGMENT_PATTERNS = {
+  0: [1, 1, 1, 1, 1, 1, 0],
+  1: [0, 1, 1, 0, 0, 0, 0],
+  2: [1, 1, 0, 1, 1, 0, 1],
+  3: [1, 1, 1, 1, 0, 0, 1],
+  4: [0, 1, 1, 0, 0, 1, 1],
+  5: [1, 0, 1, 1, 0, 1, 1],
+  6: [1, 0, 1, 1, 1, 1, 1],
+  7: [1, 1, 1, 0, 0, 0, 0],
+  8: [1, 1, 1, 1, 1, 1, 1],
+  9: [1, 1, 1, 1, 0, 1, 1],
+};
+
+function Segment({ on, horizontal, style }) {
+  const color = on ? '#ff2222' : '#1a0808';
+  const shadow = on ? '0 0 10px #ff4444, 0 0 20px #ff2222' : 'none';
+  
+  if (horizontal) {
+    return (
+      <div style={{
+        width: '40px',
+        height: '8px',
+        backgroundColor: color,
+        boxShadow: shadow,
+        borderRadius: '4px',
+        ...style
+      }} />
+    );
+  }
+  return (
+    <div style={{
+      width: '8px',
+      height: '36px',
+      backgroundColor: color,
+      boxShadow: shadow,
+      borderRadius: '4px',
+      ...style
+    }} />
+  );
+}
+
+function Digit({ value }) {
+  const pattern = SEGMENT_PATTERNS[value] || SEGMENT_PATTERNS[0];
+  const [top, topRight, bottomRight, bottom, bottomLeft, topLeft, middle] = pattern;
+  
+  return (
+    <div style={{
+      position: 'relative',
+      width: '56px',
+      height: '100px',
+      margin: '0 6px'
+    }}>
+      {/* Top */}
+      <Segment on={top} horizontal style={{ position: 'absolute', top: 0, left: 8 }} />
+      {/* Top-left */}
+      <Segment on={topLeft} style={{ position: 'absolute', top: 6, left: 0 }} />
+      {/* Top-right */}
+      <Segment on={topRight} style={{ position: 'absolute', top: 6, right: 0 }} />
+      {/* Middle */}
+      <Segment on={middle} horizontal style={{ position: 'absolute', top: 46, left: 8 }} />
+      {/* Bottom-left */}
+      <Segment on={bottomLeft} style={{ position: 'absolute', top: 52, left: 0 }} />
+      {/* Bottom-right */}
+      <Segment on={bottomRight} style={{ position: 'absolute', top: 52, right: 0 }} />
+      {/* Bottom */}
+      <Segment on={bottom} horizontal style={{ position: 'absolute', bottom: 0, left: 8 }} />
+    </div>
+  );
+}
+
+function Colon() {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-around',
+      height: '100px',
+      padding: '20px 8px'
+    }}>
+      <div style={{
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#ff2222',
+        borderRadius: '50%',
+        boxShadow: '0 0 10px #ff4444, 0 0 20px #ff2222'
+      }} />
+      <div style={{
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#ff2222',
+        borderRadius: '50%',
+        boxShadow: '0 0 10px #ff4444, 0 0 20px #ff2222'
+      }} />
+    </div>
+  );
+}
+
+function DigitalClock({ hour, minute }) {
+  const hourStr = hour.toString();
+  const minuteStr = minute.toString().padStart(2, '0');
+  
+  return (
+    <div style={{
+      backgroundColor: '#111',
+      padding: '30px 40px',
+      borderRadius: '16px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      border: '4px solid #333',
+      boxShadow: 'inset 0 0 30px rgba(0,0,0,0.8), 0 8px 32px rgba(0,0,0,0.5)'
+    }}>
+      <Digit value={parseInt(hourStr)} />
+      <Colon />
+      <Digit value={parseInt(minuteStr[0])} />
+      <Digit value={parseInt(minuteStr[1])} />
+    </div>
+  );
+}
+
+function StreakBar({ streak, maxStreak = 10 }) {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '8px'
+    }}>
+      <div style={{
+        fontSize: '18px',
+        fontWeight: 'bold',
+        color: '#444'
+      }}>
+        Streak: {streak} / {maxStreak}
+      </div>
+      <div style={{
+        display: 'flex',
+        gap: '6px'
+      }}>
+        {Array.from({ length: maxStreak }).map((_, i) => (
+          <div
+            key={i}
+            style={{
+              width: '28px',
+              height: '28px',
+              borderRadius: '50%',
+              backgroundColor: i < streak ? '#22cc44' : '#ddd',
+              border: i < streak ? '3px solid #119933' : '3px solid #bbb',
+              boxShadow: i < streak ? '0 0 8px #22cc44' : 'none',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
+      </div>
+      {streak === maxStreak && (
+        <div style={{
+          fontSize: '24px',
+          fontWeight: 'bold',
+          color: '#22cc44',
+          animation: 'pulse 1s infinite'
+        }}>
+          🎉 You did it! 🎉
+        </div>
+      )}
+    </div>
+  );
+}
+
+function generateRandomTime() {
+  // Hours from 1 to 9
+  const hour = Math.floor(Math.random() * 9) + 1;
+  // Minutes from 0 to 59
+  const minute = Math.floor(Math.random() * 60);
+  return { hour, minute };
+}
+
+export default function TimePractice() {
+  const [time, setTime] = useState(generateRandomTime);
+  const [streak, setStreak] = useState(0);
+  const [feedback, setFeedback] = useState(null);
+  const [showingFeedback, setShowingFeedback] = useState(false);
+  
+  const correctAnswer = time.hour < 6 ? 'stay' : 'getup';
+  
+  const handleAnswer = (answer) => {
+    if (showingFeedback) return;
+    
+    const isCorrect = answer === correctAnswer;
+    
+    if (isCorrect) {
+      setStreak(s => s + 1);
+      setFeedback({ correct: true, message: "That's right! Great job! 🌟" });
+    } else {
+      setStreak(0);
+      if (time.hour < 6) {
+        setFeedback({ correct: false, message: `Oops! ${time.hour}:${time.minute.toString().padStart(2, '0')} is before 6:00. Stay in your room!` });
+      } else {
+        setFeedback({ correct: false, message: `Oops! ${time.hour}:${time.minute.toString().padStart(2, '0')} is after 6:00. Time to get up!` });
+      }
+    }
+    
+    setShowingFeedback(true);
+  };
+  
+  const nextRound = () => {
+    setTime(generateRandomTime());
+    setFeedback(null);
+    setShowingFeedback(false);
+  };
+  
+  const resetGame = () => {
+    setStreak(0);
+    nextRound();
+  };
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#f5f5f5',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      gap: '30px'
+    }}>
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+      `}</style>
+      
+      <h1 style={{
+        fontSize: '28px',
+        color: '#333',
+        margin: 0,
+        textAlign: 'center'
+      }}>
+        ⏰ Is it time to get up? ⏰
+      </h1>
+      
+      <p style={{
+        fontSize: '18px',
+        color: '#666',
+        margin: 0,
+        textAlign: 'center'
+      }}>
+        Before 6:00 = Stay in Room &nbsp;|&nbsp; 6:00 or later = Get Up!
+      </p>
+      
+      <DigitalClock hour={time.hour} minute={time.minute} />
+      
+      {!showingFeedback ? (
+        <div style={{
+          display: 'flex',
+          gap: '20px',
+          flexWrap: 'wrap',
+          justifyContent: 'center'
+        }}>
+          <button
+            onClick={() => handleAnswer('getup')}
+            style={{
+              backgroundColor: '#22cc44',
+              color: 'white',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              padding: '20px 40px',
+              border: 'none',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              boxShadow: '0 6px 0 #119933, 0 8px 16px rgba(0,0,0,0.2)',
+              transition: 'transform 0.1s, box-shadow 0.1s'
+            }}
+            onMouseDown={e => {
+              e.currentTarget.style.transform = 'translateY(4px)';
+              e.currentTarget.style.boxShadow = '0 2px 0 #119933, 0 4px 8px rgba(0,0,0,0.2)';
+            }}
+            onMouseUp={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 6px 0 #119933, 0 8px 16px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 6px 0 #119933, 0 8px 16px rgba(0,0,0,0.2)';
+            }}
+          >
+            ☀️ Get Up!
+          </button>
+          
+          <button
+            onClick={() => handleAnswer('stay')}
+            style={{
+              backgroundColor: '#cc3333',
+              color: 'white',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              padding: '20px 40px',
+              border: 'none',
+              borderRadius: '16px',
+              cursor: 'pointer',
+              boxShadow: '0 6px 0 #991111, 0 8px 16px rgba(0,0,0,0.2)',
+              transition: 'transform 0.1s, box-shadow 0.1s'
+            }}
+            onMouseDown={e => {
+              e.currentTarget.style.transform = 'translateY(4px)';
+              e.currentTarget.style.boxShadow = '0 2px 0 #991111, 0 4px 8px rgba(0,0,0,0.2)';
+            }}
+            onMouseUp={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 6px 0 #991111, 0 8px 16px rgba(0,0,0,0.2)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 6px 0 #991111, 0 8px 16px rgba(0,0,0,0.2)';
+            }}
+          >
+            🌙 Stay in Room
+          </button>
+        </div>
+      ) : (
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px'
+        }}>
+          <div style={{
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: feedback.correct ? '#22cc44' : '#cc3333',
+            textAlign: 'center',
+            padding: '16px 24px',
+            backgroundColor: feedback.correct ? '#e8f8eb' : '#fde8e8',
+            borderRadius: '12px',
+            border: `3px solid ${feedback.correct ? '#22cc44' : '#cc3333'}`
+          }}>
+            {feedback.message}
+          </div>
+          
+          <button
+            onClick={nextRound}
+            style={{
+              backgroundColor: '#4488ff',
+              color: 'white',
+              fontSize: '20px',
+              fontWeight: 'bold',
+              padding: '16px 32px',
+              border: 'none',
+              borderRadius: '12px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 0 #2266cc, 0 6px 12px rgba(0,0,0,0.2)'
+            }}
+          >
+            Next! →
+          </button>
+        </div>
+      )}
+      
+      <StreakBar streak={streak} />
+      
+      {streak >= 10 && (
+        <button
+          onClick={resetGame}
+          style={{
+            backgroundColor: '#888',
+            color: 'white',
+            fontSize: '16px',
+            padding: '12px 24px',
+            border: 'none',
+            borderRadius: '8px',
+            cursor: 'pointer'
+          }}
+        >
+          Play Again
+        </button>
+      )}
+    </div>
+  );
+}
