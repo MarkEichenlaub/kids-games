@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mira &amp; Maia's Games</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      padding: 10px;
+    }
+
+    .game-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .game-card:active {
+      transform: translateY(-4px) scale(1.01);
+    }
+
+    .game-preview {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+      overflow: hidden;
+    }
+
+    .game-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .game-info {
+      padding: 20px;
+    }
+
+    .game-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .game-description {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .play-button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .game-card:hover .play-button {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .loading {
+      text-align: center;
+      color: white;
+      font-size: 1.5rem;
+      padding: 40px;
+    }
+
+    .error {
+      text-align: center;
+      color: #ff6b6b;
+      background: rgba(255,255,255,0.9);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .games-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .game-preview {
+        height: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Mira &amp; Maia's Games</h1>
+      <p class="subtitle">Fun educational games for kids!</p>
+    </header>
+
+    <div id="games-container" class="games-grid">
+      <div class="loading">Loading games...</div>
+    </div>
+
+    <footer>
+      Made with love for Mira and Maia
+    </footer>
+  </div>
+
+  <script>
+    async function loadGames() {
+      const container = document.getElementById('games-container');
+
+      try {
+        const response = await fetch('manifest.json');
+        if (!response.ok) {
+          throw new Error('Failed to load manifest');
+        }
+
+        const data = await response.json();
+        const games = data.games;
+
+        if (!games || games.length === 0) {
+          container.innerHTML = '<div class="error">No games found!</div>';
+          return;
+        }
+
+        container.innerHTML = games.map(game => `
+          <a href="${game.file}" class="game-card">
+            <div class="game-preview">
+              <img src="${game.preview}" alt="${game.title}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\"font-size:48px;\\">&#127918;</div>';">
+            </div>
+            <div class="game-info">
+              <h2 class="game-title">${game.title}</h2>
+              <p class="game-description">${game.description}</p>
+              <span class="play-button">Play Now</span>
+            </div>
+          </a>
+        `).join('');
+
+      } catch (error) {
+        console.error('Error loading games:', error);
+        container.innerHTML = `
+          <div class="error">
+            <p>Could not load games.</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">Make sure manifest.json exists and is valid JSON.</p>
+          </div>
+        `;
+      }
+    }
+
+    // Load games when page loads
+    loadGames();
+  </script>
+</body>
+</html>

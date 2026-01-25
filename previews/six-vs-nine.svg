@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7"/>
+      <stop offset="50%" stop-color="#f472b6"/>
+      <stop offset="100%" stop-color="#fde047"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="200" height="150" fill="url(#bg)"/>
+
+  <!-- Number 6 -->
+  <text x="55" y="85" font-family="Georgia, serif" font-size="60" font-weight="bold" fill="white" opacity="0.9">6</text>
+
+  <!-- Question mark -->
+  <text x="88" y="80" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="white">?</text>
+
+  <!-- Number 9 -->
+  <text x="115" y="85" font-family="Impact, sans-serif" font-size="60" font-weight="bold" fill="white" opacity="0.9">9</text>
+
+  <!-- Stars decorations -->
+  <text x="25" y="35" font-size="20" fill="#fde047">&#x2B50;</text>
+  <text x="170" y="40" font-size="16" fill="#fde047">&#x2B50;</text>
+  <text x="15" y="110" font-size="14" fill="#fde047">&#x2B50;</text>
+  <text x="180" y="120" font-size="18" fill="#fde047">&#x2B50;</text>
+
+  <!-- Title -->
+  <text x="100" y="135" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="white">Six vs Nine</text>
+</svg>

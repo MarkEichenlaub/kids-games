@@ -1,0 +1,36 @@
+{
+  "games": [
+    {
+      "id": "penguin-maze",
+      "title": "Penguin Maze",
+      "description": "Guide a penguin through ice-themed mazes. Difficulty scales as you win!",
+      "preview": "previews/penguin-maze.svg",
+      "file": "games/penguin-maze.html",
+      "sourceChat": "https://claude.ai/chat/ee4b200a-0c7b-4d89-a616-1c74668fed97"
+    },
+    {
+      "id": "six-vs-nine",
+      "title": "Six vs Nine",
+      "description": "Learn to tell 6 and 9 apart with varied fonts and sizes. Get 10 in a row to win!",
+      "preview": "previews/six-vs-nine.svg",
+      "file": "games/six-vs-nine.html",
+      "sourceChat": "https://claude.ai/chat/9714b6f0-1c37-4faa-bbc8-2c5235253b4b"
+    },
+    {
+      "id": "time-practice",
+      "title": "Time to Get Up?",
+      "description": "Practice reading digital clocks - is it before or after 6 AM?",
+      "preview": "previews/time-practice.svg",
+      "file": "games/time-practice.html",
+      "sourceChat": "https://claude.ai/chat/71005d4f-ac20-451a-a2af-a29c1d0c640e"
+    },
+    {
+      "id": "memory-game",
+      "title": "Photo Memory",
+      "description": "Classic memory matching game using your own photos!",
+      "preview": "previews/memory-game.svg",
+      "file": "games/memory-game.html",
+      "sourceChat": "https://claude.ai/chat/08e58326-d54b-4e67-acc5-347e32c04b22"
+    }
+  ]
+}

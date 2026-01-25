@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Six vs Nine</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
+
+    // Sound generation using Web Audio API
+    const playSound = (type) => {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      if (type === 'correct') {
+        // Happy ascending chime
+        const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+        notes.forEach((freq, i) => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          oscillator.frequency.value = freq;
+          oscillator.type = 'sine';
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + i * 0.1);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.1 + 0.3);
+          oscillator.start(audioContext.currentTime + i * 0.1);
+          oscillator.stop(audioContext.currentTime + i * 0.1 + 0.3);
+        });
+      } else if (type === 'wrong') {
+        // Gentle low tone
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = 200;
+        oscillator.type = 'sine';
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.3);
+      } else if (type === 'win') {
+        // Victory fanfare
+        const notes = [523.25, 659.25, 783.99, 1046.50, 783.99, 1046.50];
+        notes.forEach((freq, i) => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          oscillator.frequency.value = freq;
+          oscillator.type = 'sine';
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime + i * 0.15);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.15 + 0.2);
+          oscillator.start(audioContext.currentTime + i * 0.15);
+          oscillator.stop(audioContext.currentTime + i * 0.15 + 0.25);
+        });
+      }
+    };
+
+    // Available fonts
+    const fonts = [
+      'Georgia, serif',
+      'Times New Roman, serif',
+      'Arial, sans-serif',
+      'Verdana, sans-serif',
+      'Courier New, monospace',
+      'Impact, sans-serif',
+      'Comic Sans MS, cursive',
+      'Trebuchet MS, sans-serif',
+      'Arial Black, sans-serif',
+      'Palatino Linotype, serif',
+    ];
+
+    // Dot pattern component for buttons
+    const DotPattern = ({ count, color }) => {
+      const patterns = {
+        6: [
+          [0, 0], [0, 1], [0, 2],
+          [1, 0], [1, 1], [1, 2]
+        ],
+        9: [
+          [0, 0], [0, 1], [0, 2],
+          [1, 0], [1, 1], [1, 2],
+          [2, 0], [2, 1], [2, 2]
+        ]
+      };
+
+      const dots = patterns[count];
+
+      return (
+        <div
+          className="grid gap-1 mt-2"
+          style={{
+            gridTemplateColumns: `repeat(3, 1fr)`,
+            width: '48px',
+            margin: '8px auto 0'
+          }}
+        >
+          {dots.map((pos, i) => (
+            <div
+              key={i}
+              className="rounded-full"
+              style={{
+                width: '12px',
+                height: '12px',
+                backgroundColor: color,
+              }}
+            />
+          ))}
+        </div>
+      );
+    };
+
+    function SixVsNine() {
+      const [currentNumber, setCurrentNumber] = useState(null);
+      const [currentFont, setCurrentFont] = useState(fonts[0]);
+      const [currentSize, setCurrentSize] = useState(120);
+      const [streak, setStreak] = useState(0);
+      const [showFeedback, setShowFeedback] = useState(null);
+      const [hasWon, setHasWon] = useState(false);
+      const [confetti, setConfetti] = useState([]);
+      const [rotation, setRotation] = useState(0);
+      const [buttonPop, setButtonPop] = useState(null);
+
+      const generateNewNumber = useCallback(() => {
+        const num = Math.random() > 0.5 ? 6 : 9;
+        const font = fonts[Math.floor(Math.random() * fonts.length)];
+        const size = 100 + Math.floor(Math.random() * 80); // 100-180px
+        const rot = (Math.random() - 0.5) * 20; // -10 to 10 degrees
+
+        setCurrentNumber(num);
+        setCurrentFont(font);
+        setCurrentSize(size);
+        setRotation(rot);
+        setShowFeedback(null);
+      }, []);
+
+      useEffect(() => {
+        generateNewNumber();
+      }, [generateNewNumber]);
+
+      const createConfetti = () => {
+        const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#F38181', '#AA96DA', '#FCBAD3'];
+        const newConfetti = [];
+        for (let i = 0; i < 50; i++) {
+          newConfetti.push({
+            id: i,
+            left: Math.random() * 100 + '%',
+            top: -20,
+            backgroundColor: colors[Math.floor(Math.random() * colors.length)],
+            animationDuration: (Math.random() * 2 + 2) + 's',
+            animationDelay: Math.random() * 0.5 + 's',
+          });
+        }
+        setConfetti(newConfetti);
+      };
+
+      const handleGuess = (guess) => {
+        if (hasWon || showFeedback) return;
+
+        setButtonPop(guess);
+        setTimeout(() => setButtonPop(null), 200);
+
+        if (guess === currentNumber) {
+          const newStreak = streak + 1;
+          setStreak(newStreak);
+          setShowFeedback('correct');
+          playSound('correct');
+
+          if (newStreak >= 10) {
+            setHasWon(true);
+            playSound('win');
+            createConfetti();
+          } else {
+            setTimeout(generateNewNumber, 800);
+          }
+        } else {
+          setStreak(0);
+          setShowFeedback('wrong');
+          playSound('wrong');
+          setTimeout(generateNewNumber, 1000);
+        }
+      };
+
+      const resetGame = () => {
+        setStreak(0);
+        setHasWon(false);
+        setConfetti([]);
+        generateNewNumber();
+      };
+
+      return (
+        <div className="min-h-screen bg-gradient-to-b from-purple-400 via-pink-300 to-yellow-200 flex flex-col items-center justify-center p-4 relative overflow-hidden">
+          {/* Confetti */}
+          {confetti.map((c) => (
+            <div
+              key={c.id}
+              className="absolute"
+              style={{
+                left: c.left,
+                top: c.top,
+                width: '12px',
+                height: '12px',
+                backgroundColor: c.backgroundColor,
+                borderRadius: Math.random() > 0.5 ? '50%' : '2px',
+                animation: `fall ${c.animationDuration} ease-out ${c.animationDelay} forwards`,
+              }}
+            />
+          ))}
+
+          <style>{`
+            @keyframes fall {
+              to {
+                top: 110%;
+                transform: rotate(720deg);
+              }
+            }
+            @keyframes wiggle {
+              0%, 100% { transform: rotate(-3deg); }
+              50% { transform: rotate(3deg); }
+            }
+            @keyframes pop {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.1); }
+              100% { transform: scale(1); }
+            }
+            @keyframes correctPulse {
+              0% { transform: scale(1); }
+              50% { transform: scale(1.2); }
+              100% { transform: scale(1); }
+            }
+            @keyframes shake {
+              0%, 100% { transform: translateX(0); }
+              25% { transform: translateX(-5px); }
+              75% { transform: translateX(5px); }
+            }
+            @keyframes rainbow {
+              0% { filter: hue-rotate(0deg); }
+              100% { filter: hue-rotate(360deg); }
+            }
+          `}</style>
+
+          {/* Title */}
+          <h1
+            className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg"
+            style={{ animation: hasWon ? 'rainbow 2s linear infinite' : 'none' }}
+          >
+            Six vs. Nine
+          </h1>
+
+          {/* Progress Bar */}
+          <div className="w-full max-w-md mb-6">
+            <div className="bg-white/50 rounded-full h-8 overflow-hidden shadow-inner border-4 border-white">
+              <div
+                className="h-full transition-all duration-500 ease-out flex items-center justify-center"
+                style={{
+                  width: `${(streak / 10) * 100}%`,
+                  background: hasWon
+                    ? 'linear-gradient(90deg, #FFD700, #FFA500, #FF6B6B, #FF69B4, #9B59B6, #3498DB, #2ECC71, #FFD700)'
+                    : 'linear-gradient(90deg, #4ECDC4, #44A08D)',
+                  backgroundSize: hasWon ? '200% 100%' : '100% 100%',
+                  animation: hasWon ? 'rainbow 2s linear infinite' : 'none',
+                }}
+              >
+                {streak > 0 && (
+                  <span className="text-white font-bold text-lg drop-shadow">
+                    {streak}/10
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Win Message */}
+          {hasWon && (
+            <div className="text-center mb-6 animate-bounce">
+              <h2 className="text-5xl md:text-6xl font-bold text-yellow-400 drop-shadow-lg mb-4">
+                YOU WON!
+              </h2>
+              <p className="text-2xl text-white drop-shadow mb-4">
+                Amazing job! You got 10 in a row!
+              </p>
+              <button
+                onClick={resetGame}
+                className="bg-gradient-to-r from-green-400 to-blue-500 text-white text-2xl font-bold py-4 px-8 rounded-full shadow-lg hover:scale-105 transition-transform"
+              >
+                Play Again!
+              </button>
+            </div>
+          )}
+
+          {/* Number Display */}
+          {!hasWon && (
+            <div
+              className="bg-white rounded-3xl shadow-2xl p-8 mb-8 min-w-64 min-h-48 flex items-center justify-center"
+              style={{
+                animation: showFeedback === 'correct'
+                  ? 'correctPulse 0.5s ease-out'
+                  : showFeedback === 'wrong'
+                    ? 'shake 0.5s ease-out'
+                    : 'none',
+              }}
+            >
+              <span
+                style={{
+                  fontFamily: currentFont,
+                  fontSize: `${currentSize}px`,
+                  transform: `rotate(${rotation}deg)`,
+                  display: 'inline-block',
+                  color: showFeedback === 'correct'
+                    ? '#10B981'
+                    : showFeedback === 'wrong'
+                      ? '#EF4444'
+                      : '#1F2937',
+                  transition: 'color 0.3s ease',
+                  lineHeight: 1,
+                }}
+              >
+                {currentNumber}
+              </span>
+            </div>
+          )}
+
+          {/* Feedback */}
+          {showFeedback && !hasWon && (
+            <div
+              className={`text-3xl font-bold mb-4 ${
+                showFeedback === 'correct' ? 'text-green-500' : 'text-red-400'
+              }`}
+              style={{
+                animation: showFeedback === 'correct' ? 'pop 0.3s ease-out' : 'shake 0.3s ease-out'
+              }}
+            >
+              {showFeedback === 'correct' ? 'Great job!' : 'Try again!'}
+            </div>
+          )}
+
+          {/* Buttons */}
+          {!hasWon && (
+            <div className="flex gap-6 md:gap-10">
+              {/* Six Button */}
+              <button
+                onClick={() => handleGuess(6)}
+                className="bg-gradient-to-br from-blue-400 to-blue-600 text-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
+                style={{
+                  transform: buttonPop === 6 ? 'scale(1.1)' : 'scale(1)',
+                  transition: 'transform 0.2s ease',
+                  minWidth: '120px',
+                }}
+              >
+                <div className="text-3xl font-bold">Six</div>
+                <DotPattern count={6} color="white" />
+              </button>
+
+              {/* Nine Button */}
+              <button
+                onClick={() => handleGuess(9)}
+                className="bg-gradient-to-br from-pink-400 to-pink-600 text-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all hover:scale-105 active:scale-95"
+                style={{
+                  transform: buttonPop === 9 ? 'scale(1.1)' : 'scale(1)',
+                  transition: 'transform 0.2s ease',
+                  minWidth: '120px',
+                }}
+              >
+                <div className="text-3xl font-bold">Nine</div>
+                <DotPattern count={9} color="white" />
+              </button>
+            </div>
+          )}
+
+          {/* Streak indicator stars */}
+          {!hasWon && streak > 0 && (
+            <div className="mt-6 flex gap-1">
+              {Array.from({ length: streak }).map((_, i) => (
+                <span
+                  key={i}
+                  className="text-2xl"
+                  style={{
+                    animation: 'wiggle 0.5s ease-in-out infinite',
+                    animationDelay: `${i * 0.1}s`
+                  }}
+                >
+                  &#11088;
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<SixVsNine />);
+  </script>
+</body>
+</html>
