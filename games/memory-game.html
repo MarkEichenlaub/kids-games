@@ -10,33 +10,77 @@
       margin: 0;
       padding: 0;
     }
-    
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       min-height: 100vh;
       background: linear-gradient(135deg, #1e1b4b 0%, #581c87 50%, #831843 100%);
       padding: 16px;
     }
-    
+
     .container {
       max-width: 600px;
       margin: 0 auto;
     }
-    
+
     h1 {
       text-align: center;
       color: white;
       font-size: 28px;
       margin-bottom: 8px;
     }
-    
+
     .subtitle {
       text-align: center;
       color: #c4b5fd;
       margin-bottom: 24px;
     }
-    
-    /* Upload Screen */
+
+    /* Setup Screen */
+    .setup-section {
+      background: rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .setup-section h2 {
+      color: white;
+      font-size: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .pairs-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .pairs-selector label {
+      color: white;
+      font-size: 18px;
+    }
+
+    .pairs-selector input[type="range"] {
+      width: 150px;
+      accent-color: #ec4899;
+    }
+
+    .pairs-selector .pairs-display {
+      background: #ec4899;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 18px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    /* Upload Zone (hidden by default, shown as backup) */
     .upload-zone {
       border: 3px dashed rgba(167, 139, 250, 0.5);
       border-radius: 16px;
@@ -45,32 +89,32 @@
       background: rgba(255,255,255,0.05);
       margin-bottom: 24px;
     }
-    
+
     .upload-icon {
       font-size: 48px;
       margin-bottom: 16px;
     }
-    
+
     .upload-text {
       color: white;
       font-size: 18px;
       margin-bottom: 16px;
     }
-    
+
     .btn-row {
       display: flex;
       flex-direction: column;
       gap: 12px;
       margin-bottom: 16px;
     }
-    
+
     @media (min-width: 400px) {
       .btn-row {
         flex-direction: row;
         justify-content: center;
       }
     }
-    
+
     .btn {
       padding: 14px 24px;
       border: none;
@@ -80,21 +124,21 @@
       cursor: pointer;
       transition: opacity 0.2s;
     }
-    
+
     .btn:active {
       opacity: 0.8;
     }
-    
+
     .btn-pink {
       background: #ec4899;
       color: white;
     }
-    
+
     .btn-purple {
       background: #8b5cf6;
       color: white;
     }
-    
+
     .btn-gradient {
       background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
       color: white;
@@ -102,18 +146,46 @@
       padding: 16px;
       font-size: 18px;
     }
-    
+
+    .btn-family {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      color: white;
+      width: 100%;
+      padding: 18px;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+
     .btn:disabled {
       background: #4b5563;
       color: #9ca3af;
       cursor: not-allowed;
     }
-    
+
     .hint {
       color: #c4b5fd;
       font-size: 14px;
     }
-    
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 20px 0;
+      color: #c4b5fd;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid rgba(196, 181, 253, 0.3);
+    }
+
+    .or-divider span {
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
     /* Preview grid */
     .preview-section {
       background: rgba(255,255,255,0.1);
@@ -121,32 +193,32 @@
       padding: 16px;
       margin-bottom: 24px;
     }
-    
+
     .preview-header {
       display: flex;
       justify-content: space-between;
       margin-bottom: 12px;
       color: white;
     }
-    
+
     .preview-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 8px;
     }
-    
+
     .preview-item {
       position: relative;
       aspect-ratio: 1;
     }
-    
+
     .preview-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       border-radius: 8px;
     }
-    
+
     .preview-remove {
       position: absolute;
       top: -8px;
@@ -161,7 +233,7 @@
       font-weight: bold;
       cursor: pointer;
     }
-    
+
     /* Game controls */
     .controls {
       background: rgba(255,255,255,0.1);
@@ -169,7 +241,7 @@
       padding: 16px;
       margin-bottom: 16px;
     }
-    
+
     .control-row {
       display: flex;
       flex-wrap: wrap;
@@ -177,52 +249,52 @@
       justify-content: space-between;
       gap: 12px;
     }
-    
+
     .slider-group {
       display: flex;
       align-items: center;
       gap: 8px;
       color: white;
     }
-    
+
     .slider-group input[type="range"] {
       width: 80px;
       accent-color: #ec4899;
     }
-    
+
     .stats {
       display: flex;
       gap: 16px;
       color: white;
     }
-    
+
     .stats span {
       color: #c4b5fd;
     }
-    
+
     .btn-row-controls {
       display: flex;
       gap: 8px;
       margin-top: 12px;
       width: 100%;
     }
-    
+
     .btn-row-controls .btn {
       flex: 1;
     }
-    
+
     /* Game board */
     .game-board {
       display: grid;
       gap: 8px;
     }
-    
+
     .card {
       aspect-ratio: 1;
       perspective: 1000px;
       cursor: pointer;
     }
-    
+
     .card-inner {
       position: relative;
       width: 100%;
@@ -230,16 +302,16 @@
       transition: transform 0.5s;
       transform-style: preserve-3d;
     }
-    
+
     .card.flipped .card-inner,
     .card.matched .card-inner {
       transform: rotateY(180deg);
     }
-    
+
     .card.matched {
       opacity: 0.6;
     }
-    
+
     .card-face {
       position: absolute;
       width: 100%;
@@ -248,7 +320,7 @@
       border-radius: 12px;
       overflow: hidden;
     }
-    
+
     .card-back {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
@@ -259,18 +331,18 @@
       font-weight: bold;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    
+
     .card-front {
       transform: rotateY(180deg);
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
-    
+
     .card-front img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-    
+
     .match-check {
       position: absolute;
       inset: 0;
@@ -281,7 +353,7 @@
       color: white;
       font-size: 28px;
     }
-    
+
     /* Win modal */
     .modal-overlay {
       display: none;
@@ -293,11 +365,11 @@
       z-index: 100;
       padding: 16px;
     }
-    
+
     .modal-overlay.show {
       display: flex;
     }
-    
+
     .modal {
       background: white;
       border-radius: 16px;
@@ -306,51 +378,51 @@
       max-width: 320px;
       width: 100%;
     }
-    
+
     .modal-icon {
       font-size: 48px;
       margin-bottom: 16px;
     }
-    
+
     .modal h2 {
       color: #1f2937;
       margin-bottom: 8px;
     }
-    
+
     .modal p {
       color: #6b7280;
       margin-bottom: 20px;
     }
-    
+
     .modal p strong {
       color: #8b5cf6;
     }
-    
+
     .modal-buttons {
       display: flex;
       gap: 8px;
     }
-    
+
     .modal-buttons .btn {
       flex: 1;
     }
-    
+
     .btn-gray {
       background: #e5e7eb;
       color: #374151;
     }
-    
+
     .btn-folder {
       background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: white;
       width: 100%;
     }
-    
+
     .btn-small {
       padding: 8px 16px;
       font-size: 14px;
     }
-    
+
     .random-select {
       display: flex;
       align-items: center;
@@ -361,7 +433,7 @@
       color: white;
       flex-wrap: wrap;
     }
-    
+
     .random-select input[type="number"] {
       width: 60px;
       padding: 8px;
@@ -370,15 +442,15 @@
       font-size: 16px;
       text-align: center;
     }
-    
+
     .random-select label {
       font-weight: 500;
     }
-    
+
     .hidden {
       display: none !important;
     }
-    
+
     /* Match preview modal */
     .match-preview {
       display: none;
@@ -392,16 +464,16 @@
       padding: 20px;
       animation: fadeIn 0.3s ease;
     }
-    
+
     .match-preview.show {
       display: flex;
     }
-    
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    
+
     .match-preview img {
       max-width: 100%;
       max-height: 70vh;
@@ -409,19 +481,19 @@
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
     }
-    
+
     .match-caption {
       margin-top: 20px;
       text-align: center;
       color: white;
     }
-    
+
     .match-caption .date {
       font-size: 20px;
       font-weight: 600;
       margin-bottom: 8px;
     }
-    
+
     .match-caption .location {
       font-size: 16px;
       color: #c4b5fd;
@@ -430,7 +502,7 @@
       justify-content: center;
       gap: 6px;
     }
-    
+
     .match-badge {
       background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
       color: white;
@@ -440,55 +512,121 @@
       margin-bottom: 20px;
       font-size: 18px;
     }
-    
+
     .match-preview .btn {
       margin-top: 24px;
       width: auto;
       padding: 14px 32px;
+    }
+
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+      color: white;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 4px solid rgba(255,255,255,0.3);
+      border-top-color: #ec4899;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .folder-hint {
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: #c4b5fd;
+    }
+
+    .folder-hint code {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Memory Match</h1>
-    
-    <!-- Upload Screen -->
-    <div id="uploadScreen">
+
+    <!-- Setup Screen -->
+    <div id="setupScreen">
+      <div class="setup-section">
+        <h2>How many pairs?</h2>
+        <div class="pairs-selector">
+          <label>Pairs:</label>
+          <input type="range" id="setupPairsSlider" min="2" max="12" value="6">
+          <div class="pairs-display"><span id="setupPairsValue">6</span> pairs</div>
+        </div>
+      </div>
+
+      <button class="btn btn-family" id="familyPhotosBtn">
+        Start with Family Photos
+      </button>
+
+      <div class="folder-hint" id="folderHint">
+        Navigate to <code>Pictures > Mira and Maia</code> when prompted
+      </div>
+
+      <div class="or-divider"><span>or</span></div>
+
+      <button class="btn btn-gradient" id="chooseOwnBtn">Choose Your Own Photos</button>
+    </div>
+
+    <!-- Upload Screen (backup option) -->
+    <div id="uploadScreen" class="hidden">
       <p class="subtitle">Add your photos to create a personalized memory game!</p>
-      
+
       <div class="upload-zone">
         <div class="upload-icon">📷</div>
         <p class="upload-text">Add your photos</p>
-        
+
         <div class="btn-row">
           <button class="btn btn-pink" id="chooseBtn">Choose Photos</button>
           <button class="btn btn-purple" id="cameraBtn">Take Photo</button>
         </div>
         <div class="btn-row" style="margin-top: 0;">
-          <button class="btn btn-folder" id="folderBtn">📁 Select Folder (DCIM)</button>
+          <button class="btn btn-folder" id="folderBtn">Select Folder</button>
         </div>
-        
-        <p class="hint">Add 2-16 photos • Each becomes a matching pair</p>
-        
+
+        <p class="hint">Add 2-16 photos - Each becomes a matching pair</p>
+
         <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2);">
           <p class="hint" style="margin-bottom: 8px;">Have a location cache? Load it for offline use:</p>
           <button class="btn" style="background: rgba(255,255,255,0.2); color: white;" id="loadCacheBtn">Load Cache File</button>
           <span id="cacheStatus" style="margin-left: 12px; color: #22c55e; font-size: 14px;"></span>
         </div>
       </div>
-      
+
       <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
       <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
       <input type="file" id="folderInput" accept="image/*" webkitdirectory style="display:none">
       <input type="file" id="cacheInput" accept=".json" style="display:none">
-      
+
       <div id="previewSection" class="preview-section hidden">
         <div class="preview-header">
           <span id="photoCount">0 photos</span>
           <span id="cardCount">(0 cards)</span>
         </div>
         <div class="preview-grid" id="previewGrid"></div>
-        
+
         <!-- Random selection option -->
         <div class="random-select" id="randomSelect">
           <label>Use random:</label>
@@ -497,16 +635,11 @@
           <button class="btn btn-purple btn-small" id="randomizeBtn">Randomize</button>
         </div>
       </div>
-        <div class="preview-header">
-          <span id="photoCount">0 photos</span>
-          <span id="cardCount">(0 cards)</span>
-        </div>
-        <div class="preview-grid" id="previewGrid"></div>
-      </div>
-      
+
       <button class="btn btn-gradient" id="startBtn" disabled>Add at least 2 photos to start</button>
+      <button class="btn btn-gray" style="width: 100%; margin-top: 12px;" id="backToSetupBtn">Back</button>
     </div>
-    
+
     <!-- Game Screen -->
     <div id="gameScreen" class="hidden">
       <div class="controls">
@@ -527,10 +660,10 @@
           <button class="btn btn-purple" id="changePhotosBtn">Change Photos</button>
         </div>
       </div>
-      
+
       <div class="game-board" id="gameBoard"></div>
     </div>
-    
+
     <!-- Win Modal -->
     <div class="modal-overlay" id="winModal">
       <div class="modal">
@@ -543,10 +676,10 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Match Preview Modal -->
     <div class="match-preview" id="matchPreview">
-      <div class="match-badge">✓ Match!</div>
+      <div class="match-badge">Match!</div>
       <img id="matchImage" src="" alt="Matched photo">
       <div class="match-caption">
         <div class="date" id="matchDate"></div>
@@ -554,24 +687,26 @@
       </div>
       <button class="btn btn-gradient" id="returnToGameBtn">Return to Game</button>
     </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+      <div class="loading-spinner"></div>
+      <div id="loadingText">Loading photos...</div>
+    </div>
   </div>
 
   <script>
     // EXIF Parser
     function parseExif(arrayBuffer) {
       const view = new DataView(arrayBuffer);
-      
-      // Check for JPEG
       if (view.getUint16(0) !== 0xFFD8) return null;
-      
+
       let offset = 2;
       while (offset < view.byteLength) {
         const marker = view.getUint16(offset);
         offset += 2;
-        
-        // APP1 marker (EXIF)
+
         if (marker === 0xFFE1) {
-          const length = view.getUint16(offset);
           const exifData = parseExifData(view, offset + 2);
           return exifData;
         } else if ((marker & 0xFF00) === 0xFF00) {
@@ -582,39 +717,36 @@
       }
       return null;
     }
-    
+
     function parseExifData(view, start) {
-      // Check for "Exif\0\0"
       const exifHeader = String.fromCharCode(
-        view.getUint8(start), view.getUint8(start+1), 
+        view.getUint8(start), view.getUint8(start+1),
         view.getUint8(start+2), view.getUint8(start+3)
       );
       if (exifHeader !== 'Exif') return null;
-      
+
       const tiffStart = start + 6;
       const littleEndian = view.getUint16(tiffStart) === 0x4949;
-      
+
       const ifdOffset = view.getUint32(tiffStart + 4, littleEndian);
       const result = { date: null, lat: null, lng: null };
-      
-      // Parse IFD0
+
       parseIFD(view, tiffStart, tiffStart + ifdOffset, littleEndian, result, false);
-      
+
       return result;
     }
-    
+
     function parseIFD(view, tiffStart, ifdStart, littleEndian, result, isGPS) {
       try {
         const entries = view.getUint16(ifdStart, littleEndian);
-        
+
         for (let i = 0; i < entries; i++) {
           const entryOffset = ifdStart + 2 + i * 12;
           const tag = view.getUint16(entryOffset, littleEndian);
           const type = view.getUint16(entryOffset + 2, littleEndian);
           const count = view.getUint32(entryOffset + 4, littleEndian);
           const valueOffset = entryOffset + 8;
-          
-          // DateTimeOriginal (0x9003) or DateTime (0x0132)
+
           if (tag === 0x9003 || tag === 0x0132) {
             let strOffset = valueOffset;
             if (count > 4) {
@@ -628,44 +760,36 @@
               result.date = dateStr;
             }
           }
-          
-          // GPS IFD pointer (0x8825)
+
           if (tag === 0x8825) {
             const gpsOffset = view.getUint32(valueOffset, littleEndian);
             parseIFD(view, tiffStart, tiffStart + gpsOffset, littleEndian, result, true);
           }
-          
-          // ExifIFD pointer (0x8769)
+
           if (tag === 0x8769) {
             const exifOffset = view.getUint32(valueOffset, littleEndian);
             parseIFD(view, tiffStart, tiffStart + exifOffset, littleEndian, result, false);
           }
-          
-          // GPS Latitude (0x0002)
+
           if (isGPS && tag === 0x0002) {
             result.lat = parseGPSCoord(view, tiffStart, valueOffset, littleEndian);
           }
-          
-          // GPS Latitude Ref (0x0001)
+
           if (isGPS && tag === 0x0001) {
             result.latRef = String.fromCharCode(view.getUint8(valueOffset));
           }
-          
-          // GPS Longitude (0x0004)
+
           if (isGPS && tag === 0x0004) {
             result.lng = parseGPSCoord(view, tiffStart, valueOffset, littleEndian);
           }
-          
-          // GPS Longitude Ref (0x0003)
+
           if (isGPS && tag === 0x0003) {
             result.lngRef = String.fromCharCode(view.getUint8(valueOffset));
           }
         }
-      } catch (e) {
-        // Silently fail on parse errors
-      }
+      } catch (e) {}
     }
-    
+
     function parseGPSCoord(view, tiffStart, valueOffset, littleEndian) {
       try {
         const offset = tiffStart + view.getUint32(valueOffset, littleEndian);
@@ -675,54 +799,48 @@
         const minDen = view.getUint32(offset + 12, littleEndian);
         const secNum = view.getUint32(offset + 16, littleEndian);
         const secDen = view.getUint32(offset + 20, littleEndian);
-        
+
         if (degDen === 0 || minDen === 0 || secDen === 0) return null;
-        
+
         const deg = degNum / degDen;
         const min = minNum / minDen;
         const sec = secNum / secDen;
-        
+
         const result = deg + min / 60 + sec / 3600;
         return isNaN(result) ? null : result;
       } catch (e) {
         return null;
       }
     }
-    
+
     function formatDate(dateStr) {
       if (!dateStr) return null;
-      
-      // Handle different formats:
-      // EXIF: "2024:01:15 14:30:00" or "2024:01:15"
-      // Cache: "2024-01-15"
-      
+
       let year, month, day;
-      
+
       if (dateStr.includes(':')) {
-        // EXIF format
         const parts = dateStr.split(' ')[0].split(':');
         if (parts.length !== 3) return null;
         [year, month, day] = parts;
       } else if (dateStr.includes('-')) {
-        // Cache format (YYYY-MM-DD)
         const parts = dateStr.split('-');
         if (parts.length !== 3) return null;
         [year, month, day] = parts;
       } else {
         return null;
       }
-      
+
       const date = new Date(year, month - 1, day);
       if (isNaN(date.getTime())) return null;
-      
-      return date.toLocaleDateString('en-US', { 
+
+      return date.toLocaleDateString('en-US', {
         weekday: 'long',
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
     }
-    
+
     async function reverseGeocode(lat, lng) {
       try {
         const response = await fetch(
@@ -731,30 +849,29 @@
         );
         const data = await response.json();
         const addr = data.address;
-        
-        // Build a nice location string
+
         const city = addr.city || addr.town || addr.village || addr.hamlet || addr.municipality || '';
         const state = addr.state || addr.region || '';
         const country = addr.country || '';
-        
+
         const parts = [city, state, country].filter(p => p);
-        return parts.length > 0 ? `📍 ${parts.join(', ')}` : null;
+        return parts.length > 0 ? `${parts.join(', ')}` : null;
       } catch (e) {
         return null;
       }
     }
-    
+
     function formatLocationCoords(lat, latRef, lng, lngRef) {
       if (lat === null || lng === null || isNaN(lat) || isNaN(lng)) return { coords: null, lat: null, lng: null };
-      
+
       const latDir = latRef === 'S' ? -1 : 1;
       const lngDir = lngRef === 'W' ? -1 : 1;
-      
+
       const finalLat = lat * latDir;
       const finalLng = lng * lngDir;
-      
-      return { 
-        coords: `📍 ${Math.abs(finalLat).toFixed(4)}°${latDir < 0 ? 'S' : 'N'}, ${Math.abs(finalLng).toFixed(4)}°${lngDir < 0 ? 'W' : 'E'}`,
+
+      return {
+        coords: `${Math.abs(finalLat).toFixed(4)}°${latDir < 0 ? 'S' : 'N'}, ${Math.abs(finalLng).toFixed(4)}°${lngDir < 0 ? 'W' : 'E'}`,
         lat: finalLat,
         lng: finalLng
       };
@@ -762,17 +879,25 @@
 
     // State
     let photos = [];
+    let allPhotos = [];
     let cards = [];
     let flippedIndices = [];
     let matchedPairs = new Set();
     let moves = 0;
     let isChecking = false;
     let numPairs = 6;
-    let locationCache = {};  // Loaded from cache file
+    let locationCache = {};
+    let storedFolderHandle = null;
 
     // Elements
+    const setupScreen = document.getElementById('setupScreen');
     const uploadScreen = document.getElementById('uploadScreen');
     const gameScreen = document.getElementById('gameScreen');
+    const setupPairsSlider = document.getElementById('setupPairsSlider');
+    const setupPairsValue = document.getElementById('setupPairsValue');
+    const familyPhotosBtn = document.getElementById('familyPhotosBtn');
+    const chooseOwnBtn = document.getElementById('chooseOwnBtn');
+    const folderHint = document.getElementById('folderHint');
     const fileInput = document.getElementById('fileInput');
     const cameraInput = document.getElementById('cameraInput');
     const chooseBtn = document.getElementById('chooseBtn');
@@ -807,11 +932,30 @@
     const loadCacheBtn = document.getElementById('loadCacheBtn');
     const cacheInput = document.getElementById('cacheInput');
     const cacheStatus = document.getElementById('cacheStatus');
-    
-    // All loaded photos (before random selection)
-    let allPhotos = [];
+    const backToSetupBtn = document.getElementById('backToSetupBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const loadingText = document.getElementById('loadingText');
 
-    // Event listeners
+    // Setup screen events
+    setupPairsSlider.addEventListener('input', () => {
+      setupPairsValue.textContent = setupPairsSlider.value;
+    });
+
+    familyPhotosBtn.addEventListener('click', loadFamilyPhotos);
+    chooseOwnBtn.addEventListener('click', () => {
+      setupScreen.classList.add('hidden');
+      uploadScreen.classList.remove('hidden');
+    });
+
+    backToSetupBtn.addEventListener('click', () => {
+      uploadScreen.classList.add('hidden');
+      setupScreen.classList.remove('hidden');
+      photos = [];
+      allPhotos = [];
+      updatePreview();
+    });
+
+    // Upload screen events
     chooseBtn.addEventListener('click', () => fileInput.click());
     cameraBtn.addEventListener('click', () => cameraInput.click());
     folderBtn.addEventListener('click', () => folderInput.click());
@@ -826,71 +970,242 @@
     shuffleBtn.addEventListener('click', initializeGame);
     changePhotosBtn.addEventListener('click', resetToUpload);
     playAgainBtn.addEventListener('click', () => { winModal.classList.remove('show'); initializeGame(); });
-    newPhotosBtn.addEventListener('click', () => { winModal.classList.remove('show'); resetToUpload(); });
-    
+    newPhotosBtn.addEventListener('click', () => { winModal.classList.remove('show'); resetToSetup(); });
+
+    // Try to use File System Access API for family photos
+    async function loadFamilyPhotos() {
+      numPairs = parseInt(setupPairsSlider.value);
+
+      // Try modern File System Access API first
+      if ('showDirectoryPicker' in window) {
+        try {
+          loadingOverlay.classList.remove('hidden');
+          loadingText.textContent = 'Select your photos folder...';
+
+          const dirHandle = await window.showDirectoryPicker({
+            mode: 'read'
+          });
+
+          await loadPhotosFromDirectory(dirHandle);
+          return;
+        } catch (e) {
+          if (e.name !== 'AbortError') {
+            console.log('File System Access API failed, falling back to input');
+          }
+          loadingOverlay.classList.add('hidden');
+        }
+      }
+
+      // Fallback to folder input
+      folderInput.click();
+
+      // Set up one-time handler for the folder input
+      const handler = async (e) => {
+        folderInput.removeEventListener('change', handler);
+        if (e.target.files.length > 0) {
+          loadingOverlay.classList.remove('hidden');
+          loadingText.textContent = 'Loading photos...';
+          await handleFilesForFamilyMode(e.target.files);
+        }
+      };
+      folderInput.addEventListener('change', handler);
+    }
+
+    async function loadPhotosFromDirectory(dirHandle) {
+      loadingText.textContent = 'Loading photos...';
+      allPhotos = [];
+
+      const imageFiles = [];
+      for await (const entry of dirHandle.values()) {
+        if (entry.kind === 'file' && /\.(jpg|jpeg|png|gif|webp)$/i.test(entry.name)) {
+          imageFiles.push(entry);
+        }
+      }
+
+      // Limit to 100 photos
+      const toProcess = imageFiles.slice(0, 100);
+      let processed = 0;
+
+      for (const fileHandle of toProcess) {
+        const file = await fileHandle.getFile();
+        loadingText.textContent = `Loading photo ${processed + 1} of ${toProcess.length}...`;
+
+        const photoData = await processPhotoFile(file);
+        if (photoData) {
+          allPhotos.push(photoData);
+        }
+        processed++;
+      }
+
+      loadingOverlay.classList.add('hidden');
+
+      if (allPhotos.length >= 2) {
+        // Select random photos for the game
+        const count = Math.min(numPairs, allPhotos.length);
+        const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+        photos = shuffled.slice(0, count);
+
+        // Go directly to game
+        startGameDirect();
+      } else {
+        alert('Need at least 2 photos. Please select a folder with more images.');
+      }
+    }
+
+    async function handleFilesForFamilyMode(files) {
+      const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+
+      if (imageFiles.length < 2) {
+        loadingOverlay.classList.add('hidden');
+        alert('Need at least 2 photos. Please select a folder with more images.');
+        return;
+      }
+
+      allPhotos = [];
+      const toProcess = imageFiles.slice(0, 100);
+
+      for (let i = 0; i < toProcess.length; i++) {
+        loadingText.textContent = `Loading photo ${i + 1} of ${toProcess.length}...`;
+        const photoData = await processPhotoFile(toProcess[i]);
+        if (photoData) {
+          allPhotos.push(photoData);
+        }
+      }
+
+      loadingOverlay.classList.add('hidden');
+      folderInput.value = '';
+
+      if (allPhotos.length >= 2) {
+        const count = Math.min(numPairs, allPhotos.length);
+        const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+        photos = shuffled.slice(0, count);
+        startGameDirect();
+      } else {
+        alert('Could not load enough photos. Please try again.');
+      }
+    }
+
+    function processPhotoFile(file) {
+      return new Promise((resolve) => {
+        // Check cache first
+        const cached = lookupInCache(file.name);
+
+        if (cached) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            resolve({
+              id: Date.now() + Math.random(),
+              filename: file.name,
+              dataUrl: e.target.result,
+              date: cached.date ? formatDate(cached.date) : null,
+              location: cached.location
+            });
+          };
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(file);
+        } else {
+          // Parse EXIF
+          const exifReader = new FileReader();
+          exifReader.onload = async (e) => {
+            const exifData = parseExif(e.target.result);
+            let dateStr = exifData ? formatDate(exifData.date) : null;
+            let locationStr = null;
+
+            if (exifData) {
+              const locData = formatLocationCoords(exifData.lat, exifData.latRef, exifData.lng, exifData.lngRef);
+              if (locData.coords) {
+                locationStr = locData.coords;
+              }
+            }
+
+            // Read as data URL
+            const displayReader = new FileReader();
+            displayReader.onload = (e2) => {
+              resolve({
+                id: Date.now() + Math.random(),
+                filename: file.name,
+                dataUrl: e2.target.result,
+                date: dateStr,
+                location: locationStr
+              });
+            };
+            displayReader.onerror = () => resolve(null);
+            displayReader.readAsDataURL(file);
+          };
+          exifReader.onerror = () => resolve(null);
+          exifReader.readAsArrayBuffer(file);
+        }
+      });
+    }
+
+    function startGameDirect() {
+      numPairs = Math.min(photos.length, parseInt(setupPairsSlider.value));
+      pairsSlider.max = photos.length;
+      pairsSlider.value = numPairs;
+      updatePairsDisplay();
+
+      setupScreen.classList.add('hidden');
+      uploadScreen.classList.add('hidden');
+      gameScreen.classList.remove('hidden');
+
+      initializeGame();
+    }
+
     function handleCacheLoad(e) {
       const file = e.target.files[0];
       if (!file) return;
-      
+
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
           locationCache = JSON.parse(event.target.result);
           const count = Object.keys(locationCache).length;
-          cacheStatus.textContent = `✓ Loaded ${count} locations`;
+          cacheStatus.textContent = `Loaded ${count} locations`;
           cacheStatus.style.color = '#22c55e';
         } catch (err) {
-          cacheStatus.textContent = '✗ Invalid cache file';
+          cacheStatus.textContent = 'Invalid cache file';
           cacheStatus.style.color = '#ef4444';
         }
       };
       reader.readAsText(file);
       cacheInput.value = '';
     }
-    
+
     function lookupInCache(filename) {
-      // Search cache by filename
       for (const key in locationCache) {
         const entry = locationCache[key];
         if (entry.filename === filename) {
           return {
             date: entry.date,
-            location: entry.location ? `📍 ${entry.location}` : null
+            location: entry.location ? entry.location : null
           };
         }
       }
       return null;
     }
-    
+
     function randomizePhotos() {
       const count = Math.min(parseInt(randomCount.value) || 6, allPhotos.length, 16);
-      
-      // Shuffle allPhotos and take first 'count'
       const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
       photos = shuffled.slice(0, count);
-      
       updatePreview();
     }
 
     function handleFiles(files, isFromFolder) {
       const imageFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-      
-      // If from folder, clear existing and prepare for batch
+
       if (isFromFolder) {
         allPhotos = [];
         photos = [];
       }
-      
+
       let processed = 0;
-      const toProcess = Math.min(imageFiles.length, 100); // Limit to 100 from folder
-      
+      const toProcess = Math.min(imageFiles.length, 100);
+
       imageFiles.slice(0, toProcess).forEach(file => {
-        
-        // First check cache
         const cached = lookupInCache(file.name);
-        
+
         if (cached) {
-          // Use cached data - just need to read the image
           const displayReader = new FileReader();
           displayReader.onload = (e) => {
             const photoData = {
@@ -900,11 +1215,11 @@
               date: cached.date ? formatDate(cached.date) : null,
               location: cached.location
             };
-            
+
             if (isFromFolder) {
               allPhotos.push(photoData);
               processed++;
-              
+
               if (processed >= toProcess) {
                 const count = Math.min(parseInt(randomCount.value) || 6, allPhotos.length, 16);
                 randomCount.max = Math.min(allPhotos.length, 16);
@@ -921,28 +1236,24 @@
           };
           displayReader.readAsDataURL(file);
         } else {
-          // No cache - extract EXIF and optionally reverse geocode
           const exifReader = new FileReader();
           exifReader.onload = async (e) => {
             const exifData = parseExif(e.target.result);
-            
-            // Get location data
+
             let locationStr = null;
             let dateStr = exifData ? formatDate(exifData.date) : null;
-            
+
             if (exifData) {
               const locData = formatLocationCoords(exifData.lat, exifData.latRef, exifData.lng, exifData.lngRef);
               if (locData.lat !== null && locData.lng !== null) {
-                // Only do online lookup if we don't have many photos (avoid rate limiting)
                 if (!isFromFolder || toProcess <= 10) {
                   locationStr = await reverseGeocode(locData.lat, locData.lng) || locData.coords;
                 } else {
-                  locationStr = locData.coords; // Just use coordinates for large batches
+                  locationStr = locData.coords;
                 }
               }
             }
-            
-            // Read as DataURL for display
+
             const displayReader = new FileReader();
             displayReader.onload = (e2) => {
               const photoData = {
@@ -952,12 +1263,11 @@
                 date: dateStr,
                 location: locationStr
               };
-              
+
               if (isFromFolder) {
                 allPhotos.push(photoData);
                 processed++;
-                
-                // When all processed, randomly select
+
                 if (processed >= toProcess) {
                   const count = Math.min(parseInt(randomCount.value) || 6, allPhotos.length, 16);
                   randomCount.max = Math.min(allPhotos.length, 16);
@@ -986,22 +1296,20 @@
       if (photos.length > 0) {
         previewSection.classList.remove('hidden');
         photoCount.textContent = `${photos.length} photo${photos.length !== 1 ? 's' : ''} selected`;
-        
-        // Show total available if we have more in allPhotos
+
         if (allPhotos.length > photos.length) {
           cardCount.textContent = `(from ${allPhotos.length} available)`;
         } else {
           cardCount.textContent = `(${photos.length * 2} cards)`;
         }
-        
+
         previewGrid.innerHTML = photos.map((photo, i) => `
           <div class="preview-item">
             <img src="${photo.dataUrl}" alt="Preview">
             <button class="preview-remove" onclick="removePhoto(${i})">×</button>
           </div>
         `).join('');
-        
-        // Show random selection UI if we have more photos available
+
         if (allPhotos.length > 2) {
           randomSelect.style.display = 'flex';
           randomCount.max = Math.min(allPhotos.length, 16);
@@ -1011,7 +1319,7 @@
       } else {
         previewSection.classList.add('hidden');
       }
-      
+
       if (photos.length >= 2) {
         startBtn.disabled = false;
         startBtn.textContent = `Start Game with ${photos.length} Pairs!`;
@@ -1030,19 +1338,23 @@
       numPairs = Math.min(6, photos.length);
       pairsSlider.max = photos.length;
       pairsSlider.value = numPairs;
-      updatePairs();
-      
+      updatePairsDisplay();
+
       uploadScreen.classList.add('hidden');
       gameScreen.classList.remove('hidden');
-      
+
       initializeGame();
     }
 
     function updatePairs() {
       numPairs = parseInt(pairsSlider.value);
+      updatePairsDisplay();
+      initializeGame();
+    }
+
+    function updatePairsDisplay() {
       pairsValue.textContent = numPairs;
       cardsCount.textContent = `(${numPairs * 2} cards)`;
-      initializeGame();
     }
 
     function shuffle(array) {
@@ -1055,17 +1367,23 @@
     }
 
     function initializeGame() {
+      // If we have more photos available than selected, re-randomize
+      if (allPhotos.length > numPairs) {
+        const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+        photos = shuffled.slice(0, numPairs);
+      }
+
       const selectedPhotos = photos.slice(0, numPairs);
       cards = shuffle(selectedPhotos.flatMap((photo, i) => [
         { id: i * 2, pairId: i, imageUrl: photo.dataUrl, date: photo.date, location: photo.location },
         { id: i * 2 + 1, pairId: i, imageUrl: photo.dataUrl, date: photo.date, location: photo.location }
       ]));
-      
+
       flippedIndices = [];
       matchedPairs = new Set();
       moves = 0;
       isChecking = false;
-      
+
       updateStats();
       renderBoard();
     }
@@ -1078,7 +1396,7 @@
     function renderBoard() {
       const cols = cards.length <= 8 ? 4 : cards.length <= 12 ? 4 : cards.length <= 16 ? 4 : cards.length <= 20 ? 5 : 6;
       gameBoard.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-      
+
       gameBoard.innerHTML = cards.map((card, i) => {
         const isFlipped = flippedIndices.includes(i);
         const isMatched = matchedPairs.has(card.pairId);
@@ -1088,16 +1406,16 @@
               <div class="card-face card-back">?</div>
               <div class="card-face card-front">
                 <img src="${card.imageUrl}" alt="Card">
-                ${isMatched ? '<div class="match-check">✓</div>' : ''}
+                ${isMatched ? '<div class="match-check"></div>' : ''}
               </div>
             </div>
           </div>
         `;
       }).join('');
     }
-    
+
     let matchResolve = null;
-    
+
     returnToGameBtn.addEventListener('click', () => {
       matchPreview.classList.remove('show');
       if (matchResolve) {
@@ -1105,23 +1423,22 @@
         matchResolve = null;
       }
     });
-    
+
     function showMatchPreview(card) {
       matchImage.src = card.imageUrl;
       matchDate.textContent = card.date || '';
-      
+
       if (card.location) {
         matchLocation.textContent = card.location;
         matchLocation.style.display = 'block';
       } else {
         matchLocation.style.display = 'none';
       }
-      
-      // Hide date line entirely if no date
+
       matchDate.style.display = card.date ? 'block' : 'none';
-      
+
       matchPreview.classList.add('show');
-      
+
       return new Promise(resolve => {
         matchResolve = resolve;
       });
@@ -1139,22 +1456,20 @@
         moves++;
         isChecking = true;
         updateStats();
-        
+
         const [first, second] = flippedIndices;
         if (cards[first].pairId === cards[second].pairId) {
-          // Match found!
-          await new Promise(r => setTimeout(r, 600)); // Wait for flip animation
-          
+          await new Promise(r => setTimeout(r, 600));
+
           matchedPairs.add(cards[first].pairId);
           updateStats();
           renderBoard();
-          
-          // Show match preview
+
           await showMatchPreview(cards[first]);
-          
+
           flippedIndices = [];
           isChecking = false;
-          
+
           if (matchedPairs.size === numPairs) {
             setTimeout(() => {
               finalMoves.textContent = moves;
@@ -1173,9 +1488,18 @@
 
     function resetToUpload() {
       photos = [];
+      allPhotos = [];
       updatePreview();
       gameScreen.classList.add('hidden');
       uploadScreen.classList.remove('hidden');
+    }
+
+    function resetToSetup() {
+      photos = [];
+      allPhotos = [];
+      gameScreen.classList.add('hidden');
+      uploadScreen.classList.add('hidden');
+      setupScreen.classList.remove('hidden');
     }
   </script>
 </body>
