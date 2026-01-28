@@ -397,6 +397,24 @@
               Play Again
             </button>
           )}
+
+          <a
+            href="../index.html"
+            style={{
+              marginTop: '20px',
+              padding: '10px 20px',
+              backgroundColor: '#ddd',
+              color: '#555',
+              fontSize: '14px',
+              borderRadius: '20px',
+              textDecoration: 'none',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={e => e.currentTarget.style.backgroundColor = '#ccc'}
+            onMouseOut={e => e.currentTarget.style.backgroundColor = '#ddd'}
+          >
+            Back to Games
+          </a>
         </div>
       );
     }
