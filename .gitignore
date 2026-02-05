@@ -1,0 +1,13 @@
+# Claude Code settings
+.claude/
+CLAUDE_CODE_PROMPT.md
+
+# Windows artifacts
+nul
+
+# IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
