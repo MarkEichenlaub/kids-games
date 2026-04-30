@@ -13,73 +13,47 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { min-height: 100vh; overflow: hidden; }
-    .region-path { transition: filter 0.1s; }
+    .region-path { transition: filter 0.12s; }
     .region-path.clickable { cursor: pointer; }
-    .region-path.clickable:hover { filter: brightness(0.82); }
+    .region-path.clickable:hover { filter: brightness(0.80); }
     @keyframes invalidFlash {
-      0%   { filter: brightness(1) saturate(1); }
-      30%  { filter: brightness(0.5) saturate(3) hue-rotate(300deg); }
-      70%  { filter: brightness(0.5) saturate(3) hue-rotate(300deg); }
-      100% { filter: brightness(1) saturate(1); }
+      0%,100% { filter: brightness(1); }
+      40%,60% { filter: brightness(0.45) sepia(1) hue-rotate(300deg) saturate(4); }
     }
     .invalid-flash { animation: invalidFlash 0.45s ease-out; }
     @keyframes confettiFall {
       to { transform: translateY(110vh) rotate(540deg); opacity: 0; }
     }
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .slide-in { animation: slideIn 0.25s ease-out; }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+    const { useState, useEffect, useCallback, useMemo, useRef } = React;
 
-    // ── Color palette ──────────────────────────────────────────────────
-    const COLORS = [
-      { id: 'red',    name: 'Red',    hex: '#E74C3C' },
-      { id: 'blue',   name: 'Blue',   hex: '#3498DB' },
-      { id: 'green',  name: 'Green',  hex: '#2ECC71' },
-      { id: 'yellow', name: 'Yellow', hex: '#F1C40F' },
-      { id: 'orange', name: 'Orange', hex: '#E67E22' },
-      { id: 'purple', name: 'Purple', hex: '#9B59B6' },
+    // ── Colors (always 6 defined; slice to numColors) ─────────────────
+    const ALL_COLORS = [
+      { id:'red',    name:'Red',    hex:'#E74C3C' },
+      { id:'blue',   name:'Blue',   hex:'#3498DB' },
+      { id:'green',  name:'Green',  hex:'#2ECC71' },
+      { id:'yellow', name:'Yellow', hex:'#F1C40F' },
+      { id:'orange', name:'Orange', hex:'#E67E22' },
+      { id:'purple', name:'Purple', hex:'#9B59B6' },
     ];
 
-    // ── US state data ──────────────────────────────────────────────────
-    const US_NAMES = {
-      '01':'Alabama','02':'Alaska','04':'Arizona','05':'Arkansas','06':'California',
-      '08':'Colorado','09':'Connecticut','10':'Delaware','12':'Florida','13':'Georgia',
-      '15':'Hawaii','16':'Idaho','17':'Illinois','18':'Indiana','19':'Iowa',
-      '20':'Kansas','21':'Kentucky','22':'Louisiana','23':'Maine','24':'Maryland',
-      '25':'Massachusetts','26':'Michigan','27':'Minnesota','28':'Mississippi',
-      '29':'Missouri','30':'Montana','31':'Nebraska','32':'Nevada',
-      '33':'New Hampshire','34':'New Jersey','35':'New Mexico','36':'New York',
-      '37':'North Carolina','38':'North Dakota','39':'Ohio','40':'Oklahoma',
-      '41':'Oregon','42':'Pennsylvania','44':'Rhode Island','45':'South Carolina',
-      '46':'South Dakota','47':'Tennessee','48':'Texas','49':'Utah','50':'Vermont',
-      '51':'Virginia','53':'Washington','54':'West Virginia','55':'Wisconsin','56':'Wyoming',
-    };
-    const US_ABBR = {
-      '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT',
-      '10':'DE','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN',
-      '19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA',
-      '26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV',
-      '33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH',
-      '40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN',
-      '48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY',
-    };
-
-    // ── Africa data ────────────────────────────────────────────────────
-    const AFRICA_IDS = new Set([
-      12,24,204,72,854,108,120,140,148,178,180,262,818,226,232,231,
-      266,270,288,324,624,384,404,426,430,434,450,454,466,478,504,
-      508,516,562,566,646,686,694,706,710,728,729,748,768,788,800,
-      834,894,716,
-    ]);
-    const AFRICA_NAMES = {
+    // ── World country names (ISO numeric → name) ──────────────────────
+    const CNAMES = {
+      // Europe
+      8:'Albania',20:'Andorra',40:'Austria',56:'Belgium',70:'Bosnia & Herz.',
+      100:'Bulgaria',112:'Belarus',191:'Croatia',196:'Cyprus',203:'Czech Republic',
+      208:'Denmark',233:'Estonia',246:'Finland',250:'France',276:'Germany',
+      300:'Greece',348:'Hungary',352:'Iceland',372:'Ireland',376:'Israel',
+      380:'Italy',428:'Latvia',440:'Lithuania',442:'Luxembourg',498:'Moldova',
+      499:'Montenegro',528:'Netherlands',578:'Norway',807:'N. Macedonia',616:'Poland',
+      620:'Portugal',642:'Romania',643:'Russia',688:'Serbia',703:'Slovakia',
+      705:'Slovenia',724:'Spain',752:'Sweden',756:'Switzerland',792:'Turkey',
+      804:'Ukraine',826:'United Kingdom',383:'Kosovo',
+      // Africa
       12:'Algeria',24:'Angola',204:'Benin',72:'Botswana',854:'Burkina Faso',
       108:'Burundi',120:'Cameroon',140:'C.A.R.',148:'Chad',178:'Congo',
       180:'DR Congo',262:'Djibouti',818:'Egypt',226:'Eq. Guinea',232:'Eritrea',
@@ -90,33 +64,198 @@
       566:'Nigeria',646:'Rwanda',686:'Senegal',694:'Sierra Leone',706:'Somalia',
       710:'South Africa',728:'South Sudan',729:'Sudan',748:'Eswatini',768:'Togo',
       788:'Tunisia',800:'Uganda',834:'Tanzania',894:'Zambia',716:'Zimbabwe',
+      // South America
+      32:'Argentina',68:'Bolivia',76:'Brazil',152:'Chile',170:'Colombia',
+      218:'Ecuador',254:'Fr. Guiana',328:'Guyana',600:'Paraguay',604:'Peru',
+      740:'Suriname',858:'Uruguay',862:'Venezuela',
+      // Asia
+      4:'Afghanistan',31:'Azerbaijan',48:'Bahrain',50:'Bangladesh',64:'Bhutan',
+      96:'Brunei',116:'Cambodia',156:'China',626:'Timor-Leste',356:'India',
+      360:'Indonesia',364:'Iran',368:'Iraq',268:'Georgia',392:'Japan',400:'Jordan',
+      398:'Kazakhstan',410:'South Korea',408:'North Korea',417:'Kyrgyzstan',
+      418:'Laos',422:'Lebanon',458:'Malaysia',496:'Mongolia',104:'Myanmar',
+      524:'Nepal',512:'Oman',586:'Pakistan',275:'Palestine',608:'Philippines',
+      634:'Qatar',682:'Saudi Arabia',144:'Sri Lanka',760:'Syria',762:'Tajikistan',
+      764:'Thailand',795:'Turkmenistan',784:'UAE',704:'Vietnam',860:'Uzbekistan',
+      887:'Yemen',51:'Armenia',
+      // US states
+      '01':'Alabama','02':'Alaska','04':'Arizona','05':'Arkansas','06':'California',
+      '08':'Colorado','09':'Connecticut','10':'Delaware','12':'Florida','13':'Georgia',
+      '15':'Hawaii','16':'Idaho','17':'Illinois','18':'Indiana','19':'Iowa',
+      '20':'Kansas','21':'Kentucky','22':'Louisiana','23':'Maine','24':'Maryland',
+      '25':'Massachusetts','26':'Michigan','27':'Minnesota','28':'Mississippi',
+      '29':'Missouri','30':'Montana','31':'Nebraska','32':'Nevada',
+      '33':'New Hampshire','34':'New Jersey','35':'New Mexico','36':'New York',
+      '37':'North Carolina','38':'North Dakota','39':'Ohio','40':'Oklahoma',
+      '41':'Oregon','42':'Pennsylvania','44':'Rhode Island','45':'South Carolina',
+      '46':'South Dakota','47':'Tennessee','48':'Texas','49':'Utah','50':'Vermont',
+      '51':'Virginia','53':'Washington','54':'West Virginia','55':'Wisconsin',
+      '56':'Wyoming',
+    };
+
+    // ── Continent ID sets ─────────────────────────────────────────────
+    const AFRICA_IDS = new Set([
+      12,24,204,72,854,108,120,140,148,178,180,262,818,226,232,231,266,270,
+      288,324,624,384,404,426,430,434,450,454,466,478,504,508,516,562,566,
+      646,686,694,706,710,728,729,748,768,788,800,834,894,716,
+    ]);
+    const EUROPE_IDS = new Set([
+      8,40,56,70,100,112,191,196,203,208,233,246,250,276,300,348,352,372,
+      380,428,440,442,498,499,528,578,807,616,620,642,688,703,705,724,752,
+      756,804,826,383,
+    ]);
+    const SA_IDS = new Set([32,68,76,152,170,218,254,328,600,604,740,858,862]);
+    const ASIA_IDS = new Set([
+      4,31,48,50,64,96,116,156,626,356,360,364,368,268,392,400,398,410,408,
+      417,418,422,458,496,104,524,512,586,275,608,634,682,144,760,762,764,
+      795,784,704,860,887,51,
+    ]);
+
+    // ── Custom fictional maps ─────────────────────────────────────────
+    // All custom maps share a 600×420 coordinate space.
+
+    const ENCHANCIA_REGIONS = [
+      { id:'freezenberg', name:'Freezenberg',
+        pathD:'M 5,5 L 325,5 L 325,120 L 5,120 Z', centroid:[165,62] },
+      { id:'birk',        name:'Birk',
+        pathD:'M 325,5 L 595,5 L 595,120 L 325,120 Z', centroid:[460,62] },
+      { id:'wei-ling',    name:'Wei-Ling',
+        pathD:'M 5,120 L 160,120 L 160,290 L 5,290 Z', centroid:[82,205] },
+      { id:'enchancia',   name:'Enchancia',
+        pathD:'M 160,120 L 390,120 L 390,290 L 160,290 Z', centroid:[275,205] },
+      { id:'tangu',       name:'Tangu',
+        pathD:'M 390,120 L 595,120 L 595,290 L 390,290 Z', centroid:[492,205] },
+      { id:'brazendell',  name:'Brazendell',
+        pathD:'M 5,290 L 205,290 L 205,415 L 5,415 Z', centroid:[105,352] },
+      { id:'maru',        name:'Maru',
+        pathD:'M 205,290 L 390,290 L 390,415 L 205,415 Z', centroid:[297,352] },
+      { id:'khaldeen',    name:'Khaldeen',
+        pathD:'M 390,290 L 595,290 L 595,415 L 390,415 Z', centroid:[492,352] },
+    ];
+    const ENCHANCIA_ADJ = {
+      freezenberg: ['birk','wei-ling','enchancia'],
+      birk:        ['freezenberg','enchancia','tangu'],
+      'wei-ling':  ['freezenberg','enchancia','brazendell'],
+      enchancia:   ['freezenberg','birk','wei-ling','tangu','brazendell','maru'],
+      tangu:       ['birk','enchancia','khaldeen'],
+      brazendell:  ['wei-ling','enchancia','maru'],
+      maru:        ['enchancia','brazendell','khaldeen'],
+      khaldeen:    ['tangu','maru'],
+    };
+
+    const EQUESTRIA_REGIONS = [
+      { id:'crystal-empire', name:'Crystal Empire',
+        pathD:'M 5,5 L 595,5 L 595,90 L 5,90 Z',           centroid:[300,47] },
+      { id:'yakyakistan',    name:'Yakyakistan',
+        pathD:'M 5,90 L 175,90 L 175,245 L 5,245 Z',        centroid:[90,167] },
+      { id:'canterlot',      name:'Canterlot',
+        pathD:'M 175,90 L 395,90 L 395,245 L 175,245 Z',    centroid:[285,167] },
+      { id:'manehattan',     name:'Manehattan',
+        pathD:'M 395,90 L 595,90 L 595,245 L 395,245 Z',    centroid:[495,167] },
+      { id:'griffonstone',   name:'Griffonstone',
+        pathD:'M 5,245 L 175,245 L 175,360 L 5,360 Z',      centroid:[90,302] },
+      { id:'ponyville',      name:'Ponyville',
+        pathD:'M 175,245 L 395,245 L 395,360 L 175,360 Z',  centroid:[285,302] },
+      { id:'dragon-lands',   name:'Dragon Lands',
+        pathD:'M 395,245 L 595,245 L 595,360 L 395,360 Z',  centroid:[495,302] },
+      { id:'appleloosa',     name:'Appleloosa',
+        pathD:'M 5,360 L 295,360 L 295,415 L 5,415 Z',      centroid:[150,387] },
+      { id:'badlands',       name:'Badlands',
+        pathD:'M 295,360 L 595,360 L 595,415 L 295,415 Z',  centroid:[445,387] },
+    ];
+    const EQUESTRIA_ADJ = {
+      'crystal-empire': ['yakyakistan','canterlot','manehattan'],
+      yakyakistan:      ['crystal-empire','canterlot','griffonstone'],
+      canterlot:        ['crystal-empire','yakyakistan','manehattan','ponyville'],
+      manehattan:       ['crystal-empire','canterlot','dragon-lands'],
+      griffonstone:     ['yakyakistan','ponyville','appleloosa'],
+      ponyville:        ['canterlot','griffonstone','dragon-lands','appleloosa','badlands'],
+      'dragon-lands':   ['manehattan','ponyville','badlands'],
+      appleloosa:       ['griffonstone','ponyville','badlands'],
+      badlands:         ['appleloosa','ponyville','dragon-lands'],
     };
 
     // ── Map configurations ─────────────────────────────────────────────
+    // type:'topo'   → fetches topojson from URL, projects into 600×420 viewBox
+    // type:'custom' → uses pre-defined SVG paths in 600×420 viewBox
     const MAP_CONFIGS = {
       us: {
-        label: 'United States',
-        url: 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json',
-        objectName: 'states',
-        filterGeom: g => g.id !== 11,            // exclude DC
-        getId: id => String(id).padStart(2, '0'),
-        getName: id => US_NAMES[id] || '',
-        getLabel: id => US_ABBR[id] || '',
-        makeProjFn: (features, ext) =>
-          d3.geoAlbersUsa().fitExtent(ext, { type:'FeatureCollection', features }),
-        fontSize: 9,
+        type:'topo', label:'United States',
+        url:'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json',
+        objectName:'states',
+        filterGeom: g => g.id !== 11,
+        getId: id => String(id).padStart(2,'0'),
+        getName: id => CNAMES[id] || String(id),
+        makeProj: features =>
+          d3.geoAlbersUsa().fitExtent([[20,40],[580,410]],
+            { type:'FeatureCollection', features }),
+        fontSize: 7,
       },
       africa: {
-        label: 'Africa',
-        url: 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
-        objectName: 'countries',
+        type:'topo', label:'Africa',
+        url:'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+        objectName:'countries',
         filterGeom: g => AFRICA_IDS.has(+g.id),
         getId: id => String(id),
-        getName: id => AFRICA_NAMES[+id] || '',
-        getLabel: id => AFRICA_NAMES[+id] || '',
-        makeProjFn: (features, ext) =>
-          d3.geoMercator().fitExtent(ext, { type:'FeatureCollection', features }),
+        getName: id => CNAMES[+id] || String(id),
+        makeProj: features =>
+          d3.geoMercator().fitExtent([[20,40],[580,410]],
+            { type:'FeatureCollection', features }),
         fontSize: 6.5,
+      },
+      europe: {
+        type:'topo', label:'Europe',
+        url:'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+        objectName:'countries',
+        filterGeom: g => EUROPE_IDS.has(+g.id),
+        getId: id => String(id),
+        getName: id => CNAMES[+id] || String(id),
+        makeProj: features =>
+          d3.geoMercator().fitExtent([[20,40],[580,410]],
+            { type:'FeatureCollection', features }),
+        fontSize: 6.5,
+      },
+      south_america: {
+        type:'topo', label:'South America',
+        url:'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+        objectName:'countries',
+        filterGeom: g => SA_IDS.has(+g.id),
+        getId: id => String(id),
+        getName: id => CNAMES[+id] || String(id),
+        makeProj: features =>
+          d3.geoMercator().fitExtent([[20,40],[580,410]],
+            { type:'FeatureCollection', features }),
+        fontSize: 7,
+      },
+      asia: {
+        type:'topo', label:'Asia',
+        url:'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+        objectName:'countries',
+        filterGeom: g => ASIA_IDS.has(+g.id),
+        getId: id => String(id),
+        getName: id => CNAMES[+id] || String(id),
+        makeProj: features =>
+          d3.geoMercator().fitExtent([[20,40],[580,410]],
+            { type:'FeatureCollection', features }),
+        fontSize: 6,
+      },
+      enchancia: {
+        type:'custom', label:'Enchancia',
+        subtitle:'from Sofia the First',
+        regions: ENCHANCIA_REGIONS,
+        adjacencyList: ENCHANCIA_ADJ,
+        bgFill:'#2a1a0a',
+        regionDefault:'#d4b483',
+        strokeColor:'#5c3d1e',
+      },
+      equestria: {
+        type:'custom', label:'Equestria',
+        subtitle:'My Little Pony',
+        regions: EQUESTRIA_REGIONS,
+        adjacencyList: EQUESTRIA_ADJ,
+        bgFill:'#0d1f3c',
+        regionDefault:'#8ecce8',
+        strokeColor:'#1a3a5c',
       },
     };
 
@@ -139,108 +278,49 @@
       } catch(_) {}
     };
 
-    // ── Component ──────────────────────────────────────────────────────
+    // ── Error boundary ─────────────────────────────────────────────────
+    class ErrorBoundary extends React.Component {
+      constructor(props) { super(props); this.state = { err: null }; }
+      static getDerivedStateFromError(err) { return { err }; }
+      render() {
+        if (this.state.err) return (
+          <div style={{padding:40,color:'#FC8181',fontFamily:'sans-serif'}}>
+            <h2>Something went wrong loading the map.</h2>
+            <p style={{marginTop:12,opacity:0.6}}>{String(this.state.err)}</p>
+            <button onClick={() => this.setState({err:null})}
+              style={{marginTop:20,padding:'8px 20px',background:'#3498DB',color:'#fff',border:'none',borderRadius:8,cursor:'pointer'}}>
+              Try Again
+            </button>
+          </div>
+        );
+        return this.props.children;
+      }
+    }
+
+    // ── Main component ─────────────────────────────────────────────────
     function Cartographer() {
       const [selectedMap, setSelectedMap]     = useState('us');
-      const [rawTopology, setRawTopology]     = useState(null);
-      const [loadError, setLoadError]         = useState('');
+      const [numColors,   setNumColors]       = useState(4);
       const [mapFeatures, setMapFeatures]     = useState([]);
-      const [adjacency, setAdjacency]         = useState({});
-      const [svgW, setSvgW]                   = useState(800);
-      const [svgH, setSvgH]                   = useState(540);
+      const [adjacency,   setAdjacency]       = useState({});
+      const [loading,     setLoading]         = useState(true);
+      const [loadError,   setLoadError]       = useState('');
 
       // game state
       const [regionColors, setRegionColors]   = useState({});
-      const [currentPlayer, setCurrentPlayer] = useState(1);
-      const [selectedColor, setSelectedColor] = useState(null);
-      const [gameStatus, setGameStatus]       = useState('playing');
-      const [message, setMessage]             = useState(null);
-      const [flashRegion, setFlashRegion]     = useState(null);
-      const [confetti, setConfetti]           = useState([]);
+      const [currentPlayer,setCurrentPlayer]  = useState(1);
+      const [selectedColor,setSelectedColor]  = useState(null);
+      const [gameStatus,   setGameStatus]     = useState('playing');
+      const [message,      setMessage]        = useState(null);
+      const [flashRegion,  setFlashRegion]    = useState(null);
+      const [confetti,     setConfetti]       = useState([]);
 
-      const containerRef = useRef(null);
+      // Cache fetched topologies to avoid re-downloading on map switch
+      const topoCache = useRef({});
 
-      // ── Measure map container ──
-      useEffect(() => {
-        const measure = () => {
-          if (containerRef.current) {
-            const r = containerRef.current.getBoundingClientRect();
-            setSvgW(r.width  || 800);
-            setSvgH(r.height || 540);
-          }
-        };
-        measure();
-        const ro = new ResizeObserver(measure);
-        if (containerRef.current) ro.observe(containerRef.current);
-        return () => ro.disconnect();
-      }, []);
+      const activeColors = useMemo(() => ALL_COLORS.slice(0, numColors), [numColors]);
 
-      // ── Fetch topology when map selection changes ──
-      useEffect(() => {
-        setRawTopology(null);
-        setLoadError('');
-        setMapFeatures([]);
-        setAdjacency({});
-        resetGame();
-        d3.json(MAP_CONFIGS[selectedMap].url)
-          .then(setRawTopology)
-          .catch(() => setLoadError('Could not load map. Check your internet connection.'));
-      }, [selectedMap]);
-
-      // ── Compute projected features when topology or SVG size changes ──
-      useEffect(() => {
-        if (!rawTopology || svgW < 50) return;
-        const cfg = MAP_CONFIGS[selectedMap];
-        const pad = 24;
-        const topPad = 48; // room for title
-        const ext = [[pad, topPad], [svgW - pad, svgH - pad]];
-
-        const allGeoms  = rawTopology.objects[cfg.objectName].geometries;
-        const filtered  = allGeoms.filter(cfg.filterGeom);
-
-        // Adjacency via shared TopoJSON arcs
-        const nbIndices = topojson.neighbors(filtered);
-        const adj = {};
-        filtered.forEach((g, i) => {
-          const id = cfg.getId(g.id);
-          adj[id] = new Set(nbIndices[i].map(j => cfg.getId(filtered[j].id)));
-        });
-
-        // Build sub-topology so topojson.feature works on filtered set
-        const subTopo = {
-          ...rawTopology,
-          objects: {
-            [cfg.objectName]: {
-              ...rawTopology.objects[cfg.objectName],
-              geometries: filtered,
-            },
-          },
-        };
-        const features = topojson.feature(subTopo, subTopo.objects[cfg.objectName]).features;
-
-        // Projection fitted to SVG
-        const proj    = cfg.makeProjFn(features, ext);
-        const pathGen = d3.geoPath().projection(proj);
-
-        const processed = features.map(f => {
-          const id     = cfg.getId(f.id);
-          const pathD  = pathGen(f);
-          const ctr    = pathGen.centroid(f);
-          return {
-            id,
-            name:    cfg.getName(id),
-            label:   cfg.getLabel(id),
-            pathD,
-            centroid: (ctr && !isNaN(ctr[0]) && !isNaN(ctr[1])) ? ctr : null,
-          };
-        }).filter(f => f.pathD);
-
-        setMapFeatures(processed);
-        setAdjacency(adj);
-      }, [rawTopology, svgW, svgH, selectedMap]);
-
-      // ── Game helpers ──
-      const resetGame = () => {
+      const resetGame = useCallback(() => {
         setRegionColors({});
         setCurrentPlayer(1);
         setSelectedColor(null);
@@ -248,64 +328,155 @@
         setMessage(null);
         setFlashRegion(null);
         setConfetti([]);
-      };
+      }, []);
 
-      const handleColorClick = (colorId) => {
-        if (gameStatus !== 'playing') return;
-        setSelectedColor(id => id === colorId ? null : colorId);
-        setMessage(null);
-      };
+      // ── Load map whenever selectedMap changes ──────────────────────
+      useEffect(() => {
+        const cfg = MAP_CONFIGS[selectedMap];
+        setLoadError('');
+        resetGame();
 
+        if (cfg.type === 'custom') {
+          // Custom maps: data is already in code
+          const adj = {};
+          cfg.regions.forEach(r => {
+            adj[r.id] = new Set(cfg.adjacencyList[r.id] || []);
+          });
+          setMapFeatures(cfg.regions.map(r => ({
+            id: r.id, name: r.name, pathD: r.pathD, centroid: r.centroid,
+          })));
+          setAdjacency(adj);
+          setLoading(false);
+        } else {
+          // TopoJSON map: fetch (with cache), then project
+          setLoading(true);
+          setMapFeatures([]);
+          setAdjacency({});
+
+          const doLoad = (topo) => {
+            try {
+              const allGeoms   = topo.objects[cfg.objectName].geometries;
+              const filtered   = allGeoms.filter(cfg.filterGeom);
+
+              if (filtered.length === 0) {
+                setLoadError('No regions found for this map.');
+                setLoading(false);
+                return;
+              }
+
+              // Adjacency via shared TopoJSON arcs
+              const nbIdx = topojson.neighbors(filtered);
+              const adj   = {};
+              filtered.forEach((g, i) => {
+                const id   = cfg.getId(g.id);
+                adj[id]    = new Set(nbIdx[i].map(j => cfg.getId(filtered[j].id)));
+              });
+
+              // Build sub-topology for filtered set (keeps all arcs)
+              const subTopo = {
+                ...topo,
+                objects: {
+                  [cfg.objectName]: {
+                    ...topo.objects[cfg.objectName],
+                    geometries: filtered,
+                  },
+                },
+              };
+              const features = topojson.feature(subTopo, subTopo.objects[cfg.objectName]).features;
+
+              // Project into 600×420 coordinate space
+              const proj    = cfg.makeProj(features);
+              const pathGen = d3.geoPath().projection(proj);
+
+              const processed = features.map(f => {
+                const id   = cfg.getId(f.id);
+                const pathD = pathGen(f);
+                const ctr  = pathGen.centroid(f);
+                return {
+                  id,
+                  name:     cfg.getName(id),
+                  pathD,
+                  centroid: (ctr && !isNaN(ctr[0]) && !isNaN(ctr[1])) ? ctr : null,
+                };
+              }).filter(f => f.pathD && f.pathD.length > 10);
+
+              setMapFeatures(processed);
+              setAdjacency(adj);
+              setLoading(false);
+            } catch (err) {
+              console.error('Map processing error:', err);
+              setLoadError('Failed to process map data: ' + err.message);
+              setLoading(false);
+            }
+          };
+
+          if (topoCache.current[cfg.url]) {
+            doLoad(topoCache.current[cfg.url]);
+          } else {
+            d3.json(cfg.url)
+              .then(topo => {
+                topoCache.current[cfg.url] = topo;
+                doLoad(topo);
+              })
+              .catch(err => {
+                setLoadError('Could not load map. Check your internet connection.');
+                setLoading(false);
+              });
+          }
+        }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [selectedMap]);
+
+      // Reset selectedColor if it's no longer in the active palette
+      useEffect(() => {
+        if (selectedColor && !activeColors.find(c => c.id === selectedColor)) {
+          setSelectedColor(null);
+        }
+      }, [numColors, selectedColor, activeColors]);
+
+      // ── Handlers ──────────────────────────────────────────────────
       const handleRegionClick = useCallback((regionId) => {
         if (gameStatus !== 'playing') return;
-
         if (!selectedColor) {
-          setMessage({ text: 'Pick a color first!', type: 'info' });
+          setMessage({ text:'Pick a color first!', type:'info' });
           return;
         }
         if (regionColors[regionId]) {
-          setMessage({ text: 'That region is already colored.', type: 'info' });
+          setMessage({ text:'That region is already colored.', type:'info' });
           return;
         }
-
-        // Adjacency check
-        const neighbors = adjacency[regionId] || new Set();
-        const colorName = COLORS.find(c => c.id === selectedColor)?.name || '';
-        if ([...neighbors].some(nId => regionColors[nId] === selectedColor)) {
-          setMessage({ text: `Can't use ${colorName} here — a neighboring region already has that color!`, type: 'error' });
+        const nbs     = adjacency[regionId] || new Set();
+        const blocked = [...nbs].some(nId => regionColors[nId] === selectedColor);
+        if (blocked) {
+          const cn = ALL_COLORS.find(c => c.id === selectedColor)?.name || '';
+          setMessage({ text:`Can't use ${cn} here — a neighboring region already has that color!`, type:'error' });
           setFlashRegion(regionId);
           playSound('invalid');
           setTimeout(() => setFlashRegion(null), 450);
           return;
         }
-
-        // Apply
         const newColors = { ...regionColors, [regionId]: selectedColor };
         setRegionColors(newColors);
         setMessage(null);
         playSound('place');
-
-        // Win check
         if (Object.keys(newColors).length === mapFeatures.length) {
           setGameStatus('won');
           playSound('win');
-          const cols = ['#E74C3C','#3498DB','#2ECC71','#F1C40F','#E67E22','#9B59B6'];
-          setConfetti(Array.from({ length: 50 }, (_, i) => ({
-            id: i,
-            left: Math.random() * 100,
-            color: cols[i % cols.length],
-            size: 7 + Math.random() * 9,
-            delay: Math.random() * 1.2,
-            dur: 2.5 + Math.random() * 2,
+          const cols = ALL_COLORS.map(c => c.hex);
+          setConfetti(Array.from({length:50}, (_,i) => ({
+            id:i, left:Math.random()*100,
+            color:cols[i % cols.length],
+            size:7+Math.random()*9,
+            delay:Math.random()*1.2,
+            dur:2.5+Math.random()*2,
           })));
           return;
         }
-
-        setCurrentPlayer(p => p === 1 ? 2 : 1);
+        setCurrentPlayer(p => p===1 ? 2 : 1);
         setSelectedColor(null);
       }, [gameStatus, selectedColor, regionColors, adjacency, mapFeatures.length]);
 
-      // ── Derived values ──
+      // ── Derived values ─────────────────────────────────────────────
       const coloredCount = Object.keys(regionColors).length;
       const totalCount   = mapFeatures.length;
       const progress     = totalCount > 0 ? (coloredCount / totalCount) * 100 : 0;
@@ -315,110 +486,120 @@
         const uncolored = mapFeatures.filter(f => !regionColors[f.id]);
         if (uncolored.length === 0) return false;
         return uncolored.every(f => {
-          const nbs = adjacency[f.id] || new Set();
+          const nbs  = adjacency[f.id] || new Set();
           const used = new Set([...nbs].map(n => regionColors[n]).filter(Boolean));
-          return COLORS.every(c => used.has(c.id));
+          return activeColors.every(c => used.has(c.id));
         });
-      }, [mapFeatures, regionColors, adjacency, gameStatus, totalCount]);
+      }, [mapFeatures, regionColors, adjacency, gameStatus, totalCount, activeColors]);
 
-      const cfg = MAP_CONFIGS[selectedMap];
-      const p1col = '#FF6B6B';
-      const p2col = '#4ECDC4';
-      const pcol  = currentPlayer === 1 ? p1col : p2col;
+      const cfg    = MAP_CONFIGS[selectedMap];
+      const p1col  = '#FF6B6B';
+      const p2col  = '#4ECDC4';
+      const pcol   = currentPlayer === 1 ? p1col : p2col;
+      const isCustom = cfg.type === 'custom';
 
-      // ── Render ──
+      // SVG background / stroke colors
+      const svgBg      = isCustom ? cfg.bgFill      : '#1a1a2e';
+      const regDefault = isCustom ? cfg.regionDefault : '#cccccc';
+      const stroke     = isCustom ? cfg.strokeColor   : '#111827';
+
       return (
-        <div
-          className="flex flex-col"
-          style={{
-            height: '100vh',
-            background: 'linear-gradient(135deg,#1a1a2e 0%,#16213e 55%,#0f3460 100%)',
-            fontFamily: "'Segoe UI',sans-serif",
-          }}
-        >
-          {/* Header */}
-          <header
-            className="flex items-center justify-between px-5 py-2 flex-shrink-0"
-            style={{ background: 'rgba(0,0,0,0.35)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            <h1 className="text-2xl font-bold text-white tracking-wide select-none">
-              🗺️ Cartographer
-            </h1>
-            <div className="flex items-center gap-3">
-              <select
-                value={selectedMap}
-                onChange={e => setSelectedMap(e.target.value)}
-                className="text-white text-sm px-3 py-1.5 rounded-lg border cursor-pointer"
-                style={{ background: 'rgba(255,255,255,0.1)', borderColor: 'rgba(255,255,255,0.2)' }}
-              >
-                {Object.entries(MAP_CONFIGS).map(([k, c]) => (
-                  <option key={k} value={k} style={{ background: '#16213e' }}>{c.label}</option>
+        <div className="flex flex-col" style={{height:'100vh', background:'linear-gradient(135deg,#1a1a2e 0%,#16213e 55%,#0f3460 100%)', fontFamily:"'Segoe UI',sans-serif"}}>
+
+          {/* ── Header ───────────────────────────────────────────── */}
+          <header className="flex items-center justify-between px-4 py-2 flex-shrink-0"
+            style={{background:'rgba(0,0,0,0.4)', borderBottom:'1px solid rgba(255,255,255,0.09)'}}>
+            <h1 className="text-xl font-bold text-white tracking-wide select-none">🗺️ Cartographer</h1>
+            <div className="flex items-center gap-2 flex-wrap justify-end">
+              {/* Color count selector */}
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-white/40 mr-1">Colors:</span>
+                {[3,4,5,6].map(n => (
+                  <button key={n} onClick={() => setNumColors(n)}
+                    className="w-7 h-7 rounded-lg text-xs font-bold transition"
+                    style={{
+                      background: numColors===n ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.1)',
+                      color:      numColors===n ? '#1a1a2e' : 'rgba(255,255,255,0.6)',
+                      border:     numColors===n ? '2px solid #fff' : '2px solid rgba(255,255,255,0.15)',
+                    }}>
+                    {n}
+                  </button>
                 ))}
+              </div>
+              {/* Map selector */}
+              <select value={selectedMap} onChange={e => setSelectedMap(e.target.value)}
+                className="text-white text-sm px-2 py-1.5 rounded-lg border cursor-pointer"
+                style={{background:'rgba(255,255,255,0.1)', borderColor:'rgba(255,255,255,0.2)'}}>
+                <optgroup label="Real Maps" style={{background:'#16213e'}}>
+                  <option value="us"           style={{background:'#16213e'}}>United States</option>
+                  <option value="africa"       style={{background:'#16213e'}}>Africa</option>
+                  <option value="europe"       style={{background:'#16213e'}}>Europe</option>
+                  <option value="south_america"style={{background:'#16213e'}}>South America</option>
+                  <option value="asia"         style={{background:'#16213e'}}>Asia</option>
+                </optgroup>
+                <optgroup label="Fantasy Maps" style={{background:'#16213e'}}>
+                  <option value="enchancia"    style={{background:'#16213e'}}>Enchancia (Sofia)</option>
+                  <option value="equestria"    style={{background:'#16213e'}}>Equestria (MLP)</option>
+                </optgroup>
               </select>
-              <a
-                href="../index.html"
-                className="text-sm px-3 py-1.5 rounded-lg border transition"
-                style={{ color: 'rgba(255,255,255,0.65)', borderColor: 'rgba(255,255,255,0.18)', background: 'rgba(255,255,255,0.05)' }}
-              >
+              <a href="../index.html" className="text-sm px-3 py-1.5 rounded-lg border transition"
+                style={{color:'rgba(255,255,255,0.6)', borderColor:'rgba(255,255,255,0.18)', background:'rgba(255,255,255,0.05)'}}>
                 ← Back
               </a>
             </div>
           </header>
 
-          {/* Body */}
+          {/* ── Body ─────────────────────────────────────────────── */}
           <div className="flex flex-1 overflow-hidden">
-            {/* Map area */}
-            <div className="flex-1 relative overflow-hidden" ref={containerRef}>
+
+            {/* ── Map area ─────────────────────────────────────── */}
+            <div className="flex-1 relative flex items-center justify-center overflow-hidden">
               {loadError ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-red-400 text-base">{loadError}</p>
-                </div>
-              ) : !rawTopology || mapFeatures.length === 0 ? (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <p className="text-white/50 text-lg">Loading {cfg.label}…</p>
-                </div>
+                <div className="text-red-400 text-base px-8 text-center">{loadError}</div>
+              ) : loading ? (
+                <div className="text-white/50 text-lg">Loading {cfg.label}…</div>
               ) : (
-                <svg width={svgW} height={svgH} style={{ display: 'block' }}>
-                  {/* Title */}
-                  <text
-                    x={svgW / 2} y={28}
-                    textAnchor="middle"
-                    fill="rgba(255,255,255,0.45)"
-                    fontSize="15" fontWeight="700"
-                    style={{ userSelect: 'none' }}
-                  >
-                    {cfg.label}
+                <svg
+                  viewBox="0 0 600 420"
+                  preserveAspectRatio="xMidYMid meet"
+                  style={{width:'100%', height:'100%', display:'block'}}
+                >
+                  {/* Background */}
+                  <rect width="600" height="420" fill={svgBg} />
+
+                  {/* Map title */}
+                  <text x="300" y="20" textAnchor="middle"
+                    fill="rgba(255,255,255,0.5)" fontSize="13" fontWeight="700"
+                    style={{userSelect:'none'}}>
+                    {cfg.label}{cfg.subtitle ? ` — ${cfg.subtitle}` : ''}
                   </text>
 
                   {/* Regions */}
                   {mapFeatures.map(f => {
                     const col     = regionColors[f.id];
-                    const hexFill = col ? COLORS.find(c => c.id === col)?.hex : '#cccccc';
+                    const hexFill = col ? ALL_COLORS.find(c => c.id===col)?.hex : regDefault;
                     const flash   = flashRegion === f.id;
                     return (
                       <g key={f.id} onClick={() => handleRegionClick(f.id)}>
                         <path
                           d={f.pathD}
                           fill={hexFill}
-                          stroke="#111827"
-                          strokeWidth="0.7"
+                          stroke={stroke}
+                          strokeWidth="0.8"
                           strokeLinejoin="round"
-                          className={
-                            'region-path' +
-                            (gameStatus === 'playing' && !col ? ' clickable' : '') +
-                            (flash ? ' invalid-flash' : '')
-                          }
+                          className={'region-path' +
+                            (gameStatus==='playing' && !col ? ' clickable' : '') +
+                            (flash ? ' invalid-flash' : '')}
                         />
-                        {f.centroid && f.label && (
+                        {f.centroid && f.name && (
                           <text
                             x={f.centroid[0]} y={f.centroid[1]}
                             textAnchor="middle" dominantBaseline="middle"
-                            fontSize={cfg.fontSize}
+                            fontSize={cfg.fontSize || 7}
                             fontWeight="700"
-                            fill={col ? 'rgba(0,0,0,0.7)' : '#444'}
-                            style={{ pointerEvents: 'none', userSelect: 'none' }}
-                          >
-                            {f.label}
+                            fill={col ? 'rgba(0,0,0,0.72)' : (isCustom ? 'rgba(0,0,0,0.5)' : '#555')}
+                            style={{pointerEvents:'none', userSelect:'none'}}>
+                            {f.name}
                           </text>
                         )}
                       </g>
@@ -427,201 +608,123 @@
                 </svg>
               )}
 
-              {/* Confetti */}
+              {/* Confetti overlay */}
               {confetti.map(p => (
-                <div
-                  key={p.id}
-                  style={{
-                    position: 'absolute',
-                    left: p.left + '%',
-                    top: -16,
-                    width: p.size,
-                    height: p.size,
-                    background: p.color,
-                    borderRadius: p.id % 3 === 0 ? '50%' : '2px',
-                    pointerEvents: 'none',
-                    animation: `confettiFall ${p.dur}s ease-out ${p.delay}s forwards`,
-                  }}
-                />
+                <div key={p.id} style={{
+                  position:'absolute', left:p.left+'%', top:-16,
+                  width:p.size, height:p.size, background:p.color, pointerEvents:'none',
+                  borderRadius: p.id%3===0 ? '50%' : '2px',
+                  animation:`confettiFall ${p.dur}s ease-out ${p.delay}s forwards`,
+                }}/>
               ))}
             </div>
 
-            {/* Side panel */}
-            <div
-              className="flex-shrink-0 flex flex-col gap-3 p-4 overflow-y-auto"
-              style={{
-                width: 220,
-                background: 'rgba(0,0,0,0.32)',
-                borderLeft: '1px solid rgba(255,255,255,0.08)',
-              }}
-            >
-              {gameStatus === 'playing' && (
-                <>
-                  {/* Player turn */}
-                  <div
-                    className="rounded-xl p-3 text-center"
-                    style={{
-                      background: `${pcol}18`,
-                      border: `2px solid ${pcol}`,
-                    }}
-                  >
-                    <div className="text-xs text-white/40 uppercase tracking-widest mb-0.5">Your Turn</div>
-                    <div className="text-xl font-bold" style={{ color: pcol }}>
-                      Player {currentPlayer}
-                    </div>
-                  </div>
+            {/* ── Side panel ───────────────────────────────────── */}
+            <div className="flex-shrink-0 flex flex-col gap-3 p-4 overflow-y-auto"
+              style={{width:220, background:'rgba(0,0,0,0.35)', borderLeft:'1px solid rgba(255,255,255,0.08)'}}>
 
-                  {/* Color picker */}
-                  <div>
-                    <div className="text-xs text-white/40 uppercase tracking-widest mb-2">Pick a Color</div>
-                    <div className="grid grid-cols-3 gap-1.5">
-                      {COLORS.map(c => (
-                        <button
-                          key={c.id}
-                          title={c.name}
-                          onClick={() => handleColorClick(c.id)}
-                          className="rounded-lg h-9 transition-all"
-                          style={{
-                            background: c.hex,
-                            border: selectedColor === c.id
-                              ? '3px solid #fff'
-                              : '3px solid rgba(255,255,255,0.12)',
-                            transform: selectedColor === c.id ? 'scale(1.12)' : 'scale(1)',
-                            boxShadow: selectedColor === c.id ? `0 0 10px ${c.hex}99` : 'none',
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-xs text-center mt-2" style={{ color: 'rgba(255,255,255,0.35)' }}>
-                      {selectedColor
-                        ? `Now click a region →`
-                        : 'Select a color above'}
-                    </p>
-                  </div>
+              {gameStatus === 'playing' && !loading && !loadError && (<>
+                {/* Player turn */}
+                <div className="rounded-xl p-3 text-center"
+                  style={{background:`${pcol}18`, border:`2px solid ${pcol}`}}>
+                  <div className="text-xs text-white/40 uppercase tracking-widest mb-0.5">Your Turn</div>
+                  <div className="text-xl font-bold" style={{color:pcol}}>Player {currentPlayer}</div>
+                </div>
 
-                  {/* Progress */}
-                  <div>
-                    <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                      <span>{coloredCount} colored</span>
-                      <span>{totalCount - coloredCount} left</span>
-                    </div>
-                    <div
-                      className="w-full h-2.5 rounded-full"
-                      style={{ background: 'rgba(255,255,255,0.1)' }}
-                    >
-                      <div
-                        className="h-2.5 rounded-full transition-all duration-300"
+                {/* Color picker */}
+                <div>
+                  <div className="text-xs text-white/40 uppercase tracking-widest mb-2">Pick a Color</div>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {activeColors.map(c => (
+                      <button key={c.id} title={c.name}
+                        onClick={() => setSelectedColor(id => id===c.id ? null : c.id)}
+                        className="rounded-lg h-9 transition-all"
                         style={{
-                          width: `${progress}%`,
-                          background: 'linear-gradient(90deg,#2ECC71,#27AE60)',
-                        }}
-                      />
-                    </div>
+                          background:c.hex,
+                          border: selectedColor===c.id ? '3px solid #fff' : '3px solid rgba(255,255,255,0.12)',
+                          transform: selectedColor===c.id ? 'scale(1.12)' : 'scale(1)',
+                          boxShadow: selectedColor===c.id ? `0 0 10px ${c.hex}99` : 'none',
+                        }}/>
+                    ))}
                   </div>
+                  <p className="text-xs text-center mt-2" style={{color:'rgba(255,255,255,0.32)'}}>
+                    {selectedColor ? 'Now click a region →' : 'Select a color above'}
+                  </p>
+                </div>
 
-                  {/* Message */}
-                  {message && (
-                    <div
-                      key={message.text}
-                      className={`rounded-lg px-3 py-2 text-xs leading-snug slide-in ${
-                        message.type === 'error'
-                          ? 'text-red-300'
-                          : 'text-blue-300'
-                      }`}
-                      style={{
-                        background: message.type === 'error'
-                          ? 'rgba(231,76,60,0.15)'
-                          : 'rgba(52,152,219,0.15)',
-                        border: `1px solid ${message.type === 'error' ? 'rgba(231,76,60,0.35)' : 'rgba(52,152,219,0.35)'}`,
-                      }}
-                    >
-                      {message.text}
-                    </div>
-                  )}
-
-                  {/* Stuck warning */}
-                  {isStuck && (
-                    <div
-                      className="rounded-lg px-3 py-2 text-xs text-center slide-in"
-                      style={{
-                        color: '#FFA500',
-                        background: 'rgba(255,165,0,0.12)',
-                        border: '1px solid rgba(255,165,0,0.35)',
-                      }}
-                    >
-                      No valid moves left!<br/>
-                      <span style={{ color: 'rgba(255,255,255,0.4)' }}>Consider giving up.</span>
-                    </div>
-                  )}
-
-                  {/* How to play */}
-                  <div
-                    className="text-xs leading-relaxed mt-auto"
-                    style={{ color: 'rgba(255,255,255,0.28)' }}
-                  >
-                    <strong style={{ color: 'rgba(255,255,255,0.45)' }}>How to play:</strong>
-                    {' '}Players take turns. Each turn: pick a color, then click a region.
-                    No two touching regions can share the same color — but corners are OK.
-                    Color the whole map together to win!
+                {/* Progress */}
+                <div>
+                  <div className="flex justify-between text-xs mb-1" style={{color:'rgba(255,255,255,0.38)'}}>
+                    <span>{coloredCount} colored</span>
+                    <span>{totalCount - coloredCount} left</span>
                   </div>
+                  <div className="w-full h-2.5 rounded-full" style={{background:'rgba(255,255,255,0.1)'}}>
+                    <div className="h-2.5 rounded-full transition-all duration-300"
+                      style={{width:`${progress}%`, background:'linear-gradient(90deg,#2ECC71,#27AE60)'}}/>
+                  </div>
+                </div>
 
-                  {/* Give up */}
-                  <button
-                    onClick={() => setGameStatus('lost')}
-                    className="rounded-lg py-2 text-sm font-medium transition"
+                {/* Message */}
+                {message && (
+                  <div key={message.text} className="rounded-lg px-3 py-2 text-xs leading-snug"
                     style={{
-                      color: '#FC8181',
-                      border: '1px solid rgba(252,129,129,0.3)',
-                      background: 'transparent',
-                    }}
-                    onMouseOver={e => e.currentTarget.style.background = 'rgba(252,129,129,0.1)'}
-                    onMouseOut={e => e.currentTarget.style.background = 'transparent'}
-                  >
-                    Give Up
-                  </button>
-                </>
-              )}
+                      color: message.type==='error' ? '#FC8181' : '#90CDF4',
+                      background: message.type==='error' ? 'rgba(231,76,60,0.15)' : 'rgba(52,152,219,0.15)',
+                      border: `1px solid ${message.type==='error' ? 'rgba(231,76,60,0.35)' : 'rgba(52,152,219,0.35)'}`,
+                    }}>
+                    {message.text}
+                  </div>
+                )}
+
+                {/* Stuck warning */}
+                {isStuck && (
+                  <div className="rounded-lg px-3 py-2 text-xs text-center"
+                    style={{color:'#FFA500', background:'rgba(255,165,0,0.12)', border:'1px solid rgba(255,165,0,0.35)'}}>
+                    No valid moves left!
+                  </div>
+                )}
+
+                {/* Instructions */}
+                <div className="text-xs leading-relaxed mt-auto" style={{color:'rgba(255,255,255,0.28)'}}>
+                  <strong style={{color:'rgba(255,255,255,0.45)'}}>How to play:</strong>
+                  {' '}Players take turns picking a color, then clicking a region. No two touching regions can share a color — corners are OK. Color the whole map together to win!
+                </div>
+
+                {/* Give up */}
+                <button onClick={() => setGameStatus('lost')}
+                  className="rounded-lg py-2 text-sm font-medium transition"
+                  style={{color:'#FC8181', border:'1px solid rgba(252,129,129,0.3)', background:'transparent'}}
+                  onMouseOver={e => e.currentTarget.style.background='rgba(252,129,129,0.1)'}
+                  onMouseOut={e => e.currentTarget.style.background='transparent'}>
+                  Give Up
+                </button>
+              </>)}
 
               {gameStatus === 'won' && (
                 <div className="flex flex-col items-center justify-center gap-4 flex-1 text-center py-8">
-                  <div style={{ fontSize: 52 }}>🎉</div>
-                  <div className="text-2xl font-bold" style={{ color: '#F1C40F' }}>You Win!</div>
-                  <div className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                    Amazing! You colored the whole map without breaking the rules. Both players win!
+                  <div style={{fontSize:52}}>🎉</div>
+                  <div className="text-2xl font-bold" style={{color:'#F1C40F'}}>You Win!</div>
+                  <div className="text-sm leading-relaxed" style={{color:'rgba(255,255,255,0.65)'}}>
+                    The whole map is colored! Both players win!
                   </div>
-                  <button
-                    onClick={resetGame}
-                    className="px-6 py-2 rounded-xl text-white font-bold text-sm transition"
-                    style={{ background: 'linear-gradient(135deg,#2ECC71,#27AE60)' }}
-                  >
+                  <button onClick={resetGame}
+                    className="px-6 py-2 rounded-xl text-white font-bold text-sm"
+                    style={{background:'linear-gradient(135deg,#2ECC71,#27AE60)'}}>
                     Play Again
-                  </button>
-                  <button
-                    onClick={() => setSelectedMap(m => m === 'us' ? 'africa' : 'us')}
-                    className="px-4 py-2 rounded-xl text-sm transition"
-                    style={{
-                      color: 'rgba(255,255,255,0.7)',
-                      border: '1px solid rgba(255,255,255,0.2)',
-                      background: 'transparent',
-                    }}
-                  >
-                    Try {selectedMap === 'us' ? 'Africa' : 'United States'}
                   </button>
                 </div>
               )}
 
               {gameStatus === 'lost' && (
                 <div className="flex flex-col items-center justify-center gap-4 flex-1 text-center py-8">
-                  <div style={{ fontSize: 52 }}>😔</div>
-                  <div className="text-2xl font-bold" style={{ color: '#FC8181' }}>Game Over</div>
-                  <div className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.65)' }}>
-                    You gave up! Try again — this time you'll color the whole map!
+                  <div style={{fontSize:52}}>😔</div>
+                  <div className="text-2xl font-bold" style={{color:'#FC8181'}}>Game Over</div>
+                  <div className="text-sm leading-relaxed" style={{color:'rgba(255,255,255,0.65)'}}>
+                    Don't give up! Try again and color the whole map!
                   </div>
-                  <button
-                    onClick={resetGame}
-                    className="px-6 py-2 rounded-xl text-white font-bold text-sm transition"
-                    style={{ background: 'linear-gradient(135deg,#3498DB,#2980B9)' }}
-                  >
+                  <button onClick={resetGame}
+                    className="px-6 py-2 rounded-xl text-white font-bold text-sm"
+                    style={{background:'linear-gradient(135deg,#3498DB,#2980B9)'}}>
                     Try Again
                   </button>
                 </div>
@@ -632,8 +735,9 @@
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<Cartographer />);
+    ReactDOM.createRoot(document.getElementById('root')).render(
+      <ErrorBoundary><Cartographer /></ErrorBoundary>
+    );
   </script>
 </body>
 </html>
