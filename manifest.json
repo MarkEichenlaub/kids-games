@@ -31,6 +31,13 @@
       "preview": "previews/memory-game.svg",
       "file": "games/memory-game.html",
       "sourceChat": "https://claude.ai/chat/08e58326-d54b-4e67-acc5-347e32c04b22"
+    },
+    {
+      "id": "cartographer",
+      "title": "Cartographer",
+      "description": "Two players take turns coloring a real map — no two touching regions can share the same color. Work together to color the whole map!",
+      "preview": "previews/cartographer.svg",
+      "file": "games/cartographer.html"
     }
   ]
 }
