@@ -165,7 +165,7 @@
   /* ---------- Toast ---------- */
   #toast{
     position:fixed; top:18%; left:50%; transform:translateX(-50%) scale(.6);
-    z-index:12; background:rgba(255,255,255,.9); color:var(--accent); font-weight:700;
+    z-index:30; background:rgba(255,255,255,.9); color:var(--accent); font-weight:700;
     font-size:clamp(22px,5vw,34px); padding:10px 26px; border-radius:999px; opacity:0;
     box-shadow:0 10px 30px rgba(90,70,140,.3); border:3px solid #fff; pointer-events:none;
     transition:opacity .25s ease;
@@ -178,6 +178,87 @@
     80%{ opacity:1; transform:translateX(-50%) scale(1) translateY(-4px);}
     100%{ opacity:0; transform:translateX(-50%) scale(.95) translateY(-20px);}
   }
+
+  /* ---------- Save modal: player chips + song name ---------- */
+  .playerChip{
+    font-family:var(--font); font-weight:600; font-size:15px; color:var(--ink);
+    background:rgba(255,255,255,0.75); border:2.5px solid rgba(200,180,230,0.6);
+    border-radius:999px; padding:9px 18px; cursor:pointer;
+    transition:border-color .12s, background .12s, transform .08s;
+  }
+  .playerChip.sel{ border-color:var(--accent); background:#fff; transform:translateY(-1px); }
+  .playerChip:active{ transform:translateY(1px); }
+  .saveInput{
+    width:100%; padding:10px 14px; border-radius:14px; border:2px solid #ddd;
+    font-family:var(--font); font-size:15px; color:var(--ink); outline:none;
+    transition:border-color .15s; background:#fff;
+  }
+  .saveInput:focus{ border-color:var(--accent); }
+  .saveLabel{ display:block; font-weight:700; color:var(--ink); margin:0 0 8px; font-size:15px; }
+  #saveModal{
+    position:fixed; inset:0; z-index:18; display:none;
+    align-items:center; justify-content:center; padding:24px;
+    background:rgba(60,30,90,0.3); backdrop-filter:blur(2px); pointer-events:none;
+  }
+  #saveModal.show{ display:flex; pointer-events:auto; }
+
+  /* ---------- Library modal ---------- */
+  #libraryModal{
+    position:fixed; inset:0; z-index:22; display:none;
+    align-items:center; justify-content:center; padding:16px;
+    background:rgba(60,30,90,0.45); backdrop-filter:blur(4px); pointer-events:none;
+  }
+  #libraryModal.show{ display:flex; pointer-events:auto; }
+  .libraryCard{
+    background:var(--panel); backdrop-filter:blur(8px); border-radius:28px;
+    padding:20px 24px 24px; max-width:720px; width:100%; max-height:88vh;
+    overflow-y:auto; box-shadow:0 20px 60px rgba(90,70,140,0.35);
+    border:3px solid rgba(255,255,255,0.8); pointer-events:auto;
+  }
+  .libraryTop{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .libraryTop h2{ margin:0; font-size:clamp(19px,4vw,26px); color:var(--ink); }
+  #closeLibraryBtn{ background:none; border:none; font-size:20px; cursor:pointer; padding:4px 8px; color:var(--ink); border-radius:8px; }
+  #closeLibraryBtn:hover{ background:rgba(0,0,0,0.06); }
+  .libSortRow{ display:flex; gap:8px; margin-bottom:10px; align-items:center; }
+  .libSortRow .libRowLbl{ font-size:13px; font-weight:600; color:#888; margin-right:4px; }
+  .sortBtn{
+    font-family:var(--font); font-weight:600; font-size:13px; color:var(--ink);
+    background:rgba(255,255,255,0.7); border:2px solid rgba(255,255,255,0.9);
+    border-radius:999px; padding:7px 14px; cursor:pointer;
+    transition:border-color .12s, background .12s;
+  }
+  .sortBtn.sel{ border-color:var(--accent); background:#fff; }
+  #libFilterRow{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+  #libFilterRow .libRowLbl{ font-size:13px; font-weight:600; color:#888; }
+  .filterChip{
+    font-family:var(--font); font-weight:600; font-size:13px; color:var(--ink);
+    background:rgba(255,255,255,0.7); border:2px solid rgba(255,255,255,0.9);
+    border-radius:999px; padding:6px 14px; cursor:pointer;
+    transition:border-color .12s, background .12s, opacity .12s; user-select:none;
+  }
+  .filterChip.sel{ border-color:var(--accent); background:#fff; }
+  .filterChip:not(.sel){ opacity:.45; }
+  #libraryGrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(155px,1fr)); gap:14px; }
+  #libraryEmpty{ text-align:center; padding:40px 16px; color:#888; font-size:16px; line-height:1.5; }
+  .gardenCard{
+    background:#fff; border-radius:18px; overflow:hidden; cursor:default;
+    box-shadow:0 4px 16px rgba(90,70,140,0.15); border:2px solid rgba(255,255,255,0.8);
+    transition:box-shadow .12s;
+  }
+  .gardenCard:hover{ box-shadow:0 8px 24px rgba(90,70,140,0.25); }
+  .gardenThumb{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:linear-gradient(135deg,#c9efff,#d9f3e0); }
+  .gardenThumbPlaceholder{ width:100%; aspect-ratio:16/9; display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#c9efff,#d9f3e0); }
+  .gcInfo{ padding:10px 12px 6px; }
+  .gcSong{ font-weight:700; font-size:14px; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:3px; }
+  .gcMeta{ font-size:11.5px; color:#8a7aaa; line-height:1.45; }
+  .gcBtns{ display:flex; gap:6px; padding:6px 10px 10px; }
+  .gcBtn{
+    flex:1; font-family:var(--font); font-weight:600; font-size:12px;
+    border:none; border-radius:999px; padding:7px 4px; cursor:pointer; color:#fff;
+  }
+  .gcBtn.replay{ background:linear-gradient(180deg,#86d6a4,#52b788); box-shadow:0 3px 0 #3a9d72; }
+  .gcBtn.del{ background:linear-gradient(180deg,#ffb3b3,#ff8080); box-shadow:0 3px 0 #e05050; }
+  .gcBtn.del.confirm{ background:linear-gradient(180deg,#ff6b6b,#e53e3e); }
 </style>
 </head>
 <body>
@@ -195,7 +276,7 @@
 <div id="settings">
   <h3>Tuning the ears 🎧</h3>
   <label for="sens">Listening sensitivity</label>
-  <input type="range" id="sens" min="1" max="100" value="55">
+  <input type="range" id="sens" min="1" max="100" value="33">
   <div class="hint">Slide right if it misses quiet notes, left if random sounds make things grow.</div>
 
   <label>Sound level</label>
@@ -228,7 +309,7 @@
     </button>
   </div>
   <button id="startBtn">▶ Let's Play!</button>
-  <button id="lastBtn" style="display:none;">▶ Replay last saved garden 🌼</button>
+  <button id="lastBtn" style="display:none;">📚 Browse saved gardens 🌼</button>
   <p style="font-size:13px;opacity:.65;margin-top:18px;">Tip: tap "Let's Play" and allow the microphone so I can hear the piano.<br>(You can also tap the screen or press space to test a note.)</p>
 </div>
 
@@ -265,6 +346,54 @@
       <button class="cardBtn purple" id="saveBtn">💾 Save garden</button>
       <button class="cardBtn pink" id="newBtn">🌱 New garden</button>
     </div>
+  </div>
+</div>
+
+<!-- Save garden modal -->
+<div id="saveModal">
+  <div class="modalCard" style="max-width:420px;width:100%;pointer-events:auto;">
+    <div class="big">💾</div>
+    <h2>Save your garden</h2>
+    <div style="text-align:left;margin-bottom:14px;">
+      <span class="saveLabel">Who played?</span>
+      <div id="playerChips" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <button class="playerChip" data-p="Baba">Baba</button>
+        <button class="playerChip" data-p="Mama">Mama</button>
+        <button class="playerChip sel" data-p="Mira">Mira</button>
+        <button class="playerChip" data-p="Maia">Maia</button>
+      </div>
+      <input type="text" id="playerCustom" class="saveInput" placeholder="Other player…" autocomplete="off">
+    </div>
+    <div style="text-align:left;margin-bottom:18px;">
+      <span class="saveLabel">Song name <span style="font-weight:500;opacity:.6;">(optional)</span></span>
+      <input type="text" id="songNameInput" class="saveInput" placeholder="e.g. Twinkle Twinkle…" autocomplete="off" list="songDatalist">
+      <datalist id="songDatalist"></datalist>
+    </div>
+    <div class="cardBtns">
+      <button class="cardBtn green" id="confirmSaveBtn">💾 Save</button>
+      <button class="cardBtn" id="cancelSaveBtn" style="background:linear-gradient(180deg,#bbb,#999);box-shadow:0 7px 0 #777;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Garden library modal -->
+<div id="libraryModal">
+  <div class="libraryCard">
+    <div class="libraryTop">
+      <h2>🌼 Saved Gardens</h2>
+      <button id="closeLibraryBtn" title="Close">✕</button>
+    </div>
+    <div class="libSortRow">
+      <span class="libRowLbl">Sort:</span>
+      <button class="sortBtn sel" data-sort="date">By date</button>
+      <button class="sortBtn" data-sort="song">By song</button>
+    </div>
+    <div id="libFilterRow">
+      <span class="libRowLbl">Players:</span>
+      <button class="filterChip sel" id="allFilterBtn">All</button>
+    </div>
+    <div id="libraryGrid"></div>
+    <div id="libraryEmpty">No saved gardens yet! Play a song and save it. 🌱</div>
   </div>
 </div>
 
@@ -316,6 +445,11 @@ function srandom(){
 const rng = srandom;
 function seedRng(s){ _rngState = (s >>> 0) || 1; }
 function freshSeed(){ return ((Date.now() ^ Math.floor(performance.now()*1e6)) >>> 0) || 1; }
+
+/* Per-entity animation helpers. wake(e) marks e as animated for `dur` seconds.
+   edt(e, dt) returns dt while the entity is animated, 0 when frozen. */
+function wake(e, dur){ e.anim = performance.now()/1000 + (dur||1.0); }
+function edt(e, dt){ return (performance.now()/1000 < (e.anim||0)) ? dt : 0; }
 
 /* ---------------- Color palettes ---------------- */
 const FLOWER_COLORS = [
@@ -736,14 +870,14 @@ function drawButterfly(bf){
 /* ---- Bird ---- */
 function addBird(){
   const fromLeft = rng()<0.5;
-  G.birds.push({
-    x: fromLeft?-30:W+30, y: rand(H*0.08,H*0.34),
-    vx:(fromLeft?1:-1)*rand(55,90), flap:rand(0,TAU), s:rand(0.8,1.3)
-  });
+  const vx = (fromLeft?1:-1)*rand(55,90);
+  const b = {x:fromLeft?-30:W+30, y:rand(H*0.08,H*0.34), vx, flap:rand(0,TAU), s:rand(0.8,1.3), anim:0};
+  wake(b, (W+160)/Math.abs(vx));  // enough time for full screen crossing
+  G.birds.push(b);
 }
 function updateBirds(dt){
-  for(const b of G.birds){ b.x += b.vx*dt; b.flap += dt*8; b.y += Math.sin(b.flap*0.4)*0.3; }
-  G.birds = G.birds.filter(b=> b.x>-50 && b.x<W+50);
+  for(const b of G.birds){ const bdt=edt(b,dt); b.x+=b.vx*bdt; b.flap+=bdt*8; b.y+=Math.sin(b.flap*0.4)*0.3; }
+  G.birds = G.birds.filter(b=> b.x>-50 && b.x<W+50 && performance.now()/1000 < b.anim);
 }
 function drawBird(b){
   const w = Math.sin(b.flap)*8*b.s + 4;
@@ -795,11 +929,11 @@ function drawBee(bee){
 function addFirefly(){
   G.fireflies.push({x:rand(0,W),y:rand(H*0.3,groundY),vx:rand(-12,12),vy:rand(-12,12),blink:rand(0,TAU),life:1});
 }
-function updateFireflies(dt){
+function updateFireflies(adt, rdt){
   for(const f of G.fireflies){
-    f.x += f.vx*dt; f.y += f.vy*dt; f.blink += dt*3;
+    f.x += f.vx*adt; f.y += f.vy*adt; f.blink += rdt*3;
     if(f.x<0||f.x>W) f.vx*=-1; if(f.y<H*0.25||f.y>groundY) f.vy*=-1;
-    if(G.dayPhase<0.3) f.life -= dt*0.8;
+    if(G.dayPhase<0.3) f.life -= rdt*0.8;  // real dt: fireflies always decay
   }
   G.fireflies = G.fireflies.filter(f=> f.life>0);
 }
@@ -1186,8 +1320,8 @@ function loop(now){
   // sparkle so they run on real dt and simply decay away.
   for(const c of G.clouds) updateCloud(c, adt);
   for(const f of G.flowers) updateFlower(f, adt);
-  updateButterflies(adt); updateBirds(adt); updateBees(adt);
-  updateFireflies(adt); updateBalloons(adt); updateShootingStars(adt);
+  updateButterflies(adt); updateBirds(dt); updateBees(adt);
+  updateFireflies(adt, dt); updateBalloons(dt); updateShootingStars(dt);
   updateTrees(adt); updateParticles(dt); updateBunny(adt);
 
   // auto "done playing": only after the song really got going (>=10 notes)
@@ -1533,13 +1667,35 @@ async function loadLatestGarden(){
     });
   }catch(e){ return null; }
 }
-async function doSave(){
+async function loadAllGardens(){
+  try{
+    const db = await idb();
+    return await new Promise(res=>{
+      const tx = db.transaction(STORE,'readonly');
+      const rq = tx.objectStore(STORE).getAll();
+      rq.onsuccess = ()=> res(rq.result||[]);
+      rq.onerror = ()=> res([]);
+    });
+  }catch(e){ return []; }
+}
+async function deleteGarden(id){
+  const db = await idb();
+  return new Promise((res,rej)=>{
+    const tx = db.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
+  });
+}
+function showSaveModal(){
   if(!G.notes.length){ showToast('Play some notes first! 🎵'); return; }
-  const g = { id: Date.now(), mode: G.gardenMode, seed: G.seed,
-              notes: G.notes.slice(), audio: recordedBlob || null,
-              count: G.noteCount, date: new Date().toISOString() };
-  try{ await saveGarden(g); showToast('Garden saved! 💾'); }
-  catch(e){ showToast('Could not save 😢'); }
+  loadAllGardens().then(all=>{
+    const songs=[...new Set(all.map(g=>g.songName).filter(Boolean))];
+    const dl=$('songDatalist');
+    dl.innerHTML=songs.map(s=>`<option value="${s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">`).join('');
+  });
+  $('playerCustom').value='';
+  $('songNameInput').value='';
+  show('saveModal');
 }
 function loadSavedAndReplay(g){
   $('start').style.display = 'none';
@@ -1574,7 +1730,7 @@ $('donePlaying').addEventListener('click', ()=> pausePlaying('manual'));
 $('keepBtn').addEventListener('click', resumePlaying);
 $('allDoneBtn').addEventListener('click', allDone);
 $('replayBtn').addEventListener('click', startReplay);
-$('saveBtn').addEventListener('click', doSave);
+$('saveBtn').addEventListener('click', showSaveModal);
 $('newBtn').addEventListener('click', newGarden);
 
 $('gear').addEventListener('click', ()=> $('settings').classList.toggle('show'));
@@ -1595,9 +1751,139 @@ window.addEventListener('keydown', e=>{
   if(e.code==='Space'){ e.preventDefault(); noteFromInput(); }
 });
 
-// offer to replay the most recently saved garden, if there is one
-loadLatestGarden().then(g=>{
-  if(g){ const b = $('lastBtn'); b.style.display = 'inline-block'; b.onclick = ()=> loadSavedAndReplay(g); }
+// ---- Save modal wiring ----
+document.querySelectorAll('.playerChip').forEach(chip=>{
+  chip.addEventListener('click',()=>{
+    document.querySelectorAll('.playerChip').forEach(c=>c.classList.remove('sel'));
+    chip.classList.add('sel');
+    $('playerCustom').value='';
+  });
+});
+$('playerCustom').addEventListener('input',()=>{
+  document.querySelectorAll('.playerChip').forEach(c=>c.classList.remove('sel'));
+});
+$('cancelSaveBtn').addEventListener('click',()=>hide('saveModal'));
+$('confirmSaveBtn').addEventListener('click', async()=>{
+  hide('saveModal');
+  const custom=$('playerCustom').value.trim();
+  const selChip=document.querySelector('.playerChip.sel');
+  const player=custom||(selChip?selChip.dataset.p:'');
+  const songName=$('songNameInput').value.trim();
+  const thumb=canvas.toDataURL('image/jpeg',0.35);
+  const g={id:Date.now(), mode:G.gardenMode, seed:G.seed,
+            notes:G.notes.slice(), audio:recordedBlob||null,
+            count:G.noteCount, date:new Date().toISOString(),
+            player, songName, thumb};
+  try{ await saveGarden(g); showToast('Garden saved! 💾'); }
+  catch(e){ showToast('Could not save 😢'); }
+});
+
+// ---- Library modal ----
+let libSortMode='date';
+let libAllGardens=[];
+function escHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function getActivePlayerSet(){
+  const s=new Set();
+  document.querySelectorAll('#libFilterRow .filterChip:not(#allFilterBtn)').forEach(c=>{
+    if(c.classList.contains('sel')) s.add(c.dataset.player);
+  });
+  return s;
+}
+function buildPlayerFilterChips(){
+  const row=$('libFilterRow');
+  row.querySelectorAll('.filterChip:not(#allFilterBtn)').forEach(c=>c.remove());
+  const players=[...new Set(libAllGardens.map(g=>g.player||'').filter(Boolean))].sort();
+  for(const p of players){
+    const chip=document.createElement('button');
+    chip.className='filterChip sel'; chip.textContent=p; chip.dataset.player=p;
+    let dt=null;
+    chip.addEventListener('click',()=>{
+      if(dt){ clearTimeout(dt); dt=null; return; }
+      dt=setTimeout(()=>{
+        dt=null;
+        chip.classList.toggle('sel');
+        const allChips=[...document.querySelectorAll('#libFilterRow .filterChip:not(#allFilterBtn)')];
+        $('allFilterBtn').classList.toggle('sel', allChips.every(c=>c.classList.contains('sel')));
+        renderLibrary();
+      },220);
+    });
+    chip.addEventListener('dblclick',()=>{
+      if(dt){ clearTimeout(dt); dt=null; }
+      document.querySelectorAll('#libFilterRow .filterChip:not(#allFilterBtn)').forEach(c=>c.classList.remove('sel'));
+      chip.classList.add('sel');
+      $('allFilterBtn').classList.remove('sel');
+      renderLibrary();
+    });
+    row.appendChild(chip);
+  }
+}
+function renderLibrary(){
+  const active=getActivePlayerSet();
+  const allOn=$('allFilterBtn').classList.contains('sel');
+  let filtered=libAllGardens.filter(g=>{
+    const p=g.player||'';
+    return !p || allOn || active.has(p);
+  });
+  if(libSortMode==='song'){
+    filtered.sort((a,b)=>{
+      const sa=(a.songName||'').toLowerCase(), sb=(b.songName||'').toLowerCase();
+      return sa<sb?-1:sa>sb?1:b.id-a.id;
+    });
+  } else {
+    filtered.sort((a,b)=>b.id-a.id);
+  }
+  const grid=$('libraryGrid'), empty=$('libraryEmpty');
+  grid.innerHTML='';
+  empty.style.display=filtered.length?'none':'block';
+  for(const g of filtered){
+    const elapsed=g.notes?.length?g.notes[g.notes.length-1]:0;
+    const dateStr=g.date?new Date(g.date).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}):'—';
+    const playerStr=escHtml(g.player||'—');
+    const songStr=escHtml(g.songName||'(unnamed)');
+    const card=document.createElement('div');
+    card.className='gardenCard';
+    const imgHtml=g.thumb
+      ?`<img class="gardenThumb" src="${g.thumb}" alt="garden">`
+      :`<div class="gardenThumbPlaceholder">🌸</div>`;
+    card.innerHTML=`${imgHtml}<div class="gcInfo"><div class="gcSong">${songStr}</div><div class="gcMeta">${playerStr} &nbsp;·&nbsp; ${dateStr}<br>${g.count||0} notes &nbsp;·&nbsp; ${fmtTime(elapsed)}</div></div><div class="gcBtns"><button class="gcBtn replay">▶ Play</button><button class="gcBtn del">🗑</button></div>`;
+    card.querySelector('.gcBtn.replay').addEventListener('click',()=>{ hide('libraryModal'); loadSavedAndReplay(g); });
+    const delBtn=card.querySelector('.gcBtn.del');
+    delBtn.addEventListener('click',()=>{
+      if(delBtn.dataset.confirm){
+        deleteGarden(g.id).then(()=>{ loadAllGardens().then(all=>{ libAllGardens=all; buildPlayerFilterChips(); document.querySelectorAll('#libFilterRow .filterChip').forEach(c=>c.classList.add('sel')); renderLibrary(); }); });
+      } else {
+        delBtn.dataset.confirm='1'; delBtn.textContent='Sure?'; delBtn.classList.add('confirm');
+        setTimeout(()=>{ delete delBtn.dataset.confirm; delBtn.textContent='🗑'; delBtn.classList.remove('confirm'); },2500);
+      }
+    });
+    grid.appendChild(card);
+  }
+}
+async function openLibrary(){
+  libAllGardens=await loadAllGardens();
+  buildPlayerFilterChips();
+  document.querySelectorAll('#libFilterRow .filterChip').forEach(c=>c.classList.add('sel'));
+  renderLibrary();
+  show('libraryModal');
+}
+$('closeLibraryBtn').addEventListener('click',()=>hide('libraryModal'));
+document.querySelectorAll('.sortBtn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    libSortMode=btn.dataset.sort;
+    document.querySelectorAll('.sortBtn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    renderLibrary();
+  });
+});
+$('allFilterBtn').addEventListener('click',()=>{
+  document.querySelectorAll('#libFilterRow .filterChip').forEach(c=>c.classList.add('sel'));
+  renderLibrary();
+});
+
+// offer to browse saved gardens if any exist
+loadAllGardens().then(all=>{
+  if(all.length){ const b=$('lastBtn'); b.style.display='inline-block'; b.onclick=openLibrary; }
 });
 </script>
 </body>
