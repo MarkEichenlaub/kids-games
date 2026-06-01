@@ -82,15 +82,7 @@
   #start h1{ font-size:clamp(34px,8vw,68px); margin:0 0 6px; color:#fff;
     text-shadow:0 3px 0 #ffb3d1, 0 8px 22px rgba(120,80,160,.35); letter-spacing:.5px; }
   #start p{ font-size:clamp(15px,3.4vw,20px); color:#5a4a7a; max-width:560px; margin:6px auto 26px; line-height:1.45; }
-  #startBtn{
-    font-family:var(--font); font-weight:700; font-size:clamp(20px,4.5vw,28px);
-    color:#fff; background:linear-gradient(180deg,#ff97c4,#ff6fae); border:none;
-    border-radius:999px; padding:18px 46px; cursor:pointer;
-    box-shadow:0 10px 0 #e85a98, 0 18px 30px rgba(220,90,150,.4);
-    transition:transform .08s ease, box-shadow .08s ease;
-  }
-  #startBtn:active{ transform:translateY(6px); box-shadow:0 4px 0 #e85a98, 0 10px 20px rgba(220,90,150,.4); }
-  #startEmoji{ font-size:clamp(48px,12vw,96px); margin-bottom:6px; filter:drop-shadow(0 8px 12px rgba(120,80,160,.3)); }
+#startEmoji{ font-size:clamp(48px,12vw,96px); margin-bottom:6px; filter:drop-shadow(0 8px 12px rgba(120,80,160,.3)); }
 
   /* ---------- Mode select (start screen) ---------- */
   #modeSel{ display:flex; gap:14px; margin:8px 0 22px; flex-wrap:wrap; justify-content:center; }
@@ -112,7 +104,7 @@
 
   /* ---------- Done-playing button ---------- */
   #donePlaying{
-    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:6; display:none;
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:16; display:none;
     font-family:var(--font); font-weight:700; font-size:clamp(16px,3.6vw,20px); color:#fff;
     background:linear-gradient(180deg,#9d8cff,#7a64f0); border:none; border-radius:999px;
     padding:13px 30px; cursor:pointer; box-shadow:0 8px 0 #5e49c9, 0 14px 24px rgba(90,70,200,.35);
@@ -304,16 +296,15 @@
       <span class="sub">Watch it grow while you play.</span>
     </button>
     <button class="modeBtn" data-mode="review">
-      <span class="ttl">🎧 Review Mode</span>
-      <span class="sub">No peeking — see &amp; hear your garden after.</span>
+      <span class="ttl">🎧 Focus Mode</span>
+      <span class="sub">No peeking — see your garden after.</span>
     </button>
   </div>
-  <button id="startBtn">▶ Let's Play!</button>
   <button id="lastBtn" style="display:none;">📚 Browse saved gardens 🌼</button>
-  <p style="font-size:13px;opacity:.65;margin-top:18px;">Tip: tap "Let's Play" and allow the microphone so I can hear the piano.<br>(You can also tap the screen or press space to test a note.)</p>
+  <p style="font-size:13px;opacity:.65;margin-top:18px;">Tap the screen or press space to test a note without the piano.</p>
 </div>
 
-<button id="donePlaying">✓ Done playing</button>
+<button id="donePlaying">✓ Done</button>
 
 <div id="reviewOverlay">
   <div class="emoji">🎧</div>
@@ -1095,8 +1086,8 @@ function drawParticles(){
    MODE SYSTEM — pick a "thing that happens" for a few notes
    ============================================================ */
 const MODE_WEIGHTS = [
-  ['flowers',5],['flowers',5],['butterflies',2],['bunny',1.6],
-  ['birds',1.6],['tree',1.5],['bees',1.6],['rainbow',1.1],['fireflies',1.1]
+  ['flowers',6],['flowers',6],['butterflies',1.0],['bunny',1.1],
+  ['birds',1.6],['tree',2.0],['bees',1.0],['rainbow',1.2],['fireflies',1.3]
 ];
 function pickMode(){
   let pool = MODE_WEIGHTS.filter(m=> m[0]!==G.lastMode);
@@ -1233,6 +1224,13 @@ function showFinaleCard(){
   document.getElementById('finaleStats').innerHTML = stats;
   document.getElementById('replayingNote').textContent = '';
   document.getElementById('replayBtn').textContent = recordedURL ? '▶ Replay with music' : '▶ Replay';
+  // reset save button for this new garden
+  gardenSaved = false;
+  const sb = document.getElementById('saveBtn');
+  sb.textContent = '💾 Save garden';
+  sb.className = 'cardBtn purple';
+  sb.style.background = '';
+  sb.style.boxShadow = '';
   card.classList.add('show');
 }
 
@@ -1563,10 +1561,13 @@ function resumePlaying(){
 }
 
 async function allDone(){
+  if(G.phase === 'playing') G.playClock += performance.now()/1000 - G.playSegStart;
+  G.phase = 'review'; // stop further note input immediately
   hide('stopCard');
+  hide('donePlaying');
   hide('reviewOverlay');
+  if(recorder && recorder.state === 'paused') recorder.resume();
   await stopRecording();
-  G.phase = 'review';
   if(G.gardenMode === 'review'){
     startReplay();              // they never saw it — show it now
   } else {
@@ -1713,24 +1714,17 @@ function loadSavedAndReplay(g){
 /* ============================================================
    UI WIRING
    ============================================================ */
-// mode selector on the start screen
+// mode buttons start the game directly (one click = go)
 document.querySelectorAll('.modeBtn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    document.querySelectorAll('.modeBtn').forEach(b=> b.classList.remove('sel'));
-    btn.classList.add('sel');
-  });
+  btn.addEventListener('click', ()=> startPlaying(btn.dataset.mode));
 });
-function selectedMode(){
-  const sel = document.querySelector('.modeBtn.sel');
-  return sel ? sel.dataset.mode : 'live';
-}
 
-$('startBtn').addEventListener('click', ()=> startPlaying(selectedMode()));
-$('donePlaying').addEventListener('click', ()=> pausePlaying('manual'));
+$('donePlaying').addEventListener('click', allDone);
 $('keepBtn').addEventListener('click', resumePlaying);
 $('allDoneBtn').addEventListener('click', allDone);
 $('replayBtn').addEventListener('click', startReplay);
-$('saveBtn').addEventListener('click', showSaveModal);
+let gardenSaved = false;
+$('saveBtn').addEventListener('click', ()=> gardenSaved ? openLibrary() : showSaveModal());
 $('newBtn').addEventListener('click', newGarden);
 
 $('gear').addEventListener('click', ()=> $('settings').classList.toggle('show'));
@@ -1774,7 +1768,14 @@ $('confirmSaveBtn').addEventListener('click', async()=>{
             notes:G.notes.slice(), audio:recordedBlob||null,
             count:G.noteCount, date:new Date().toISOString(),
             player, songName, thumb};
-  try{ await saveGarden(g); showToast('Garden saved! 💾'); }
+  try{
+    await saveGarden(g);
+    showToast('Garden saved! 💾');
+    gardenSaved = true;
+    $('saveBtn').textContent = '📚 Browse gardens';
+    $('saveBtn').style.background = 'linear-gradient(180deg,#86d6a4,#52b788)';
+    $('saveBtn').style.boxShadow = '0 7px 0 #3a9d72';
+  }
   catch(e){ showToast('Could not save 😢'); }
 });
 
