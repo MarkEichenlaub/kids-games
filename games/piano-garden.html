@@ -53,7 +53,7 @@
     position:fixed; top:70px; right:16px; width:min(320px,86vw);
     background:var(--panel); backdrop-filter:blur(8px); border-radius:20px; padding:16px 18px;
     box-shadow:0 12px 36px rgba(90,70,140,0.28); border:2px solid rgba(255,255,255,0.7);
-    color:var(--ink); z-index:8; display:none; font-size:14px;
+    color:var(--ink); z-index:16; display:none; font-size:14px;
   }
   #settings.show{ display:block; }
   #settings h3{ margin:0 0 10px; font-size:16px; }
@@ -84,22 +84,20 @@
   #start p{ font-size:clamp(15px,3.4vw,20px); color:#5a4a7a; max-width:560px; margin:6px auto 26px; line-height:1.45; }
 #startEmoji{ font-size:clamp(48px,12vw,96px); margin-bottom:6px; filter:drop-shadow(0 8px 12px rgba(120,80,160,.3)); }
 
-  /* ---------- Mode select (start screen) ---------- */
-  #modeSel{ display:flex; gap:14px; margin:8px 0 22px; flex-wrap:wrap; justify-content:center; }
-  .modeBtn{
-    font-family:var(--font); font-weight:700; color:#5a4a7a; width:min(240px,80vw);
-    background:rgba(255,255,255,0.78); border:3px solid rgba(255,255,255,0.9); border-radius:22px;
-    padding:16px 20px; cursor:pointer; box-shadow:0 8px 22px rgba(120,80,160,.22);
-    transition:transform .08s, border-color .15s, background .15s;
+  /* ---------- Start screen action buttons ---------- */
+  #startBtn{
+    font-family:var(--font); font-weight:700; font-size:clamp(22px,5vw,32px);
+    color:#fff; background:linear-gradient(180deg,#ff97c4,#ff6fae); border:none;
+    border-radius:999px; padding:22px 60px; cursor:pointer; margin-bottom:20px;
+    box-shadow:0 10px 0 #e85a98, 0 18px 30px rgba(220,90,150,.4);
+    transition:transform .08s ease, box-shadow .08s ease;
   }
-  .modeBtn .ttl{ display:block; font-size:clamp(17px,3.6vw,21px); margin-bottom:4px; }
-  .modeBtn .sub{ display:block; font-size:13px; font-weight:500; opacity:.72; line-height:1.3; }
-  .modeBtn.sel{ border-color:var(--accent); background:#fff; transform:translateY(-2px); }
-  .modeBtn:active{ transform:translateY(2px); }
-  #lastBtn{
-    margin-top:14px; font-family:var(--font); font-weight:600; font-size:15px; color:#6a5a8a;
+  #startBtn:active{ transform:translateY(6px); box-shadow:0 4px 0 #e85a98; }
+  #startSecondary{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  #lastBtn, #backupBtn{
+    font-family:var(--font); font-weight:600; font-size:14px; color:#6a5a8a;
     background:rgba(255,255,255,0.7); border:2px solid rgba(255,255,255,0.8); border-radius:999px;
-    padding:10px 22px; cursor:pointer;
+    padding:9px 18px; cursor:pointer;
   }
 
   /* ---------- Done-playing button ---------- */
@@ -170,6 +168,24 @@
     80%{ opacity:1; transform:translateX(-50%) scale(1) translateY(-4px);}
     100%{ opacity:0; transform:translateX(-50%) scale(.95) translateY(-20px);}
   }
+
+  /* ---------- Gear inside the focus overlay ---------- */
+  #reviewGear{
+    position:absolute; top:14px; right:16px;
+    width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.18);
+    border:2px solid rgba(255,255,255,0.35); cursor:pointer;
+    display:flex; align-items:center; justify-content:center; font-size:20px; color:#fff;
+    transition:background .15s;
+  }
+  #reviewGear:hover{ background:rgba(255,255,255,0.30); }
+
+  /* ---------- Backup modal (reuses .libraryCard and .gardenCard) ---------- */
+  #backupModal{
+    position:fixed; inset:0; z-index:22; display:none;
+    align-items:center; justify-content:center; padding:16px;
+    background:rgba(60,30,90,0.45); backdrop-filter:blur(4px); pointer-events:none;
+  }
+  #backupModal.show{ display:flex; pointer-events:auto; }
 
   /* ---------- Save modal: player chips + song name ---------- */
   .playerChip{
@@ -289,27 +305,22 @@
 <div id="start">
   <div id="startEmoji">🌻🐰🌈</div>
   <h1>Piano Garden</h1>
-  <p>Set me next to the piano and play! Every piano note makes the garden grow — flowers bloom, bunnies hop, butterflies flutter. When you finish your song, see the whole garden you grew. 🌸</p>
-  <div id="modeSel">
-    <button class="modeBtn sel" data-mode="live">
-      <span class="ttl">🌱 Live Garden</span>
-      <span class="sub">Watch it grow while you play.</span>
-    </button>
-    <button class="modeBtn" data-mode="review">
-      <span class="ttl">🎧 Focus Mode</span>
-      <span class="sub">No peeking — see your garden after.</span>
-    </button>
+  <p>Set me next to the piano and play! Every note makes the garden grow — flowers bloom, bunnies hop, butterflies flutter. When you're done, see the garden you grew. 🌸</p>
+  <button id="startBtn">🌸 Play!</button>
+  <div id="startSecondary">
+    <button id="lastBtn" style="display:none;">📚 Browse saved</button>
+    <button id="backupBtn" style="display:none;">↩ Recent unsaved</button>
   </div>
-  <button id="lastBtn" style="display:none;">📚 Browse saved gardens 🌼</button>
-  <p style="font-size:13px;opacity:.65;margin-top:18px;">Tap the screen or press space to test a note without the piano.</p>
+  <p style="font-size:13px;opacity:.65;margin-top:16px;">Tap the screen or press space to test a note without the piano.</p>
 </div>
 
 <button id="donePlaying">✓ Done</button>
 
 <div id="reviewOverlay">
+  <button id="reviewGear" title="Sensitivity">⚙️</button>
   <div class="emoji">🎧</div>
-  <h2>Listening &amp; building your garden…</h2>
-  <p>Play your whole song. No peeking — the garden is a surprise!</p>
+  <h2>Building your garden…</h2>
+  <p>Play your song. No peeking — the garden is a surprise!</p>
   <div id="reviewCount"><span id="reviewNum">0</span><span class="lbl">NOTES</span></div>
 </div>
 
@@ -385,6 +396,19 @@
     </div>
     <div id="libraryGrid"></div>
     <div id="libraryEmpty">No saved gardens yet! Play a song and save it. 🌱</div>
+  </div>
+</div>
+
+<!-- Backup browser modal -->
+<div id="backupModal">
+  <div class="libraryCard">
+    <div class="libraryTop">
+      <h2>↩ Recent unsaved</h2>
+      <button id="closeBackupBtn" title="Close">✕</button>
+    </div>
+    <p style="font-size:14px;color:#7a6a9a;margin:0 0 16px;line-height:1.4;">The 10 most recent gardens that weren't saved. Load one to replay or save it.</p>
+    <div id="backupGrid"></div>
+    <div id="backupEmpty">No unsaved gardens yet.</div>
   </div>
 </div>
 
@@ -1223,7 +1247,7 @@ function showFinaleCard(){
   stats += `<br>⏱️ Song length: ${fmtTime(elapsed)}`;
   document.getElementById('finaleStats').innerHTML = stats;
   document.getElementById('replayingNote').textContent = '';
-  document.getElementById('replayBtn').textContent = recordedURL ? '▶ Replay with music' : '▶ Replay';
+  document.getElementById('replayBtn').textContent = '▶ Replay';
   // reset save button for this new garden
   gardenSaved = false;
   const sb = document.getElementById('saveBtn');
@@ -1568,11 +1592,15 @@ async function allDone(){
   hide('reviewOverlay');
   if(recorder && recorder.state === 'paused') recorder.resume();
   await stopRecording();
-  if(G.gardenMode === 'review'){
-    startReplay();              // they never saw it — show it now
-  } else {
-    showFinaleCard();           // live: the finished garden is already on screen
+  // auto-backup this session before showing the finale
+  if(G.notes.length){
+    currentBackupId = Date.now();
+    const thumb = canvas.toDataURL('image/jpeg', 0.3);
+    saveBackup({id:currentBackupId, seed:G.seed, notes:G.notes.slice(),
+                audio:recordedBlob||null, count:G.noteCount,
+                date:new Date().toISOString(), thumb});
   }
+  showFinaleCard();
 }
 
 /* ---- Replay: rebuild the exact garden in sync with the recorded audio ---- */
@@ -1639,11 +1667,17 @@ function newGarden(){
 /* ============================================================
    SAVE / LOAD gardens (IndexedDB — keeps seed, note times and the audio blob)
    ============================================================ */
-const DB_NAME='pianoGarden', STORE='gardens';
+const DB_NAME='pianoGarden', STORE='gardens', BACKUP_STORE='backups';
+const MAX_BACKUPS = 10;
+let currentBackupId = null;
 function idb(){
   return new Promise((res,rej)=>{
-    const r = indexedDB.open(DB_NAME,1);
-    r.onupgradeneeded = ()=> r.result.createObjectStore(STORE,{keyPath:'id'});
+    const r = indexedDB.open(DB_NAME, 2);
+    r.onupgradeneeded = ()=>{
+      const db = r.result;
+      if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE,{keyPath:'id'});
+      if(!db.objectStoreNames.contains(BACKUP_STORE)) db.createObjectStore(BACKUP_STORE,{keyPath:'id'});
+    };
     r.onsuccess = ()=> res(r.result);
     r.onerror = ()=> rej(r.error);
   });
@@ -1687,6 +1721,42 @@ async function deleteGarden(id){
     tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
   });
 }
+async function deleteFromStore(id, storeName){
+  const db = await idb();
+  return new Promise((res,rej)=>{
+    const tx = db.transaction(storeName,'readwrite');
+    tx.objectStore(storeName).delete(id);
+    tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
+  });
+}
+async function loadAllBackups(){
+  try{
+    const db = await idb();
+    return await new Promise(res=>{
+      const tx = db.transaction(BACKUP_STORE,'readonly');
+      const rq = tx.objectStore(BACKUP_STORE).getAll();
+      rq.onsuccess=()=>res(rq.result||[]);
+      rq.onerror=()=>res([]);
+    });
+  }catch(e){ return []; }
+}
+async function saveBackup(g){
+  try{
+    const db = await idb();
+    await new Promise((res,rej)=>{
+      const tx = db.transaction(BACKUP_STORE,'readwrite');
+      tx.objectStore(BACKUP_STORE).put(g);
+      tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error);
+    });
+    const all = await loadAllBackups();
+    if(all.length > MAX_BACKUPS){
+      const sorted = all.sort((a,b)=>a.id-b.id);
+      for(let i=0;i<all.length-MAX_BACKUPS;i++) await deleteFromStore(sorted[i].id, BACKUP_STORE);
+    }
+    // show the backup button on start screen (may be hidden)
+    const bb=$('backupBtn'); if(bb) bb.style.display='inline-block';
+  }catch(e){}
+}
 function showSaveModal(){
   if(!G.notes.length){ showToast('Play some notes first! 🎵'); return; }
   loadAllGardens().then(all=>{
@@ -1714,12 +1784,9 @@ function loadSavedAndReplay(g){
 /* ============================================================
    UI WIRING
    ============================================================ */
-// mode buttons start the game directly (one click = go)
-document.querySelectorAll('.modeBtn').forEach(btn=>{
-  btn.addEventListener('click', ()=> startPlaying(btn.dataset.mode));
-});
-
+$('startBtn').addEventListener('click', ()=> startPlaying('review'));
 $('donePlaying').addEventListener('click', allDone);
+$('reviewGear').addEventListener('click', ()=> $('settings').classList.toggle('show'));
 $('keepBtn').addEventListener('click', resumePlaying);
 $('allDoneBtn').addEventListener('click', allDone);
 $('replayBtn').addEventListener('click', startReplay);
@@ -1775,6 +1842,11 @@ $('confirmSaveBtn').addEventListener('click', async()=>{
     $('saveBtn').textContent = '📚 Browse gardens';
     $('saveBtn').style.background = 'linear-gradient(180deg,#86d6a4,#52b788)';
     $('saveBtn').style.boxShadow = '0 7px 0 #3a9d72';
+    // remove from backups — it's now properly saved
+    if(currentBackupId !== null){
+      deleteFromStore(currentBackupId, BACKUP_STORE).catch(()=>{});
+      currentBackupId = null;
+    }
   }
   catch(e){ showToast('Could not save 😢'); }
 });
@@ -1882,9 +1954,71 @@ $('allFilterBtn').addEventListener('click',()=>{
   renderLibrary();
 });
 
+// ---- Backup browser ----
+function loadBackupAndShow(bg){
+  hide('backupModal');
+  $('start').style.display = 'none';
+  G.gardenMode = 'review';
+  G.seed = bg.seed;
+  G.notes = (bg.notes||[]).slice();
+  G.started = true;
+  G.phase = 'review';
+  if(recordedURL) URL.revokeObjectURL(recordedURL);
+  recordedBlob = bg.audio || null;
+  recordedURL = recordedBlob ? URL.createObjectURL(recordedBlob) : null;
+  currentBackupId = bg.id; // so an explicit save will remove it from backups
+  gardenSaved = false;
+  // rebuild garden in final state (fast-forward through notes, no animation delay)
+  seedRng(bg.seed);
+  resetGarden();
+  G.replaying = true; // suppress noteFromInput
+  for(const t of bg.notes) onNote(t);
+  G.replaying = false;
+  for(const f of G.flowers){ f.growth=f.target; f.bloomed=f.growth>0.62; if(f.bloomed) f.bloomPop=1; }
+  for(const t of G.trees){ t.growth=t.target; for(const p of t.foliage) p.pop=1; }
+  showFinaleCard();
+}
+function renderBackups(backups){
+  const grid=$('backupGrid'), empty=$('backupEmpty');
+  grid.innerHTML='';
+  const sorted=backups.sort((a,b)=>b.id-a.id);
+  empty.style.display=sorted.length?'none':'block';
+  for(const bg of sorted){
+    const elapsed=bg.notes?.length?bg.notes[bg.notes.length-1]:0;
+    const dateStr=bg.date?new Date(bg.date).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):'—';
+    const card=document.createElement('div');
+    card.className='gardenCard';
+    const imgHtml=bg.thumb
+      ?`<img class="gardenThumb" src="${bg.thumb}" alt="garden">`
+      :`<div class="gardenThumbPlaceholder">🌸</div>`;
+    card.innerHTML=`${imgHtml}<div class="gcInfo"><div class="gcSong">${dateStr}</div><div class="gcMeta">${bg.count||0} notes &nbsp;·&nbsp; ${fmtTime(elapsed)}</div></div><div class="gcBtns"><button class="gcBtn replay">Load</button><button class="gcBtn del">🗑</button></div>`;
+    card.querySelector('.gcBtn.replay').addEventListener('click',()=>loadBackupAndShow(bg));
+    const delBtn=card.querySelector('.gcBtn.del');
+    delBtn.addEventListener('click',()=>{
+      if(delBtn.dataset.confirm){
+        deleteFromStore(bg.id, BACKUP_STORE).then(()=>loadAllBackups().then(renderBackups));
+      } else {
+        delBtn.dataset.confirm='1'; delBtn.textContent='Sure?'; delBtn.classList.add('confirm');
+        setTimeout(()=>{ delete delBtn.dataset.confirm; delBtn.textContent='🗑'; delBtn.classList.remove('confirm'); },2500);
+      }
+    });
+    grid.appendChild(card);
+  }
+}
+async function openBackups(){
+  const backups = await loadAllBackups();
+  renderBackups(backups);
+  show('backupModal');
+}
+$('backupBtn').addEventListener('click', openBackups);
+$('closeBackupBtn').addEventListener('click', ()=>hide('backupModal'));
+
 // offer to browse saved gardens if any exist
 loadAllGardens().then(all=>{
   if(all.length){ const b=$('lastBtn'); b.style.display='inline-block'; b.onclick=openLibrary; }
+});
+loadAllBackups().then(all=>{
+  if(all.length){ $('backupBtn').style.display='inline-block'; }
 });
 </script>
 </body>
