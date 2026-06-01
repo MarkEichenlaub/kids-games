@@ -92,30 +92,75 @@
   #startBtn:active{ transform:translateY(6px); box-shadow:0 4px 0 #e85a98, 0 10px 20px rgba(220,90,150,.4); }
   #startEmoji{ font-size:clamp(48px,12vw,96px); margin-bottom:6px; filter:drop-shadow(0 8px 12px rgba(120,80,160,.3)); }
 
-  /* ---------- Finale ---------- */
-  #finale{
+  /* ---------- Mode select (start screen) ---------- */
+  #modeSel{ display:flex; gap:14px; margin:8px 0 22px; flex-wrap:wrap; justify-content:center; }
+  .modeBtn{
+    font-family:var(--font); font-weight:700; color:#5a4a7a; width:min(240px,80vw);
+    background:rgba(255,255,255,0.78); border:3px solid rgba(255,255,255,0.9); border-radius:22px;
+    padding:16px 20px; cursor:pointer; box-shadow:0 8px 22px rgba(120,80,160,.22);
+    transition:transform .08s, border-color .15s, background .15s;
+  }
+  .modeBtn .ttl{ display:block; font-size:clamp(17px,3.6vw,21px); margin-bottom:4px; }
+  .modeBtn .sub{ display:block; font-size:13px; font-weight:500; opacity:.72; line-height:1.3; }
+  .modeBtn.sel{ border-color:var(--accent); background:#fff; transform:translateY(-2px); }
+  .modeBtn:active{ transform:translateY(2px); }
+  #lastBtn{
+    margin-top:14px; font-family:var(--font); font-weight:600; font-size:15px; color:#6a5a8a;
+    background:rgba(255,255,255,0.7); border:2px solid rgba(255,255,255,0.8); border-radius:999px;
+    padding:10px 22px; cursor:pointer;
+  }
+
+  /* ---------- Done-playing button ---------- */
+  #donePlaying{
+    position:fixed; bottom:22px; left:50%; transform:translateX(-50%); z-index:6; display:none;
+    font-family:var(--font); font-weight:700; font-size:clamp(16px,3.6vw,20px); color:#fff;
+    background:linear-gradient(180deg,#9d8cff,#7a64f0); border:none; border-radius:999px;
+    padding:13px 30px; cursor:pointer; box-shadow:0 8px 0 #5e49c9, 0 14px 24px rgba(90,70,200,.35);
+  }
+  #donePlaying.show{ display:block; }
+  #donePlaying:active{ transform:translateX(-50%) translateY(4px); box-shadow:0 4px 0 #5e49c9; }
+
+  /* ---------- Review overlay (listening, garden hidden) ---------- */
+  #reviewOverlay{
+    position:fixed; inset:0; z-index:14; display:none; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding:24px; color:#fff;
+    background:linear-gradient(180deg,#6a4a8f 0%, #8a6bb0 55%, #caa0c8 100%);
+  }
+  #reviewOverlay.show{ display:flex; }
+  #reviewOverlay .emoji{ font-size:clamp(54px,14vw,110px); margin-bottom:10px; filter:drop-shadow(0 6px 12px rgba(0,0,0,.25)); }
+  #reviewOverlay h2{ font-size:clamp(22px,5vw,34px); margin:0 0 6px; }
+  #reviewOverlay p{ font-size:clamp(15px,3.4vw,19px); opacity:.9; margin:0 0 26px; }
+  #reviewCount{ font-size:clamp(60px,18vw,140px); font-weight:700; line-height:1; text-shadow:0 4px 0 rgba(0,0,0,.12); }
+  #reviewCount .lbl{ display:block; font-size:.2em; font-weight:600; opacity:.8; margin-top:6px; letter-spacing:3px; }
+
+  /* ---------- Modal cards (stop + finale) ---------- */
+  #finale, #stopCard{
     position:fixed; inset:0; z-index:15; display:none; align-items:center; justify-content:center;
     padding:24px; pointer-events:none;
   }
-  #finale.show{ display:flex; }
-  #finaleCard{
+  #finale.show, #stopCard.show{ display:flex; }
+  .modalCard{
     background:var(--panel); backdrop-filter:blur(8px); border-radius:28px; padding:30px 34px;
-    text-align:center; max-width:520px; pointer-events:auto;
+    text-align:center; max-width:560px; pointer-events:auto;
     box-shadow:0 20px 60px rgba(90,70,140,0.35); border:3px solid rgba(255,255,255,0.8);
     animation:pop .5s cubic-bezier(.2,1.4,.4,1) both;
   }
   @keyframes pop{ from{ transform:scale(.6); opacity:0;} to{ transform:scale(1); opacity:1;} }
-  #finaleCard .big{ font-size:clamp(40px,10vw,72px); }
-  #finaleCard h2{ font-size:clamp(24px,5vw,34px); color:var(--accent); margin:6px 0 10px; }
-  #finaleCard p{ font-size:clamp(16px,3.6vw,20px); color:var(--ink); line-height:1.45; margin:6px 0 0; }
+  .modalCard .big{ font-size:clamp(40px,10vw,72px); }
+  .modalCard h2{ font-size:clamp(24px,5vw,34px); color:var(--accent); margin:6px 0 10px; }
+  .modalCard p{ font-size:clamp(16px,3.6vw,20px); color:var(--ink); line-height:1.45; margin:6px 0 0; }
   #finaleStats{ font-weight:600; margin-top:14px; color:#6a5a8a; }
-  #replayBtn{
-    margin-top:22px; font-family:var(--font); font-weight:700; font-size:20px; color:#fff;
-    background:linear-gradient(180deg,#86d6a4,#52b788); border:none; border-radius:999px;
-    padding:14px 34px; cursor:pointer; box-shadow:0 8px 0 #3a9d72, 0 14px 24px rgba(60,160,110,.35);
+  #replayingNote{ margin-top:10px; font-weight:600; color:#6a5a8a; min-height:1.1em; }
+  .cardBtns{ display:flex; gap:12px; margin-top:22px; flex-wrap:wrap; justify-content:center; }
+  .cardBtn{
+    font-family:var(--font); font-weight:700; font-size:clamp(15px,3.4vw,19px); color:#fff;
+    border:none; border-radius:999px; padding:14px 24px; cursor:pointer;
     transition:transform .08s, box-shadow .08s;
   }
-  #replayBtn:active{ transform:translateY(5px); box-shadow:0 3px 0 #3a9d72; }
+  .cardBtn.green{ background:linear-gradient(180deg,#86d6a4,#52b788); box-shadow:0 7px 0 #3a9d72; }
+  .cardBtn.purple{ background:linear-gradient(180deg,#b3a4ff,#8a72f0); box-shadow:0 7px 0 #5e49c9; }
+  .cardBtn.pink{ background:linear-gradient(180deg,#ff97c4,#ff6fae); box-shadow:0 7px 0 #e85a98; }
+  .cardBtn:active{ transform:translateY(4px); }
 
   /* ---------- Toast ---------- */
   #toast{
@@ -171,18 +216,55 @@
 <div id="start">
   <div id="startEmoji">🌻🐰🌈</div>
   <h1>Piano Garden</h1>
-  <p>Set me next to the piano and play! Every note you play makes the garden grow — flowers bloom, bunnies hop, butterflies flutter, and surprises pop up. When you finish your song, I'll show you the whole garden you grew. 🌸</p>
+  <p>Set me next to the piano and play! Every piano note makes the garden grow — flowers bloom, bunnies hop, butterflies flutter. When you finish your song, see the whole garden you grew. 🌸</p>
+  <div id="modeSel">
+    <button class="modeBtn sel" data-mode="live">
+      <span class="ttl">🌱 Live Garden</span>
+      <span class="sub">Watch it grow while you play.</span>
+    </button>
+    <button class="modeBtn" data-mode="review">
+      <span class="ttl">🎧 Review Mode</span>
+      <span class="sub">No peeking — see &amp; hear your garden after.</span>
+    </button>
+  </div>
   <button id="startBtn">▶ Let's Play!</button>
+  <button id="lastBtn" style="display:none;">▶ Replay last saved garden 🌼</button>
   <p style="font-size:13px;opacity:.65;margin-top:18px;">Tip: tap "Let's Play" and allow the microphone so I can hear the piano.<br>(You can also tap the screen or press space to test a note.)</p>
 </div>
 
+<button id="donePlaying">✓ Done playing</button>
+
+<div id="reviewOverlay">
+  <div class="emoji">🎧</div>
+  <h2>Listening &amp; building your garden…</h2>
+  <p>Play your whole song. No peeking — the garden is a surprise!</p>
+  <div id="reviewCount"><span id="reviewNum">0</span><span class="lbl">NOTES</span></div>
+</div>
+
+<div id="stopCard">
+  <div class="modalCard">
+    <div class="big">🎵</div>
+    <h2 id="stopTitle">Nice playing!</h2>
+    <p id="stopMsg"></p>
+    <div class="cardBtns">
+      <button class="cardBtn green" id="keepBtn">Keep playing 🎶</button>
+      <button class="cardBtn purple" id="allDoneBtn">All done! ✨</button>
+    </div>
+  </div>
+</div>
+
 <div id="finale">
-  <div id="finaleCard">
+  <div class="modalCard" id="finaleCard">
     <div class="big" id="finaleEmoji">🌼</div>
     <h2 id="finaleTitle">You did it!</h2>
     <p id="finaleMsg"></p>
     <div id="finaleStats"></div>
-    <button id="replayBtn">Plant a new garden 🌱</button>
+    <div id="replayingNote"></div>
+    <div class="cardBtns">
+      <button class="cardBtn green" id="replayBtn">▶ Replay with music</button>
+      <button class="cardBtn purple" id="saveBtn">💾 Save garden</button>
+      <button class="cardBtn pink" id="newBtn">🌱 New garden</button>
+    </div>
   </div>
 </div>
 
@@ -215,13 +297,25 @@ resize();
 
 /* ---------------- Helpers ---------------- */
 const TAU = Math.PI * 2;
-const rand = (a=1,b=0)=> b===0 ? Math.random()*a : a + Math.random()*(b-a);
+const rand = (a=1,b=0)=> b===0 ? rng()*a : a + rng()*(b-a);
 const randInt = (a,b)=> Math.floor(rand(a,b+1));
-const choice = arr => arr[(Math.random()*arr.length)|0];
+const choice = arr => arr[(rng()*arr.length)|0];
 const clamp = (v,a,b)=> v<a?a:(v>b?b:v);
 const lerp = (a,b,t)=> a + (b-a)*t;
 const smoothstep = (e0,e1,x)=>{ const t = clamp((x-e0)/(e1-e0),0,1); return t*t*(3-2*t); };
 const easeOutBack = t=>{ const c1=1.70158, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); };
+
+/* ---------------- Seedable RNG (mulberry32) — lets us replay the exact same garden ---------------- */
+let _rngState = ((Date.now() ^ Math.floor(performance.now()*1000)) >>> 0) || 1;
+function srandom(){
+  _rngState = (_rngState + 0x6D2B79F5) | 0;
+  let t = Math.imul(_rngState ^ (_rngState >>> 15), 1 | _rngState);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+}
+const rng = srandom;
+function seedRng(s){ _rngState = (s >>> 0) || 1; }
+function freshSeed(){ return ((Date.now() ^ Math.floor(performance.now()*1e6)) >>> 0) || 1; }
 
 /* ---------------- Color palettes ---------------- */
 const FLOWER_COLORS = [
@@ -252,6 +346,19 @@ const G = {
   sunFace: false,
   mode: 'flowers', modeNotesLeft: 0, lastMode: '',
   lastEasterEgg: -999, easterEggsSeen: 0, creaturesSeen: new Set(),
+
+  // ---- session / playback state ----
+  gardenMode: 'live',                  // 'live' | 'review'
+  phase: 'start',                      // 'start' | 'playing' | 'stopped' | 'review' | replaying via G.replaying
+  seed: 0,                             // RNG seed for this garden (for exact replay)
+  notes: [],                           // recorded note times (seconds of active play)
+  playClock: 0, playSegStart: 0,       // accumulated play time, excluding pauses
+  lastInputReal: 0,                    // wall-clock of last note (for silence detection)
+  lastEgg: -999,                       // logical-time cooldown for easter eggs
+  replaying: false,
+  // ---- note-triggered animation (nothing moves unless a recent note woke it) ----
+  motionUntil: 0,                      // wall-clock time until which the scene animates
+  animClock: 0,                        // animation time that only advances while moving
 };
 
 /* clouds always present */
@@ -261,7 +368,7 @@ function seedClouds(){
   for(let i=0;i<n;i++){
     G.clouds.push({
       x: rand(0,W), y: rand(H*0.06, H*0.34),
-      s: rand(0.7,1.5), spd: rand(4,12)*(Math.random()<.5?-1:1),
+      s: rand(0.7,1.5), spd: rand(4,12)*(rng()<.5?-1:1),
       puffs: randInt(3,5)
     });
   }
@@ -290,7 +397,9 @@ function plantFlower(opts={}){
     golden: !!opts.golden,
     maxStem: rand(70,120) * (opts.small?0.55:1),
   };
-  f.baseY = groundY - depth*(H*0.14) + rand(-4,4);
+  // keep the flower base inside the ground band so nothing floats in mid-air.
+  // depth 0 = front (low on screen), depth 1 = back (near the hill crest, ~40px up).
+  f.baseY = groundY + 14 - depth*44 + rand(-3,3);
   if(opts.small){ f.maxStem*=0.7; f.scale*=0.8; }
   G.flowers.push(f);
   return f;
@@ -303,7 +412,7 @@ function growExistingOrPlant(){
     if(!f.golden && f.target < 1.05 && f.target < min){ min = f.target; pick = f; }
   }
   const growingCount = G.flowers.filter(f=> f.target < 1.05 && !f.golden).length;
-  if(pick && (growingCount >= 3 || Math.random() < 0.55)){
+  if(pick && (growingCount >= 3 || rng() < 0.55)){
     pick.target = Math.min(1.18, pick.target + rand(0.22,0.34));
   } else if(G.flowers.length < 90){
     plantFlower({ target: rand(0.22,0.32) });
@@ -510,7 +619,7 @@ function drawStars(){
   if(G.dayPhase < 0.1) return;
   ctx.save(); ctx.fillStyle = '#fff';
   for(const s of STARS){
-    const tw = 0.4 + 0.6*Math.abs(Math.sin(s.tw + performance.now()*0.001));
+    const tw = 0.4 + 0.6*Math.abs(Math.sin(s.tw + G.animClock));
     ctx.globalAlpha = G.dayPhase * tw;
     const x = s.x*W, y = s.y*groundY*0.9;
     ctx.beginPath(); ctx.arc(x,y,s.s,0,TAU); ctx.fill();
@@ -520,7 +629,7 @@ function drawStars(){
 
 /* ---- Bunny ---- */
 function spawnBunny(){
-  const fromLeft = Math.random()<0.5;
+  const fromLeft = rng()<0.5;
   G.bunny = {
     x: fromLeft ? -40 : W+40, dir: fromLeft?1:-1,
     fromX:0, toX:0, hopStart:-1, hopDur:0.42, resting:true,
@@ -595,7 +704,7 @@ function spawnButterfly(){
 function butterflyVisit(){
   if(G.butterflies.length<2) spawnButterfly();
   const bf = choice(G.butterflies);
-  if(G.flowers.length && Math.random()<0.7){
+  if(G.flowers.length && rng()<0.7){
     const f = choice(G.flowers);
     bf.tx = f.x + rand(-10,10); bf.ty = f.baseY - f.maxStem*clamp(f.growth,0,1)*f.scale - 8;
   } else { bf.tx = rand(W*0.1,W*0.9); bf.ty = rand(H*0.3,groundY-30); }
@@ -626,7 +735,7 @@ function drawButterfly(bf){
 
 /* ---- Bird ---- */
 function addBird(){
-  const fromLeft = Math.random()<0.5;
+  const fromLeft = rng()<0.5;
   G.birds.push({
     x: fromLeft?-30:W+30, y: rand(H*0.08,H*0.34),
     vx:(fromLeft?1:-1)*rand(55,90), flap:rand(0,TAU), s:rand(0.8,1.3)
@@ -651,7 +760,7 @@ function spawnBee(){ G.bees.push({x:rand(0,W),y:H*0.4,tx:rand(0,W),ty:H*0.4,wing
 function beeWork(){
   if(!G.bees.length) spawnBee();
   const bee = G.bees[0];
-  bee.tx = rand(W*0.1,W*0.9); bee.ty = groundY - rand(0,H*0.1);
+  bee.tx = rand(W*0.1,W*0.9); bee.ty = groundY - rand(0, H*0.035);
   bee.job = {x:bee.tx, y:bee.ty, done:false};
 }
 function updateBees(dt){
@@ -875,8 +984,8 @@ function pickMode(){
 }
 function endMode(){
   if(G.mode==='fireflies') G.dayTarget = 0;
-  for(const bf of G.butterflies) bf.leaving = Math.random()<0.6 ? (bf.tx=rand(-60,W+60), bf.ty=-50, true) : false;
-  for(const bee of G.bees){ bee.leaving=true; bee.tx=Math.random()<.5?-60:W+60; }
+  for(const bf of G.butterflies) bf.leaving = rng()<0.6 ? (bf.tx=rand(-60,W+60), bf.ty=-50, true) : false;
+  for(const bee of G.bees){ bee.leaving=true; bee.tx=rng()<.5?-60:W+60; }
 }
 
 function handleNoteForMode(){
@@ -895,12 +1004,11 @@ function handleNoteForMode(){
 /* ============================================================
    EASTER EGGS — rare delightful surprises
    ============================================================ */
-function maybeEasterEgg(){
-  const now = performance.now()/1000;
+function maybeEasterEgg(t){
   if(G.noteCount < 6) return;
-  if(now - G.lastEasterEgg < 14) return;
-  if(Math.random() > 0.05) return;
-  G.lastEasterEgg = now; G.easterEggsSeen++;
+  if(t - G.lastEgg < 14) return;
+  if(rng() > 0.05) return;
+  G.lastEgg = t; G.easterEggsSeen++;
   const egg = choice(['balloon','star','golden','bunnycameo','confetti']);
   switch(egg){
     case 'balloon': spawnBalloon(); break;
@@ -920,16 +1028,18 @@ function checkMilestone(){
 }
 
 /* ============================================================
-   THE NOTE EVENT — called on every detected onset
+   THE NOTE EVENT
+   onNote(t) advances the garden by one note. `t` is a *logical* play time
+   (seconds of active playing). Driving the garden off this clock — rather than
+   the wall clock — is what makes a seeded replay reproduce the same garden.
    ============================================================ */
-function onNote(){
-  if(!G.started) return;
-  // a finished song that hears a new note resumes building
-  if(G.finished){ hideFinale(); G.finished=false; G.sunFace=false; }
-
+function onNote(t){
   G.noteCount++;
-  G.lastNoteTime = performance.now()/1000;
   document.getElementById('noteNum').textContent = G.noteCount;
+  const rc = document.getElementById('reviewNum'); if(rc) rc.textContent = G.noteCount;
+
+  // wake the scene for ~1s of animation, then it freezes again
+  G.motionUntil = performance.now()/1000 + 1;
   flashEar();
 
   if(G.modeNotesLeft <= 0){ endMode(); pickMode(); }
@@ -940,11 +1050,21 @@ function onNote(){
   burstSparkle(rand(W*0.1,W*0.9), rand(groundY-70, groundY-10), 6, choice(['#fff','#ffe082','#ffb3d1','#b8f0c8']));
 
   checkMilestone();
-  maybeEasterEgg();
+  maybeEasterEgg(t);
 }
 
+/* Called by the mic detector, taps and spacebar while actively playing. */
+function noteFromInput(){
+  if(G.phase !== 'playing' || G.replaying) return;
+  const t = playTimeNow();
+  G.notes.push(t);
+  G.lastInputReal = performance.now()/1000;
+  onNote(t);
+}
+function playTimeNow(){ return G.playClock + (performance.now()/1000 - G.playSegStart); }
+
 /* ============================================================
-   FINALE — 5s of silence ends the song
+   FINALE / REVIEW CARD — shown once the player is "All done"
    ============================================================ */
 const FINALE_MESSAGES = [
   "What a beautiful song! 🎵 Look at the garden you grew.",
@@ -961,12 +1081,12 @@ function gardenSizeWord(n){
   if(n<70) return ["a big beautiful garden 🌻","a grand garden bursting with color 🌈"];
   return ["a MAGNIFICENT garden! 🏆🌻🌸","an enormous wonderland of a garden! 🌳🌺🦋"];
 }
-function doFinale(){
-  G.finished = true; G.sunFace = true;
+function showFinaleCard(){
+  G.sunFace = true;
   for(let i=0;i<3;i++) setTimeout(()=>burstConfetti(rand(W*0.2,W*0.8), -10, 40), i*220);
   const card = document.getElementById('finale');
   const bloomed = G.flowers.filter(f=> f.growth>0.6).length;
-  const elapsed = (performance.now()/1000) - G.startTime;
+  const elapsed = G.notes.length ? G.notes[G.notes.length-1] : 0;
   document.getElementById('finaleTitle').textContent = choice(["You did it! 🎉","Hooray! 🎊","Beautiful! 🌟","Bravo! 👏"]);
   document.getElementById('finaleMsg').textContent = choice(FINALE_MESSAGES);
   document.getElementById('finaleEmoji').textContent = choice(['🌼','🌻','🌸','🌷','🌺']);
@@ -977,12 +1097,14 @@ function doFinale(){
   if(G.easterEggsSeen) stats += ` &nbsp;•&nbsp; ✨ ${G.easterEggsSeen} surprise${G.easterEggsSeen>1?'s':''}`;
   stats += `<br>⏱️ Song length: ${fmtTime(elapsed)}`;
   document.getElementById('finaleStats').innerHTML = stats;
+  document.getElementById('replayingNote').textContent = '';
+  document.getElementById('replayBtn').textContent = recordedURL ? '▶ Replay with music' : '▶ Replay';
   card.classList.add('show');
 }
-function hideFinale(){ document.getElementById('finale').classList.remove('show'); }
 
 /* ============================================================
-   RESET
+   RESET — clears the visible garden. Seed / recorded notes are kept so a
+   replay can rebuild this exact garden; only newGarden() throws those away.
    ============================================================ */
 function resetGarden(){
   G.flowers=[]; G.butterflies=[]; G.birds=[]; G.bees=[]; G.fireflies=[];
@@ -991,10 +1113,10 @@ function resetGarden(){
   G.noteCount=0; G.finished=false; G.sunFace=false;
   G.dayPhase=0; G.dayTarget=0;
   G.mode='flowers'; G.modeNotesLeft=0; G.lastMode='';
-  G.lastEasterEgg=-999; G.easterEggsSeen=0; G.creaturesSeen=new Set();
-  G.startTime = performance.now()/1000; G.lastNoteTime = G.startTime;
+  G.lastEasterEgg=-999; G.lastEgg=-999; G.easterEggsSeen=0; G.creaturesSeen=new Set();
+  G.motionUntil=0; G.animClock=0;
   document.getElementById('noteNum').textContent='0';
-  hideFinale();
+  const rc=document.getElementById('reviewNum'); if(rc) rc.textContent='0';
 }
 
 /* ============================================================
@@ -1029,7 +1151,7 @@ function drawGround(){
 }
 function drawGrassBlades(){
   ctx.save(); ctx.strokeStyle='#6cc568'; ctx.lineWidth=2; ctx.lineCap='round';
-  const t = performance.now()*0.001;
+  const t = G.animClock;
   for(let i=0;i<W;i+=14){
     const sway = Math.sin(t*1.2 + i*0.05)*4;
     const x = i + ((i*37)%9);
@@ -1050,32 +1172,40 @@ function mixHex(a,b,t){
 let lastT = performance.now();
 function loop(now){
   const dt = Math.min(0.05, (now - lastT)/1000); lastT = now;
+  const tnow = now/1000;
 
-  // ease day phase
-  G.dayPhase += (G.dayTarget - G.dayPhase) * Math.min(1, dt*1.2);
+  // Note-triggered animation: the scene only moves for ~1s after a note.
+  // adt ("animation dt") is 0 while frozen, so every time-based motion pauses.
+  const adt = (tnow < G.motionUntil) ? dt : 0;
+  G.animClock += adt;
 
-  // updates
-  for(const c of G.clouds) updateCloud(c, dt);
-  for(const f of G.flowers) updateFlower(f, dt);
-  updateButterflies(dt); updateBirds(dt); updateBees(dt);
-  updateFireflies(dt); updateBalloons(dt); updateShootingStars(dt);
-  updateTrees(dt); updateParticles(dt); updateBunny(dt);
+  // ease day phase (only while the scene is awake)
+  G.dayPhase += (G.dayTarget - G.dayPhase) * Math.min(1, adt*1.2);
 
-  // silence -> finale
-  if(G.started && !G.finished && G.noteCount>0){
-    if((now/1000) - G.lastNoteTime > 5){ doFinale(); }
+  // updates — gated motion gets adt; particles are a note's own short-lived
+  // sparkle so they run on real dt and simply decay away.
+  for(const c of G.clouds) updateCloud(c, adt);
+  for(const f of G.flowers) updateFlower(f, adt);
+  updateButterflies(adt); updateBirds(adt); updateBees(adt);
+  updateFireflies(adt); updateBalloons(adt); updateShootingStars(adt);
+  updateTrees(adt); updateParticles(dt); updateBunny(adt);
+
+  // auto "done playing": only after the song really got going (>=10 notes)
+  // and 5s of real silence. This becomes a paused state, not an instant finale.
+  if(G.phase==='playing' && G.noteCount>=10){
+    if(tnow - G.lastInputReal > 5){ pausePlaying('auto'); }
   }
 
   // ---- draw ----
   ctx.clearRect(0,0,W,H);
   drawSky();
   drawStars();
-  drawSun(dt);
+  drawSun(adt);
   drawShootingStars();
   for(const c of G.clouds) drawCloud(c);
   for(const b of G.balloons) drawBalloon(b);
   for(const b of G.birds) drawBird(b);
-  drawRainbow(dt);
+  drawRainbow(adt);
   drawGround();
   for(const t of G.trees) drawTree(t);
 
@@ -1095,20 +1225,24 @@ function loop(now){
 requestAnimationFrame(loop);
 
 /* ============================================================
-   AUDIO — microphone onset (new-note) detection
+   AUDIO — microphone, recording, and piano-note onset detection
    ============================================================ */
 let audioCtx=null, analyser=null, freq=null, prevFreq=null, micOK=false;
+let micStream=null;
+let recorder=null, recordedChunks=[], recordedBlob=null, recordedURL=null;
 let fluxEMA = 0, levelEMA = 0;
 let lastOnset = 0;
-const MIN_GAP_MS = 130;          // debounce between notes
+const MIN_GAP_MS = 120;          // debounce between notes
 let sensMult = 1.9;              // adaptive threshold multiplier (tuned by slider)
 
-async function startMic(){
+/* Ask for the mic once and keep the stream around for the whole session. */
+async function ensureMic(){
+  if(micOK && micStream) return;
   try{
-    audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
     if(audioCtx.state === 'suspended') await audioCtx.resume();
-    const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
-    const src = audioCtx.createMediaStreamSource(stream);
+    micStream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+    const src = audioCtx.createMediaStreamSource(micStream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 2048;
     analyser.smoothingTimeConstant = 0.0;
@@ -1124,7 +1258,63 @@ async function startMic(){
   }
 }
 
+/* Record the played audio so the garden can be replayed with its music. */
+function startRecording(){
+  if(!micStream || typeof MediaRecorder === 'undefined') return;
+  recordedChunks = [];
+  try{
+    recorder = new MediaRecorder(micStream);
+    recorder.ondataavailable = e=>{ if(e.data && e.data.size) recordedChunks.push(e.data); };
+    recorder.start(200);
+  }catch(e){ recorder = null; }
+}
+function stopRecording(){
+  return new Promise(res=>{
+    if(!recorder || recorder.state === 'inactive'){ res(); return; }
+    recorder.onstop = ()=>{
+      recordedBlob = new Blob(recordedChunks, {type: recorder.mimeType || 'audio/webm'});
+      if(recordedURL) URL.revokeObjectURL(recordedURL);
+      recordedURL = URL.createObjectURL(recordedBlob);
+      res();
+    };
+    try{ recorder.stop(); }catch(e){ res(); }
+  });
+}
+
+/* Distinguish a real piano note from talking / bumps / room noise.
+   A piano note is pitched (one strong peak that towers over the noise floor),
+   sits in the keyboard's range, has a supporting harmonic, and isn't a
+   low-frequency thud. Talking is broadband + formant-heavy; bumps are
+   broadband low-end transients. Both fail these tests most of the time. */
+function isPianoLike(){
+  const sr = audioCtx.sampleRate, binHz = sr/analyser.fftSize;
+  const lo = Math.max(2, Math.floor(50/binHz));
+  const hi = Math.min(freq.length-1, Math.floor(4200/binHz));
+  const lowCut = Math.floor(140/binHz);
+  let sum=0, peak=0, pk=lo, lowSum=0;
+  for(let i=lo;i<hi;i++){
+    const v = freq[i];
+    sum += v;
+    if(i < lowCut) lowSum += v;
+    if(v > peak){ peak = v; pk = i; }
+  }
+  if(peak < 38) return false;                 // no clear tone above the noise floor
+  const mean = sum/(hi-lo);
+  const peakiness = peak/(mean+1);            // pitched tone => tall peak vs. average
+  if(peakiness < 2.6) return false;           // broadband => bump / noise / clap
+  const domHz = pk*binHz;
+  if(domHz < 55 || domHz > 2600) return false;// outside the range people actually play
+  if(lowSum/(sum+1) > 0.62) return false;     // low-end thud (a bump on the piano/desk)
+  // look for a harmonic near 2x the fundamental (very piano-like)
+  const h2 = Math.round(pk*2);
+  let harm = 0;
+  if(h2 < hi) harm = Math.max(freq[h2-1]||0, freq[h2]||0, freq[h2+1]||0);
+  if(harm < peak*0.12 && peakiness < 5) return false; // no harmonic and not a pure tone
+  return true;
+}
+
 function detectOnset(){
+  if(G.phase !== 'playing' || G.replaying) return;
   if(!micOK || !analyser) return;
   analyser.getByteFrequencyData(freq);
   // limit to musical band (~80Hz..5kHz)
@@ -1138,7 +1328,6 @@ function detectOnset(){
     level += freq[i];
   }
   level /= (hi-lo);
-  prevFreq.set(freq);
 
   // smooth baselines
   levelEMA += (level - levelEMA) * 0.08;
@@ -1152,10 +1341,11 @@ function detectOnset(){
   // meters
   updateMeters(level, flux, threshold);
 
-  if(flux > threshold && gate && (now - lastOnset) > MIN_GAP_MS){
+  if(flux > threshold && gate && (now - lastOnset) > MIN_GAP_MS && isPianoLike()){
     lastOnset = now;
-    onNote();
+    noteFromInput();
   }
+  prevFreq.set(freq);
 }
 setInterval(detectOnset, 16);
 
@@ -1183,31 +1373,231 @@ function showToast(txt){
   t.classList.remove('show'); void t.offsetWidth; t.classList.add('show');
 }
 
-document.getElementById('startBtn').addEventListener('click', async ()=>{
-  document.getElementById('start').style.display='none';
-  G.started=true; G.startTime=performance.now()/1000; G.lastNoteTime=G.startTime;
-  await startMic();
-});
+const $ = id => document.getElementById(id);
+function show(id){ $(id).classList.add('show'); }
+function hide(id){ $(id).classList.remove('show'); }
 
-document.getElementById('gear').addEventListener('click', ()=>{
-  document.getElementById('settings').classList.toggle('show');
-});
+/* ============================================================
+   SESSION STATE MACHINE
+   start -> playing -> (stopped <-> playing) -> review -> (replay) -> ...
+   ============================================================ */
+async function startPlaying(mode){
+  G.gardenMode = mode;
+  $('start').style.display = 'none';
+  G.seed = freshSeed();
+  seedRng(G.seed);
+  resetGarden();
+  G.notes = [];
+  G.playClock = 0;
+  G.playSegStart = performance.now()/1000;
+  G.lastInputReal = G.playSegStart;
+  G.replaying = false;
+  G.started = true;
+  G.phase = 'playing';
+  show('donePlaying');
+  if(mode === 'review'){
+    $('reviewNum').textContent = '0';
+    show('reviewOverlay');
+  } else {
+    hide('reviewOverlay');
+  }
+  await ensureMic();
+  startRecording();
+}
 
-document.getElementById('sens').addEventListener('input', e=>{
+function pausePlaying(reason){
+  if(G.phase !== 'playing') return;
+  G.playClock += performance.now()/1000 - G.playSegStart;
+  G.phase = 'stopped';
+  hide('donePlaying');
+  hide('reviewOverlay');
+  if(recorder && recorder.state === 'recording') recorder.pause();
+  const n = G.noteCount;
+  $('stopTitle').textContent = reason === 'auto' ? 'All done with your song? 🎵' : 'Taking a break? 🎵';
+  $('stopMsg').textContent = `You've played ${n} note${n===1?'':'s'} so far.`;
+  show('stopCard');
+}
+
+function resumePlaying(){
+  hide('stopCard');
+  G.phase = 'playing';
+  G.playSegStart = performance.now()/1000;
+  G.lastInputReal = G.playSegStart;
+  show('donePlaying');
+  if(G.gardenMode === 'review') show('reviewOverlay');
+  if(recorder && recorder.state === 'paused') recorder.resume();
+}
+
+async function allDone(){
+  hide('stopCard');
+  hide('reviewOverlay');
+  await stopRecording();
+  G.phase = 'review';
+  if(G.gardenMode === 'review'){
+    startReplay();              // they never saw it — show it now
+  } else {
+    showFinaleCard();           // live: the finished garden is already on screen
+  }
+}
+
+/* ---- Replay: rebuild the exact garden in sync with the recorded audio ---- */
+let replayIndex = 0, replayAudio = null, replayRAF = 0;
+function startReplay(){
+  hide('finale');
+  cancelAnimationFrame(replayRAF);
+  if(replayAudio){ replayAudio.pause(); replayAudio = null; }
+  G.replaying = true;
+  seedRng(G.seed);
+  resetGarden();
+  replayIndex = 0;
+
+  const fireDue = (clock)=>{
+    while(replayIndex < G.notes.length && G.notes[replayIndex] <= clock){
+      onNote(G.notes[replayIndex]);
+      replayIndex++;
+    }
+  };
+
+  if(recordedURL){
+    replayAudio = new Audio(recordedURL);
+    replayAudio.onended = finishReplay;
+    const drive = ()=>{
+      if(!G.replaying) return;
+      fireDue(replayAudio.currentTime);
+      replayRAF = requestAnimationFrame(drive);
+    };
+    replayAudio.play().then(()=>{ replayRAF = requestAnimationFrame(drive); })
+                      .catch(()=> runReplayTimer(fireDue));   // autoplay blocked / no audio
+  } else {
+    runReplayTimer(fireDue);
+  }
+}
+function runReplayTimer(fireDue){
+  const t0 = performance.now()/1000;
+  const endAt = (G.notes[G.notes.length-1] || 0) + 1.2;
+  const drive = ()=>{
+    if(!G.replaying) return;
+    const clock = performance.now()/1000 - t0;
+    fireDue(clock);
+    if(clock >= endAt){ finishReplay(); return; }
+    replayRAF = requestAnimationFrame(drive);
+  };
+  replayRAF = requestAnimationFrame(drive);
+}
+function finishReplay(){
+  G.replaying = false;
+  cancelAnimationFrame(replayRAF);
+  showFinaleCard();
+}
+
+function newGarden(){
+  G.replaying = false;
+  cancelAnimationFrame(replayRAF);
+  if(replayAudio){ replayAudio.pause(); replayAudio = null; }
+  hide('finale'); hide('stopCard'); hide('reviewOverlay'); hide('donePlaying');
+  G.phase = 'start';
+  G.started = false;
+  resetGarden();
+  $('start').style.display = 'flex';
+}
+
+/* ============================================================
+   SAVE / LOAD gardens (IndexedDB — keeps seed, note times and the audio blob)
+   ============================================================ */
+const DB_NAME='pianoGarden', STORE='gardens';
+function idb(){
+  return new Promise((res,rej)=>{
+    const r = indexedDB.open(DB_NAME,1);
+    r.onupgradeneeded = ()=> r.result.createObjectStore(STORE,{keyPath:'id'});
+    r.onsuccess = ()=> res(r.result);
+    r.onerror = ()=> rej(r.error);
+  });
+}
+async function saveGarden(g){
+  const db = await idb();
+  return new Promise((res,rej)=>{
+    const tx = db.transaction(STORE,'readwrite');
+    tx.objectStore(STORE).put(g);
+    tx.oncomplete = ()=> res();
+    tx.onerror = ()=> rej(tx.error);
+  });
+}
+async function loadLatestGarden(){
+  try{
+    const db = await idb();
+    return await new Promise(res=>{
+      const tx = db.transaction(STORE,'readonly');
+      const rq = tx.objectStore(STORE).getAll();
+      rq.onsuccess = ()=>{ const a = rq.result||[]; res(a.length ? a[a.length-1] : null); };
+      rq.onerror = ()=> res(null);
+    });
+  }catch(e){ return null; }
+}
+async function doSave(){
+  if(!G.notes.length){ showToast('Play some notes first! 🎵'); return; }
+  const g = { id: Date.now(), mode: G.gardenMode, seed: G.seed,
+              notes: G.notes.slice(), audio: recordedBlob || null,
+              count: G.noteCount, date: new Date().toISOString() };
+  try{ await saveGarden(g); showToast('Garden saved! 💾'); }
+  catch(e){ showToast('Could not save 😢'); }
+}
+function loadSavedAndReplay(g){
+  $('start').style.display = 'none';
+  G.gardenMode = g.mode || 'live';
+  G.seed = g.seed;
+  G.notes = (g.notes||[]).slice();
+  G.started = true;
+  G.phase = 'review';
+  if(recordedURL) URL.revokeObjectURL(recordedURL);
+  recordedBlob = g.audio || null;
+  recordedURL = recordedBlob ? URL.createObjectURL(recordedBlob) : null;
+  startReplay();
+}
+
+/* ============================================================
+   UI WIRING
+   ============================================================ */
+// mode selector on the start screen
+document.querySelectorAll('.modeBtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.modeBtn').forEach(b=> b.classList.remove('sel'));
+    btn.classList.add('sel');
+  });
+});
+function selectedMode(){
+  const sel = document.querySelector('.modeBtn.sel');
+  return sel ? sel.dataset.mode : 'live';
+}
+
+$('startBtn').addEventListener('click', ()=> startPlaying(selectedMode()));
+$('donePlaying').addEventListener('click', ()=> pausePlaying('manual'));
+$('keepBtn').addEventListener('click', resumePlaying);
+$('allDoneBtn').addEventListener('click', allDone);
+$('replayBtn').addEventListener('click', startReplay);
+$('saveBtn').addEventListener('click', doSave);
+$('newBtn').addEventListener('click', newGarden);
+
+$('gear').addEventListener('click', ()=> $('settings').classList.toggle('show'));
+
+$('sens').addEventListener('input', e=>{
   // slider 1..100 -> sensMult ~3.4 (strict) down to ~1.15 (sensitive)
   const v = +e.target.value/100;
   sensMult = lerp(3.4, 1.15, v);
 });
-document.getElementById('sens').dispatchEvent(new Event('input'));
+$('sens').dispatchEvent(new Event('input'));
 
-document.getElementById('testBtn').addEventListener('click', ()=> onNote());
-document.getElementById('resetBtn').addEventListener('click', ()=> resetGarden());
-document.getElementById('replayBtn').addEventListener('click', ()=> resetGarden());
+$('testBtn').addEventListener('click', noteFromInput);
+$('resetBtn').addEventListener('click', newGarden);
 
 // tap garden or spacebar = a note (great for testing / no-mic play)
-canvas.addEventListener('pointerdown', ()=>{ if(G.started) onNote(); });
+canvas.addEventListener('pointerdown', noteFromInput);
 window.addEventListener('keydown', e=>{
-  if(e.code==='Space'){ e.preventDefault(); if(G.started) onNote(); }
+  if(e.code==='Space'){ e.preventDefault(); noteFromInput(); }
+});
+
+// offer to replay the most recently saved garden, if there is one
+loadLatestGarden().then(g=>{
+  if(g){ const b = $('lastBtn'); b.style.display = 'inline-block'; b.onclick = ()=> loadSavedAndReplay(g); }
 });
 </script>
 </body>
