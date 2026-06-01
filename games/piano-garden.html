@@ -574,7 +574,7 @@ function updateFlower(f, dt){
   f.growth += (f.target - f.growth) * Math.min(1, dt*4.5);
   f.sway += dt*f.swaySpd;
   if(!f.bloomed && f.growth > 0.62){ f.bloomed = true; f.bloomPop = 0.0001; }
-  if(f.bloomPop>0 && f.bloomPop<1){ f.bloomPop = Math.min(1, f.bloomPop + dt*2.2); }
+  if(f.bloomPop>0 && f.bloomPop<1){ f.bloomPop = Math.min(1, f.bloomPop + dt*6); }
 }
 
 function drawFlower(f){
@@ -847,7 +847,7 @@ function spawnButterfly(){
     x:rand(0,W), y:rand(H*0.3,groundY-20),
     tx:rand(0,W), ty:rand(H*0.3,groundY-20),
     wing:rand(0,TAU), col:choice(['#ff8fb1','#ffd166','#90caf9','#ce93d8','#ff8a65']),
-    leaving:false
+    leaving:false, anim:0
   });
 }
 function butterflyVisit(){
@@ -858,12 +858,14 @@ function butterflyVisit(){
     bf.tx = f.x + rand(-10,10); bf.ty = f.baseY - f.maxStem*clamp(f.growth,0,1)*f.scale - 8;
   } else { bf.tx = rand(W*0.1,W*0.9); bf.ty = rand(H*0.3,groundY-30); }
   burstSparkle(bf.tx, bf.ty, 4, bf.col);
+  wake(bf, 1.0);
 }
 function updateButterflies(dt){
   for(const bf of G.butterflies){
-    bf.wing += dt*16;
-    bf.x += (bf.tx - bf.x)*Math.min(1,dt*1.8) + Math.sin(bf.wing*0.2)*0.6;
-    bf.y += (bf.ty - bf.y)*Math.min(1,dt*1.8) + Math.cos(bf.wing*0.17)*0.6;
+    const bdt = edt(bf, dt);
+    bf.wing += bdt*16;
+    bf.x += (bf.tx - bf.x)*Math.min(1,bdt*1.8) + Math.sin(bf.wing*0.2)*0.6;
+    bf.y += (bf.ty - bf.y)*Math.min(1,bdt*1.8) + Math.cos(bf.wing*0.17)*0.6;
   }
   G.butterflies = G.butterflies.filter(bf=> !(bf.leaving && (bf.x<-40||bf.x>W+40||bf.y<-40)) );
 }
@@ -905,18 +907,20 @@ function drawBird(b){
 }
 
 /* ---- Bee ---- */
-function spawnBee(){ G.bees.push({x:rand(0,W),y:H*0.4,tx:rand(0,W),ty:H*0.4,wing:0,job:null,leaving:false}); }
+function spawnBee(){ G.bees.push({x:rand(0,W),y:H*0.4,tx:rand(0,W),ty:H*0.4,wing:0,job:null,leaving:false,anim:0}); }
 function beeWork(){
   if(!G.bees.length) spawnBee();
   const bee = G.bees[0];
   bee.tx = rand(W*0.1,W*0.9); bee.ty = groundY - rand(0, H*0.035);
   bee.job = {x:bee.tx, y:bee.ty, done:false};
+  wake(bee, 2.0);
 }
 function updateBees(dt){
   for(const bee of G.bees){
-    bee.wing += dt*30;
-    bee.x += (bee.tx-bee.x)*Math.min(1,dt*2.2);
-    bee.y += (bee.ty-bee.y)*Math.min(1,dt*2.2);
+    const bdt = edt(bee, dt);
+    bee.wing += bdt*30;
+    bee.x += (bee.tx-bee.x)*Math.min(1,bdt*2.2);
+    bee.y += (bee.ty-bee.y)*Math.min(1,bdt*2.2);
     if(bee.job && !bee.job.done && Math.hypot(bee.x-bee.job.x,bee.y-bee.job.y)<14){
       bee.job.done=true;
       const f = plantFlower({x:bee.job.x, small:true, target:rand(0.9,1.1)});
@@ -983,7 +987,7 @@ function treeGrow(){
 function updateTrees(dt){
   for(const t of G.trees){
     t.growth += (t.target-t.growth)*Math.min(1,dt*4);
-    for(const p of t.foliage) if(p.pop<1) p.pop=Math.min(1,p.pop+dt*2.5);
+    for(const p of t.foliage) if(p.pop<1) p.pop=Math.min(1,p.pop+dt*6);
   }
 }
 function drawTree(t){
@@ -1187,8 +1191,8 @@ function onNote(t){
   document.getElementById('noteNum').textContent = G.noteCount;
   const rc = document.getElementById('reviewNum'); if(rc) rc.textContent = G.noteCount;
 
-  // wake the scene for ~1s of animation, then it freezes again
-  G.motionUntil = performance.now()/1000 + 1;
+  // wake ambient scene for ~0.2s per note (snappy growth response)
+  G.motionUntil = performance.now()/1000 + 0.2;
   flashEar();
 
   if(G.modeNotesLeft <= 0){ endMode(); pickMode(); }
@@ -1342,7 +1346,7 @@ function loop(now){
   // sparkle so they run on real dt and simply decay away.
   for(const c of G.clouds) updateCloud(c, adt);
   for(const f of G.flowers) updateFlower(f, adt);
-  updateButterflies(adt); updateBirds(dt); updateBees(adt);
+  updateButterflies(dt); updateBirds(dt); updateBees(dt);
   updateFireflies(adt, dt); updateBalloons(dt); updateShootingStars(dt);
   updateTrees(adt); updateParticles(dt); updateBunny(adt);
 
@@ -1650,6 +1654,11 @@ function runReplayTimer(fireDue){
 function finishReplay(){
   G.replaying = false;
   cancelAnimationFrame(replayRAF);
+  // clear fly-through entities so the finale view is still
+  G.birds = []; G.balloons = []; G.shootingStars = [];
+  G.butterflies.forEach(b=> b.anim=0);
+  G.bees.forEach(b=> b.anim=0);
+  G.motionUntil = 0;
   showFinaleCard();
 }
 
@@ -1974,8 +1983,14 @@ function loadBackupAndShow(bg){
   G.replaying = true; // suppress noteFromInput
   for(const t of bg.notes) onNote(t);
   G.replaying = false;
+  // fully settle all growth animations
   for(const f of G.flowers){ f.growth=f.target; f.bloomed=f.growth>0.62; if(f.bloomed) f.bloomPop=1; }
   for(const t of G.trees){ t.growth=t.target; for(const p of t.foliage) p.pop=1; }
+  // clear transients so the finale view is still
+  G.birds = []; G.balloons = []; G.shootingStars = []; G.bunny = null;
+  G.butterflies.forEach(b=> b.anim=0);
+  G.bees.forEach(b=> b.anim=0);
+  G.motionUntil = 0;
   showFinaleCard();
 }
 function renderBackups(backups){
