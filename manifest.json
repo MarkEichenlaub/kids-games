@@ -1,6 +1,13 @@
 {
   "games": [
     {
+      "id": "rocket-builders",
+      "title": "Rocket Builders",
+      "description": "Build your own rocket, earn new parts with math, spelling and puzzle missions, then fly it around the solar system and land on planets!",
+      "preview": "previews/rocket-builders.svg",
+      "file": "games/rocket-builders/index.html"
+    },
+    {
       "id": "penguin-maze",
       "title": "Penguin Maze",
       "description": "Guide a penguin through ice-themed mazes. Difficulty scales as you win!",
