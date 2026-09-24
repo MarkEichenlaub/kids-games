@@ -26,7 +26,7 @@ async def record(item, sem, tmp):
         zh = item['voice'] == 'zh'
         for attempt in range(4):
             try:
-                await edge_tts.Communicate(item['say'], VOICE_ZH if zh else VOICE_EN, rate=RATE_ZH if zh else RATE_EN).save(raw)
+                await edge_tts.Communicate(item['say'], VOICE_ZH if zh else VOICE_EN, rate=item.get('rate') or (RATE_ZH if zh else RATE_EN)).save(raw)
                 break
             except Exception as e:  # the service drops a request now and then
                 if attempt == 3:

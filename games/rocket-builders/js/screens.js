@@ -189,6 +189,7 @@ G.grownups = () => {
     <p>Math follows Beast Academy levels 1 and 2: 0 = counting to 5, 1 = counting and sums to 5, 2 = within 10 and making ten, 3 = within 20 and skip counting, 4 = tens and ones, odd and even, 5 = two-digit sums and triangle numbers, 6 = hundreds and two-digit sums.</p>
     ${kids.map(k => `<div class="row"><b style="width:70px">${k.name}</b> Math ${lvlSel(k, 'math', 6)} Spelling ${lvlSel(k, 'words', 3)} Puzzles ${lvlSel(k, 'maze', 5)} Shapes ${lvlSel(k, 'shapes', 3)}</div>`).join('')}
     <h3>Sounding out words</h3><p>Words are spelled the way they sound. Beep says each sound and she picks the letter. After 20 words she gets the whole alphabet instead of four letter choices.</p>
+    <p>Letter sounds recorded by reading teacher Kathryn J. Davis, <a href="https://www.soundcityreading.net/" target="_blank">Sound City Reading</a>. Her site offers them free to parents and teachers for use with their own kids.</p>
     ${kids.map(k => { const pr = G.save.profiles[k.id]; return `<div class="row"><b style="width:70px">${k.name}</b><label style="margin:0"><input type="checkbox" data-full="${k.id}" ${pr && pr.flags.phonicsFull ? 'checked' : ''}> Whole alphabet now</label></div>`; }).join('')}
     <div class="row"><b>Letter sounds:</b> ${'abcdefghijklmnoprstuvwyz'.split('').map(l => `<button class="big-btn small" data-snd="${l}" style="padding:6px 12px">${l}</button>`).join('')}</div>
     <h3>Birthdays</h3><p>Beep throws a party the week of each birthday. Saved on this device only.</p>

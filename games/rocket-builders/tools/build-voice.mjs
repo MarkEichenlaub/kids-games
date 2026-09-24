@@ -104,6 +104,9 @@ for (const it of items.values()) {
   else it.say = it.text.replace(/^[^\p{L}\p{N}]+/u, '').replace(/\bMira\b/g, 'Meera').replace(/\bMIRA\b/g, 'Meera');
 }
 for (const it of items.values()) if (it.voice === 'zh') it.say = it.text;
+// the practice words get their own slow, careful recording
+const practice = new Set(G.PHONICS.all.map(w => w[0]).concat(G.PHONICS.alienNames.map(n => n.toLowerCase())));
+for (const it of items.values()) if (practice.has(it.id)) { it.say = it.text.replace(/^./, c => c.toUpperCase()) + '.'; it.rate = '-25%'; }
 
 fs.writeFileSync(path.join(here, 'voice-items.json'), JSON.stringify([...items.values()], null, 0));
 fs.mkdirSync(path.join(game, 'voice', 'c'), { recursive: true });
