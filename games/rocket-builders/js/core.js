@@ -132,10 +132,12 @@ window.G = (function () {
     for (const p of prefs) { const v = vs.find(v => p.test(v.name) || p.test(v.lang)); if (v) { voice = v; return; } }
   }
   if (window.speechSynthesis) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-  let lastSaid = '';
+  let lastSaid = '', curTalk = Promise.resolve(), talkGen = 0;
+  // resolves when whatever Beep is saying now is finished (or after max ms)
+  G.whenQuiet = (max = 8000) => Promise.race([curTalk, G.wait(max)]);
   G.say = (text, opts = {}) => {
     lastSaid = text;
-    return new Promise(async resolve => {
+    return curTalk = new Promise(async resolve => {
       if (!G.save.settings.voice) { setTimeout(resolve, Math.min(4000, 400 + text.length * 45)); return; }
       // recorded neural voice first
       const V = window.VOICE;
@@ -161,7 +163,8 @@ window.G = (function () {
   };
   // words and single letter sounds in one breath: G.sayMix(['Listen:', {snd: 'f'}, 'fin'])
   const soundUrl = l => 'voice/s/' + l + '.mp3';
-  G.sayMix = async (items) => {
+  G.sayMix = (items) => curTalk = sayMix(items);
+  const sayMix = async (items) => {
     items = items.filter(x => x && (typeof x !== 'string' || x.trim()));
     if (!G.save.settings.voice) { await G.wait(500 * items.length); return; }
     const V = window.VOICE, a = V && G.audio();
@@ -181,7 +184,7 @@ window.G = (function () {
   };
   let voiceGain = null;
   const voiceOut = () => { if (!voiceGain) { voiceGain = ac.createGain(); voiceGain.gain.value = 1; voiceGain.connect(ac.destination); } return voiceGain; };
-  G.hush = () => { if (window.speechSynthesis) speechSynthesis.cancel(); if (window.VOICE && window.VOICE.stop) window.VOICE.stop(); };
+  G.hush = () => { talkGen++; if (window.speechSynthesis) speechSynthesis.cancel(); if (window.VOICE && window.VOICE.stop) window.VOICE.stop(); };
 
   // ---------- Beep ----------
   let beepHideT = null, beepTaps = 0, beepTapT = null;
@@ -219,6 +222,8 @@ window.G = (function () {
   };
   G.showBeep = (on = true, mini = false) => { const b = G.$('#beep'); b.classList.toggle('hidden', !on); b.classList.toggle('mini', mini); };
   G.beep = (text, opts = {}) => {
+    // queue: wait for the current line to finish instead of cutting it off
+    if (opts.queue) { const gen = talkGen; return G.whenQuiet(12000).then(() => gen === talkGen ? G.beep(text, Object.assign({}, opts, { queue: false })) : null); }
     const bub = G.$('#beep-bubble');
     bub.textContent = text; bub.classList.add('show');
     clearTimeout(beepHideT);

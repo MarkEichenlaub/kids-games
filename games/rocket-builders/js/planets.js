@@ -45,7 +45,7 @@ G.WORLD = (function () {
       hello: 'There\'s the Moon! Let\'s land on it!',
       facts: ['The Moon goes all the way around the Earth about once a month.', 'The Moon has no air, so astronauts need spacesuits to breathe.', 'Twelve astronauts have walked on the Moon. Their footprints are still there, because there\'s no wind to blow them away!'],
       activity: { type: 'jump' },
-      sky: ['#000010', '#101030'], ground: '#cfcfcf', props: ['🪨', '🕳️', '🌍'], videos: ['w4wx_3XOrns'],
+      sky: ['#000010', '#101030'], ground: '#cfcfcf', props: ['🪨', '🕳️'], skyProps: ['🌍'], videos: ['w4wx_3XOrns'],
     },
     {
       id: 'iss', name: 'Space Station', kind: 'station', x: 0, y: 0, r: 30, tier: 1, sticker: '🛰️', mapColor: '#cfd8ff', orbit: { around: 'earth', dist: 210, speed: 0.35, phase: 0 },
@@ -178,8 +178,8 @@ G.WORLD = (function () {
       sky: ['#1a0a3a', '#6a2aa0'], noGround: true, props: ['🌌', '✨', '⭐'], videos: [],
     },
     // decorations: plain comets
-    { id: 'comet1', decor: true, name: '', kind: 'comet', x: 0, y: 0, r: 22, tier: 9, moving: { cx: 3000, cy: -3500, rx: 6000, ry: 1600, speed: 0.03 }, draw: null },
-    { id: 'comet2', decor: true, name: '', kind: 'comet', x: 0, y: 0, r: 18, tier: 9, moving: { cx: -3000, cy: 5000, rx: 5000, ry: 2600, speed: -0.025 }, draw: null },
+    { id: 'comet1', decor: true, name: '', kind: 'comet', x: 0, y: 0, r: 22, tier: 9, kepler: { a: 6200, e: 0.8, w: -2.0, P: 240, M0: 0.5 }, draw: null },
+    { id: 'comet2', decor: true, name: '', kind: 'comet', x: 0, y: 0, r: 18, tier: 9, kepler: { a: 5600, e: 0.7, w: 2.2, P: 280, M0: 4, retro: true }, draw: null },
   ];
 
   // comet drawing (tail always points away from the Sun)
@@ -276,7 +276,13 @@ G.WORLD = (function () {
   W.update = (t) => {
     W.places.forEach(p => {
       if (p.orbit) { const c = W.byId[p.orbit.around]; const a = t * p.orbit.speed + (p.orbit.phase || 0); p.x = c.x + Math.cos(a) * p.orbit.dist; p.y = c.y + Math.sin(a) * p.orbit.dist; }
-      if (p.moving) { const m = p.moving, a = t * m.speed; p.x = m.cx + Math.cos(a) * m.rx; p.y = m.cy + Math.sin(a) * m.ry; }
+      if (p.kepler) {
+        // Kepler's equation: M = E - e sin E, solved by Newton's method
+        const k = p.kepler, M = 2 * Math.PI * t / k.P + k.M0;
+        let E = M; for (let i = 0; i < 6; i++) E -= (E - k.e * Math.sin(E) - M) / (1 - k.e * Math.cos(E));
+        const x = k.a * (Math.cos(E) - k.e), y = k.a * Math.sqrt(1 - k.e * k.e) * Math.sin(E) * (k.retro ? -1 : 1);
+        p.x = x * Math.cos(k.w) - y * Math.sin(k.w); p.y = x * Math.sin(k.w) + y * Math.cos(k.w);
+      }
     });
   };
   // nearest place you can reach and haven't visited yet
@@ -293,6 +299,61 @@ G.WORLD = (function () {
   const orig = G.WORLD.byId.sun.draw;
   G.WORLD.byId.sun.draw = (ctx, x, y, r, t) => { G.WORLD._sunScreen = { x, y }; orig(ctx, x, y, r, t); };
 })();
+
+// ---------- motion on the surface ----------
+// Real physics, so a jump is a parabola: the way up is the way down played backwards.
+G.physics = {
+  // surface gravity compared with Earth's (made-up worlds get made-up values)
+  G_REL: { mercury: 0.38, venus: 0.91, earth: 1, moon: 0.166, mars: 0.38, ceres: 0.029, pluto: 0.063, 'orange-moon': 0.1, icecream: 0.5, cake: 0.6 },
+  PX_PER_M: 53,   // the astronaut is about 85 px tall, about 1.6 m
+  JUMP_SPEED: 3,  // m/s, a good jump for a kid in a spacesuit
+  gravity(pl) { return this.G_REL[pl.id] != null ? this.G_REL[pl.id] : 1; },
+  body(el) {
+    let raf = null, air = false, waiters = [], drifting = null;
+    return {
+      // height = v0 t - g t²/2 until it lands at t = 2 v0 / g
+      jump: (gRel) => {
+        if (air) return false;
+        air = true;
+        const v0 = G.physics.JUMP_SPEED, g = 9.8 * gRel, T = 2 * v0 / g, t0 = performance.now();
+        const step = now => {
+          const t = (now - t0) / 1000;
+          if (t >= T) { el.style.transform = ''; air = false; raf = null; waiters.splice(0).forEach(w => w()); return; }
+          el.style.transform = `translateY(${-(v0 * t - 0.5 * g * t * t) * G.physics.PX_PER_M}px)`;
+          raf = requestAnimationFrame(step);
+        };
+        raf = requestAnimationFrame(step);
+        return true;
+      },
+      landed: () => air ? new Promise(r => waiters.push(r)) : Promise.resolve(),
+      // no ground (a station, or looking at a gas giant): a push sets you drifting
+      push: () => { if (!drifting) drifting = G.physics.drift(el, { speed: 45 }); else drifting.push(); },
+      stop: () => { cancelAnimationFrame(raf); if (drifting) drifting.stop(); },
+    };
+  },
+  // weightless drifting: constant velocity and constant spin, bouncing off the walls
+  drift(el, opts = {}) {
+    const par = el.parentElement.closest('.visit') || el.parentElement;
+    let x = el.offsetLeft, y = el.offsetTop;
+    const a = Math.random() * Math.PI * 2, sp = opts.speed || 60;
+    let vx = Math.cos(a) * sp, vy = Math.sin(a) * sp, rot = 0, w = (Math.random() - 0.5) * 50, raf, last = performance.now();
+    const step = now => {
+      if (!el.isConnected || el.classList.contains('got')) return;
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      x += vx * dt; y += vy * dt; rot += w * dt;
+      const W = par.clientWidth - el.offsetWidth, H = par.clientHeight - el.offsetHeight, top = 150;
+      if (x < 0) { x = 0; vx = Math.abs(vx); } if (x > W) { x = W; vx = -Math.abs(vx); }
+      if (y < top) { y = top; vy = Math.abs(vy); } if (y > H) { y = H; vy = -Math.abs(vy); }
+      Object.assign(el.style, { left: x + 'px', top: y + 'px', bottom: 'auto', transform: `rotate(${rot}deg)`, animation: 'none' });
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return {
+      push: () => { const b = Math.random() * Math.PI * 2; vx += Math.cos(b) * 60; vy += Math.sin(b) * 60; w += (Math.random() - 0.5) * 60; },
+      stop: () => cancelAnimationFrame(raf),
+    };
+  },
+};
 
 // ---------- landing on a place ----------
 G.screens.visit = {
@@ -340,10 +401,12 @@ G.screens.visit = {
       props.appendChild(el);
     });
     if (id === 'earth') G.visitExtras.littleForest(root);
-    if (id === 'moon') { root.querySelector('.astro').style.transition = 'transform 1.4s cubic-bezier(.2,.8,.4,1)'; }
-    // astronaut hop (low gravity on small worlds)
+    // the astronaut: jumps under this world's gravity, or drifts where there's no ground
     const astro = root.querySelector('.astro');
-    astro.onclick = () => { G.sfx.boop(); const h = pl.kind === 'moon' || (pl.r < 60) ? 260 : 60; astro.style.transform = `translateY(-${h}px)`; setTimeout(() => astro.style.transform = '', pl.kind === 'moon' ? 1400 : 400); };
+    const body = G.physics.body(astro);
+    S.body = body;
+    astro.onclick = () => { G.sfx.boop(); if (pl.noGround) body.push(); else body.jump(G.physics.gravity(pl)); };
+    (pl.skyProps || []).forEach(e => root.querySelector('.visit').appendChild(G.html(`<div class="prop" style="left:62%;top:22%;font-size:90px;cursor:default">${e}</div>`)));
 
     // facts
     let fi = 0;
@@ -390,7 +453,7 @@ G.screens.visit = {
     });
     function C_PRAISE() { return G.ch.praise() + ' Mission complete again!'; }
   },
-  leave() { this.alive = false; cancelAnimationFrame(this.raf); G.$$('.tap-target').forEach(e => e.remove()); },
+  leave() { this.alive = false; cancelAnimationFrame(this.raf); if (this.body) this.body.stop(); G.$$('.tap-target').forEach(e => e.remove()); },
 };
 
 // ---------- missions on planets ----------
@@ -409,7 +472,7 @@ G.visitExtras = (function () {
     for (let i = 0; i < n; i++) {
       const e = Array.isArray(act.emoji) ? act.emoji[i % act.emoji.length] : act.emoji;
       const el = G.html(`<div class="tap-target" style="left:${10 + Math.random() * 75}%;top:${34 + Math.random() * 40}%;animation-delay:${i * 0.08}s">${e}</div>`);
-      if (act.float) { el.style.transition = 'left 4s ease-in-out, top 4s ease-in-out'; const mv = () => { if (!el.isConnected || el.classList.contains('got')) return; el.style.left = 10 + Math.random() * 75 + '%'; el.style.top = 30 + Math.random() * 45 + '%'; setTimeout(mv, 4000); }; setTimeout(mv, 100); }
+      if (act.float) G.physics.drift(el);
       el.onclick = () => {
         if (el.classList.contains('got')) return;
         el.classList.add('got'); got++;
@@ -449,12 +512,13 @@ G.visitExtras = (function () {
     astro.style.animation = 'glow 1.2s infinite'; astro.style.borderRadius = '50%';
     const old = astro.onclick;
     astro.onclick = () => {
-      old && old(); jumps++;
+      if (!S.body.jump(G.physics.gravity(G.WORLD.byId.moon))) return;
+      G.sfx.boop(); jumps++;
       G.say(String(jumps), { rate: 1.1 });
       if (jumps === 3) {
         astro.onclick = old; astro.style.animation = '';
-        setTimeout(async () => {
-          await G.beep('On the Moon, you can jump six times higher than on Earth! Now tap the ground to plant your flag!');
+        S.body.landed().then(async () => {
+          await G.beep('On the Moon, you jump six times higher than on Earth, and you stay up six times longer! Now tap the ground to plant your flag!');
           const g = root.querySelector('.ground');
           const plant = (e) => {
             g.removeEventListener('click', plant);
@@ -463,7 +527,7 @@ G.visitExtras = (function () {
             G.beep(`${G.kidName()}'s flag is on the Moon!`).then(resolve);
           };
           g.addEventListener('click', plant);
-        }, 1500);
+        });
       }
     };
   });

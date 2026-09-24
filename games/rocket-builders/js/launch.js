@@ -72,43 +72,54 @@ G.screens.launch = {
         'Look how fast we\'re going!',
         'The sky is getting darker. We\'re almost in space!',
       ];
-      let fi = 0;
+      let fi = 0, leaving = false;
+      const boosters = [];
+      // screen units: the rocket speeds up at a steady 120 px/s², and gravity is 80 px/s²
+      const ACC = 120, GRAV = 80;
       const frame = (now) => {
         if (!this.alive) return;
         const t = (now - t0) / 1000;
-        const alt = t < 1 ? 0 : 60 * Math.pow(t - 1, 2.1);
+        const tt = Math.max(0, t - 1);
+        const alt = 0.5 * ACC * tt * tt;              // constant thrust: distance grows with time squared
         const rise = Math.min(alt, H * 0.1);
-        const scroll = Math.max(0, alt - H * 0.1);
+        const scroll = Math.max(0, alt - H * 0.1);    // after a moment the camera follows the rocket
         rocketBox.style.transform = `translate(calc(-50% + ${(Math.random() - .5) * (t < 3 ? 4 : 1)}px), ${-rise}px)`;
         world.style.transform = `translateY(${scroll}px)`;
         const k = G.clamp(scroll / (H * 4), 0, 1);
         sky.style.background = `linear-gradient(180deg, rgb(${95 - 80 * k},${180 - 170 * k},${255 - 205 * k}), rgb(${191 - 170 * k},${230 - 215 * k},${255 - 200 * k}))`;
         stars.style.opacity = k;
-        // smoke at the pad
+        // smoke is left behind at the pad, so it scrolls away with the ground
         const rb = rocketBox.getBoundingClientRect();
-        if (t < 5) for (let i = 0; i < 6; i++) parts.push({ x: innerWidth / 2 + (Math.random() - .5) * 60, y: H * 0.81 + scroll, vx: (Math.random() - .5) * 9, vy: -Math.random() * 1.5, r: 20 + Math.random() * 20, a: 0.8 });
+        if (t < 5) for (let i = 0; i < 6; i++) parts.push({ x: innerWidth / 2 + (Math.random() - .5) * 60, y: H * 0.81, vx: (Math.random() - .5) * 9, vy: -Math.random() * 1.5, r: 20 + Math.random() * 20, a: 0.8 });
         sc.clearRect(0, 0, smoke.width, smoke.height);
-        parts.forEach(pt => { pt.x += pt.vx; pt.y += pt.vy; pt.r += 0.8; pt.a *= 0.985; if (t > 1) pt.y += 0; sc.fillStyle = `rgba(240,240,250,${pt.a})`; sc.beginPath(); sc.arc(pt.x, pt.y + scroll * 0.0, pt.r, 0, 7); sc.fill(); });
+        parts.forEach(pt => { pt.x += pt.vx; pt.y += pt.vy; pt.vx *= 0.97; pt.r += 0.8; pt.a *= 0.985; sc.fillStyle = `rgba(240,240,250,${pt.a})`; sc.beginPath(); sc.arc(pt.x, pt.y + scroll, pt.r, 0, 7); sc.fill(); });
         while (parts.length > 400) parts.shift();
-        // separation
+        // separation: a dropped booster keeps the rocket's speed, then falls behind it.
+        // Seen from the rocket, it drifts sideways at a steady speed and falls
+        // with a steady acceleration (the rocket's plus gravity), tumbling at a steady rate.
         if (!sep && t > 4.2 && r.boosters) {
           sep = true;
-          const noB = Object.assign({}, r, { boosters: null });
-          setRocket(noB, true);
+          setRocket(Object.assign({}, r, { boosters: null }), true);
           const bh = rb.height * 0.4;
           [-1, 1].forEach(side => {
-            const b = G.html(`<div style="position:absolute;left:${rb.left + rb.width / 2 + side * rb.width * 0.36}px;top:${rb.top + rb.height * 0.35}px;height:${bh}px;transition:transform 3s ease-in, opacity 3s;z-index:3">${G.art.part(r.boosters).replace('viewBox="-6 -40 82 150"', 'viewBox="-6 -40 40 150"')}</div>`);
-            b.querySelector('svg').style.height = '100%';
-            root.appendChild(b);
-            requestAnimationFrame(() => { b.style.transform = `translate(${side * 120}px, ${H}px) rotate(${side * 70}deg)`; b.style.opacity = '0.2'; });
+            const el = G.html(`<div style="position:absolute;left:${rb.left + rb.width / 2 + side * rb.width * 0.36}px;top:${rb.top + rb.height * 0.35}px;height:${bh}px;z-index:3;transform-origin:50% 40%">${G.art.part(r.boosters).replace('viewBox="-6 -40 82 150"', 'viewBox="-6 -40 40 150"')}</div>`);
+            el.querySelector('svg').style.height = '100%';
+            root.appendChild(el);
+            boosters.push({ el, side, t0: t });
           });
           G.sfx.whoosh();
-          G.beep('The boosters ran out of fuel, so they fall away! Bye bye, boosters!');
-        } else if (t > 1.6 + fi * 2.2 && fi < facts.length && !(r.boosters && t > 3.8 && t < 6.5)) {
-          if (fi > 0 || !p.flags.launchFact) { G.beep(facts[fi]); }
+          G.beep('The boosters ran out of fuel, so they fall away! Bye bye, boosters!', { queue: true });
+        }
+        boosters.forEach(b => {
+          const tau = t - b.t0;
+          b.el.style.transform = `translate(${b.side * 35 * tau}px, ${0.5 * (ACC + GRAV) * tau * tau}px) rotate(${b.side * 30 * tau}deg)`;
+        });
+        if (t > 1.6 + fi * 2.2 && fi < facts.length) {
+          if (fi > 0 || !p.flags.launchFact) G.beep(facts[fi], { queue: true });
           p.flags.launchFact = 1; fi++;
         }
-        if (t > 8.5) { G.go('space', { from: 'launch' }); return; }
+        // head to space once Beep has finished talking
+        if (t > 8.5 && !leaving) { leaving = true; G.whenQuiet(9000).then(() => { if (this.alive) G.go('space', { from: 'launch' }); }); }
         this.raf = requestAnimationFrame(frame);
       };
       this.raf = requestAnimationFrame(frame);

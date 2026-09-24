@@ -281,7 +281,7 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 .visit .prop { position: absolute; font-size: 56px; transition: transform .3s; cursor: pointer; }
 .visit .parked { position: absolute; bottom: 26%; left: 8%; height: 40%; }
 .visit .parked svg { height: 100%; width: auto; overflow: visible; }
-.visit .astro { position: absolute; bottom: 28%; left: 40%; font-size: 80px; transition: transform .5s cubic-bezier(.3,.7,.4,1); cursor: pointer; }
+.visit .astro { position: absolute; bottom: 28%; left: 40%; font-size: 80px; cursor: pointer; }
 .visit-panel { position: absolute; top: 76px; left: 50%; transform: translateX(-50%); background: var(--panel); border-radius: 26px; padding: 14px 20px; box-shadow: var(--shadow); width: min(760px, 92vw); text-align: center; z-index: 10; }
 .visit-panel h2 { margin: 0 0 6px; font-size: clamp(28px, 4.5vw, 42px); }
 .visit-panel .fact { font-size: clamp(18px, 2.7vw, 25px); min-height: 2.6em; }

@@ -48,7 +48,7 @@ G.screens.space = {
     });
     // asteroid belt
     const rocks = [];
-    for (let i = 0; i < 170; i++) { const ang = rng() * Math.PI * 2, d = 5000 + rng() * 900; rocks.push({ ang, d, r: 14 + rng() * 34, spin: rng() * 6, sp: 0.004 + rng() * 0.004, shape: Array.from({ length: 8 }, () => 0.75 + rng() * 0.35) }); }
+    for (let i = 0; i < 170; i++) { const ang = rng() * Math.PI * 2, d = 5000 + rng() * 900; rocks.push({ ang, d, r: 14 + rng() * 34, spin: rng() * 6, sp: 2100 * Math.pow(d, -1.5), shape: Array.from({ length: 8 }, () => 0.75 + rng() * 0.35) }); }
     // background stars (deterministic tiles)
     function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
     const tileStars = {};
@@ -164,23 +164,34 @@ G.screens.space = {
         const w = toWorld(pointer.x, pointer.y), dx = w.x - ship.x, dy = w.y - ship.y, d = Math.hypot(dx, dy);
         if (d * zoom > 30) { ax = dx / d; ay = dy / d; autopilot = null; }
       }
-      if (autopilot) {
-        const dx = autopilot.x - ship.x, dy = autopilot.y - ship.y, d = Math.hypot(dx, dy);
-        if (d < autopilot.r + 150) { autopilot = null; ship.vx *= 0.3; ship.vy *= 0.3; }
-        else { ax = dx / d; ay = dy / d; if (d < autopilot.r + 700) { const slow = (d - autopilot.r) / 700; ship.vx *= 0.96 + 0.03 * slow; ship.vy *= 0.96 + 0.03 * slow; } }
-      }
-      const al = Math.hypot(ax, ay);
+      // Space has no air, so nothing slows the rocket down by itself.
+      // Every change of speed is a push from an engine: the main engine, or the
+      // small thrusters in the nose that brake when you let go.
       boostT -= dt; boostCd -= dt;
       const top = maxSpeed * (boostT > 0 ? 2 : 1);
-      if (al > 0) {
-        ax /= al; ay /= al;
-        const acc = 1400 * (boostT > 0 ? 2.5 : 1);
-        ship.vx += ax * acc * dt; ship.vy += ay * acc * dt;
-        ship.thrust = Math.min(1, ship.thrust + dt * 5);
-      } else { ship.thrust = Math.max(0, ship.thrust - dt * 4); ship.vx *= Math.pow(0.35, dt); ship.vy *= Math.pow(0.35, dt); }
+      const acc = 1400 * (boostT > 0 ? 2.5 : 1), brake = 700;
+      let Ax = 0, Ay = 0, mode = 'none';
+      const al = Math.hypot(ax, ay);
+      if (al > 0) { Ax = ax / al * acc; Ay = ay / al * acc; mode = 'main'; }
+      else if (autopilot) {
+        const dx = autopilot.x - ship.x, dy = autopilot.y - ship.y, d = Math.hypot(dx, dy);
+        const stopAt = autopilot.r + 140;
+        // fastest speed that can still stop in time with steady braking: v = sqrt(2 a s)
+        const vWant = Math.min(top, Math.sqrt(2 * brake * Math.max(0, d - stopAt)));
+        const wx = dx / d * vWant - ship.vx, wy = dy / d * vWant - ship.vy, wm = Math.hypot(wx, wy);
+        if (wm > 1) { const k = Math.min(acc, wm / dt) / wm; Ax = wx * k; Ay = wy * k; mode = (Ax * dx + Ay * dy) >= 0 ? 'main' : 'retro'; }
+        if (d < stopAt + 20 && Math.hypot(ship.vx, ship.vy) < 30) autopilot = null;
+      } else {
+        const v = Math.hypot(ship.vx, ship.vy);
+        if (v > 0.5) { const k = Math.min(brake, v / dt) / v; Ax = -ship.vx * k; Ay = -ship.vy * k; mode = 'retro'; }
+      }
+      ship.vx += Ax * dt; ship.vy += Ay * dt;
+      ship.thrust = mode === 'main' ? Math.min(1, ship.thrust + dt * 5) : Math.max(0, ship.thrust - dt * 6);
+      ship.retro = mode === 'retro';
       const sp = Math.hypot(ship.vx, ship.vy);
       if (sp > top) { ship.vx *= top / sp; ship.vy *= top / sp; }
-      if (sp > 20) { const target = Math.atan2(ship.vx, -ship.vy); let da = target - ship.a; while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI; ship.a += da * Math.min(1, dt * 8); }
+      // the rocket turns to point the way its main engine is pushing
+      if (mode === 'main') { const target = Math.atan2(Ax, -Ay); let da = target - ship.a; while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI; ship.a += da * Math.min(1, dt * 8); }
       ship.x += ship.vx * dt; ship.y += ship.vy * dt;
 
       // edge of range
@@ -196,14 +207,14 @@ G.screens.space = {
       if (ds < sun.r + 90) {
         const nx = (ship.x - sun.x) / ds, ny = (ship.y - sun.y) / ds;
         ship.x = sun.x + nx * (sun.r + 90); ship.y = sun.y + ny * (sun.r + 90);
-        ship.vx = nx * 300; ship.vy = ny * 300;
+        const vn = ship.vx * nx + ship.vy * ny; if (vn < 0) { ship.vx -= 1.8 * vn * nx; ship.vy -= 1.8 * vn * ny; }
         if (t - lastSunMsg > 6) { lastSunMsg = t; G.sfx.bonk(); G.beep('Too hot! The Sun would melt our rocket! Let\'s stay back.'); }
       }
       // the black hole whooshes you home
       const bh = W.byId.blackhole;
       if (bh && power >= bh.tier) {
         const db = Math.hypot(ship.x - bh.x, ship.y - bh.y);
-        if (db < 1400) { const f = 90000 / Math.max(db, 200); ship.vx += (bh.x - ship.x) / db * f * dt; ship.vy += (bh.y - ship.y) / db * f * dt; }
+        if (db < 1400) { const f = 6e7 / Math.max(db, 250) ** 2; ship.vx += (bh.x - ship.x) / db * f * dt; ship.vy += (bh.y - ship.y) / db * f * dt; }
         if (db < bh.r * 0.5) {
           G.sfx.warp(); flash = 1; p.visited.blackhole = p.visited.blackhole || 1; p.stickers.blackhole = 1; G.persist();
           ship.x = earth.x + 250; ship.y = earth.y - 250; ship.vx = ship.vy = 0; cam.x = ship.x; cam.y = ship.y;
@@ -234,7 +245,11 @@ G.screens.space = {
       // exhaust
       if (ship.thrust > 0.1) {
         const bx = ship.x - Math.sin(ship.a) * shipH * 0.45, by = ship.y + Math.cos(ship.a) * shipH * 0.45;
-        for (let i = 0; i < (boostT > 0 ? 5 : 2); i++) exhaust.push({ x: bx + (Math.random() - .5) * 10, y: by + (Math.random() - .5) * 10, vx: -Math.sin(ship.a) * 220 + (Math.random() - .5) * 60 + ship.vx * 0.3, vy: Math.cos(ship.a) * 220 + (Math.random() - .5) * 60 + ship.vy * 0.3, life: 1, hue: flameColor === 'rainbow' ? Math.random() * 360 : 20 + Math.random() * 35 });
+        for (let i = 0; i < (boostT > 0 ? 5 : 2); i++) exhaust.push({ x: bx + (Math.random() - .5) * 10, y: by + (Math.random() - .5) * 10, vx: -Math.sin(ship.a) * 220 + (Math.random() - .5) * 60 + ship.vx, vy: Math.cos(ship.a) * 220 + (Math.random() - .5) * 60 + ship.vy, life: 1, hue: flameColor === 'rainbow' ? Math.random() * 360 : 20 + Math.random() * 35 });
+      }
+      if (ship.retro && Math.random() < 0.6) {
+        const sp2 = Math.hypot(ship.vx, ship.vy) || 1, nx = ship.x + Math.sin(ship.a) * shipH * 0.4, ny = ship.y - Math.cos(ship.a) * shipH * 0.4;
+        exhaust.push({ x: nx, y: ny, vx: ship.vx + ship.vx / sp2 * 160 + (Math.random() - .5) * 40, vy: ship.vy + ship.vy / sp2 * 160 + (Math.random() - .5) * 40, life: 0.6, hue: 210, puff: true });
       }
       exhaust.forEach(e => { e.x += e.vx * dt; e.y += e.vy * dt; e.life -= dt * 2.2; });
       while (exhaust.length && exhaust[0].life <= 0) exhaust.shift();
@@ -244,7 +259,7 @@ G.screens.space = {
       W.places.forEach(pl => {
         if (pl.hidden || pl.decor) return;
         const d = Math.hypot(pl.x - ship.x, pl.y - ship.y) - pl.r;
-        if (d < 700 && !greeted[pl.id] && pl.tier <= power) { greeted[pl.id] = 1; G.beep(p.visited[pl.id] ? `We're back at ${pl.name}!` : (pl.hello || `That's ${pl.name}!`)); }
+        if (d < 700 && !greeted[pl.id] && pl.tier <= power) { greeted[pl.id] = 1; G.beep(p.visited[pl.id] ? `We're back at ${pl.name}!` : (pl.hello || `That's ${pl.name}!`), { queue: true }); }
         if (d < cd) { cd = d; closest = pl; }
       });
       showLand(closest && cd < 190 && closest.tier <= power ? closest : null);
@@ -377,7 +392,7 @@ G.screens.space = {
       // exhaust
       exhaust.forEach(e => {
         const s = toScreen(e.x, e.y);
-        ctx.fillStyle = `hsla(${e.hue},100%,${55 + 30 * e.life}%,${e.life})`;
+        ctx.fillStyle = e.puff ? `rgba(225,235,255,${e.life})` : `hsla(${e.hue},100%,${55 + 30 * e.life}%,${e.life})`;
         ctx.beginPath(); ctx.arc(s.x, s.y, (4 + 10 * (1 - e.life)) * zoom, 0, 7); ctx.fill();
       });
       // ship

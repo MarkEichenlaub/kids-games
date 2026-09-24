@@ -61,15 +61,15 @@
     if (!have) return null;
     if (lang && lang.startsWith('zh')) { const u = clipFor('z:' + text.trim()); return u ? [{ url: u, gap: 0 }] : null; }
     const w = V.words(text);
-    const whole = !V.hasZh(w) && clipFor(V.norm(w));
+    const whole = !V.hasZh(w) && !/(^|[^\p{L}])[A-Z]([,.!?]|$)/u.test(w) && clipFor(V.norm(w));
     if (whole) return [{ url: whole, gap: 0 }];
     const plan = [];
     for (const s of V.sentences(w)) {
-      const u = !V.hasZh(s) && clipFor(V.norm(s));
+      const u = !V.hasZh(s) && !/(^|[^\p{L}])[A-Z]([,.!?]|$)/u.test(s) && clipFor(V.norm(s));
       if (u) { plan.push({ url: u, gap: 0.22 }); continue; }
       const parts = V.split(s);
       for (const p of parts) {
-        const pu = clipFor(p.id);
+        const pu = p.letter ? base + 'l/' + p.text + '.mp3' : clipFor(p.id);
         if (!pu) { V.misses.push(p.id + '  <=  ' + text); return null; }
         plan.push({ url: pu, gap: 0.04 });
       }

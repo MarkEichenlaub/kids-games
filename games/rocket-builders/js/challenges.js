@@ -102,8 +102,7 @@ G.ch = (function () {
         host.querySelectorAll('.choice').forEach(x => x.style.pointerEvents = 'none');
         const r = b.getBoundingClientRect();
         if (mistakes === 0) G.addStars(1, r.left + r.width / 2, r.top);
-        G.beep(q.after || C.praise());
-        setTimeout(() => resolve(mistakes), 1300);
+        Promise.all([G.beep(q.after || C.praise()), G.wait(900)]).then(() => resolve(mistakes));
       } else {
         mistakes++; b.classList.add('wrong'); G.sfx.oops();
         G.beep(mistakes >= 2 && q.hint ? q.hint : pick(RETRY));

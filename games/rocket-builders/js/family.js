@@ -36,7 +36,7 @@ G.FAMILY.places = [
     prize: ['nose-owl', 'fins-feather'], sky: ['#1b1f5c', '#7c8ae0'], ground: '#dfe6ff', props: ['🦉', '❄️', '✨', '🌟'],
   },
   {
-    id: 'unicorn-comet', name: 'Sugar Horn Comet', kind: 'comet', x: 6400, y: 3600, r: 45, tier: 3, sticker: '🦄', moving: { cx: 5200, cy: 2600, rx: 2600, ry: 1400, speed: 0.02 },
+    id: 'unicorn-comet', name: 'Sugar Horn Comet', kind: 'comet', x: 6400, y: 3600, r: 45, tier: 3, sticker: '🦄', kepler: { a: 5400, e: 0.59, w: 0.51 + Math.PI, P: 320, M0: 2.6 },
     colors: ['#ffffff', '#ffd1ec'], unicorn: true,
     hello: 'It\'s the Sugar Horn Comet! There\'s a unicorn riding on it!',
     facts: [
@@ -64,7 +64,7 @@ G.FAMILY.places = [
     hello: 'An Ice Cream Planet! Maia says: I no want ice cream Sunday. I want ice cream TO-DAY!',
     facts: [
       'Astronauts on the space station have had real ice cream! It came up in a special freezer.',
-      'In space, a scoop of ice cream would float right off your cone!',
+      'In space, if you bumped your cone, the scoop would float away and keep going!',
       'This planet is strawberry, chocolate, and mint. Yum!',
     ],
     activity: { type: 'sundae' },
@@ -126,7 +126,7 @@ G.FAMILY.aliens = [
   { id: 'zib', name: 'Zib', e: '👾', x: 3500, y: 1700, tier: 2, color: '#4cd97b' },
   { id: 'blorp', name: 'Blorp', e: '👽', x: 7000, y: -300, tier: 3, color: '#37c9d6' },
   { id: 'nini', name: 'Nini', e: '🐙', x: -1500, y: 2000, tier: 3, color: '#ff9fce' },
-  { id: 'glim', name: 'Glim', e: '🦑', x: 14800, y: 400, tier: 4, color: '#9b6bff' },
+  { id: 'glim', name: 'Glim', e: '🦑', x: 13500, y: 800, tier: 4, color: '#9b6bff' },
   { id: 'pip', name: 'Pip', e: '🐛', x: 2000, y: -1300, tier: 2, color: '#ffd93d' },
 ];
 
