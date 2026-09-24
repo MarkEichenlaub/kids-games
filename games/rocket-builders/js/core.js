@@ -20,7 +20,7 @@ window.G = (function () {
     parts: ['nose-cone', 'cap-basic', 'body-plain', 'fins-tri', 'eng-1'],
     rocket: { nose: null, capsule: null, bodies: [], fins: null, engine: null, boosters: null, color: '#ff5d8f', accent: '#ffffff', stickers: [], crew: null },
     visited: {}, stickers: {}, videosSeen: {}, stationRounds: {}, launched: 0,
-    level: { math: id === 'maia' ? 0 : 2, words: id === 'maia' ? 0 : 2, maze: id === 'maia' ? 0 : 1, shapes: id === 'maia' ? 0 : 1 },
+    level: { math: id === 'maia' ? 0 : 2, words: id === 'maia' ? 0 : 1, maze: id === 'maia' ? 0 : 1, shapes: id === 'maia' ? 0 : 1 },
     flags: {}, face: null,
   });
   G.save = { profiles: {}, current: null, settings: { sound: true, music: true, voice: true, rate: 0.95 } };
@@ -135,10 +135,21 @@ window.G = (function () {
   let lastSaid = '';
   G.say = (text, opts = {}) => {
     lastSaid = text;
-    return new Promise(resolve => {
-      if (!G.save.settings.voice || !window.speechSynthesis) { setTimeout(resolve, Math.min(4000, 400 + text.length * 45)); return; }
+    return new Promise(async resolve => {
+      if (!G.save.settings.voice) { setTimeout(resolve, Math.min(4000, 400 + text.length * 45)); return; }
+      // recorded neural voice first
+      const V = window.VOICE;
+      if (V) {
+        await Promise.race([V.ready, G.wait(1500)]);
+        const plan = V.plan(text, opts.lang);
+        const a = plan && G.audio();
+        if (a) { try { if (window.speechSynthesis) speechSynthesis.cancel(); await V.play(a, voiceOut(), plan); resolve(); return; } catch (e) { } }
+      }
+      if (!window.speechSynthesis) { setTimeout(resolve, Math.min(4000, 400 + text.length * 45)); return; }
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, ''));
+      let spoken = text.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').replace(/\bMira\b/g, 'Meera');
+      if (V && /^[A-Z]$/.test(spoken.trim())) spoken = V.letterNames[spoken.trim()];
+      const u = new SpeechSynthesisUtterance(spoken);
       if (voice) u.voice = voice;
       u.rate = opts.rate || G.save.settings.rate; u.pitch = opts.pitch || 1.15;
       if (opts.lang) { u.lang = opts.lang; const zv = speechSynthesis.getVoices().find(v => v.lang && v.lang.replace('_', '-').startsWith(opts.lang)); if (zv) u.voice = zv; }
@@ -148,7 +159,29 @@ window.G = (function () {
       speechSynthesis.speak(u);
     });
   };
-  G.hush = () => { if (window.speechSynthesis) speechSynthesis.cancel(); };
+  // words and single letter sounds in one breath: G.sayMix(['Listen:', {snd: 'f'}, 'fin'])
+  const soundUrl = l => 'voice/s/' + l + '.mp3';
+  G.sayMix = async (items) => {
+    items = items.filter(x => x && (typeof x !== 'string' || x.trim()));
+    if (!G.save.settings.voice) { await G.wait(500 * items.length); return; }
+    const V = window.VOICE, a = V && G.audio();
+    if (a) {
+      await Promise.race([V.ready, G.wait(1500)]);
+      const plan = []; let ok = true;
+      for (const it of items) {
+        if (typeof it === 'string') { const pl = V.plan(it); if (!pl) { ok = false; break; } pl[pl.length - 1].gap = 0.2; plan.push(...pl); }
+        else plan.push({ url: soundUrl(it.snd), gap: 0.35 });
+      }
+      if (ok && plan.length) { lastSaid = items.filter(x => typeof x === 'string').join(' '); if (window.speechSynthesis) speechSynthesis.cancel(); try { await V.play(a, voiceOut(), plan); return; } catch (e) { } }
+    }
+    for (const it of items) {
+      if (typeof it === 'string') await G.say(it);
+      else await new Promise(res => { const au = new Audio(soundUrl(it.snd)); au.onended = res; au.onerror = res; au.play().catch(res); });
+    }
+  };
+  let voiceGain = null;
+  const voiceOut = () => { if (!voiceGain) { voiceGain = ac.createGain(); voiceGain.gain.value = 1; voiceGain.connect(ac.destination); } return voiceGain; };
+  G.hush = () => { if (window.speechSynthesis) speechSynthesis.cancel(); if (window.VOICE && window.VOICE.stop) window.VOICE.stop(); };
 
   // ---------- Beep ----------
   let beepHideT = null, beepTaps = 0, beepTapT = null;

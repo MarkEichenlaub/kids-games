@@ -45,7 +45,12 @@ G.screens.launch = {
       };
       layer.appendChild(b);
     });
-    G.beep(p.launched ? `Count down from ${N}! Tap ${N} first.` : `Time to launch! Let's count down. Tap the numbers from ${N} down to 1. Find ${N}!`);
+    const startCount = () => { layer.style.display = ''; G.beep(p.launched ? `Count down from ${N}! Tap ${N} first.` : `Time to launch! Let's count down. Tap the numbers from ${N} down to 1. Find ${N}!`); };
+    if (!little || p.launched % 2 === 1) {
+      layer.style.display = 'none';
+      const w = G.PHONICS.launchWord();
+      G.PHONICS.run({ word: w, intro: 'Secret launch word!', lines: ['Mission Control needs the secret launch word!', `The word is ${w}.`] }).then(() => { if (this.alive) startCount(); });
+    } else startCount();
 
     const liftoff = async () => {
       if (!this.alive) return;

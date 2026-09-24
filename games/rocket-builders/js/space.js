@@ -225,7 +225,7 @@ G.screens.space = {
           if (p.starBits % 10 === 0) {
             G.addStars(1);
             const tens = p.starBits / 10;
-            if (!little && tens <= 12 && tens % 3 === 1) G.beep(`${p.starBits} star bits! That's ${tens} ten${tens > 1 ? 's' : ''}!`);
+            if (!little && tens <= 12 && tens % 3 === 1) G.beep(`${p.starBits} star bits! That's ${tens} ${tens > 1 ? 'tens' : 'ten'}!`);
             else G.toast(`✨ ${p.starBits} star bits! +1 ⭐`);
           }
           G.persist();
@@ -277,7 +277,13 @@ G.screens.space = {
         q.say = `Hi! I'm ${a.name}! Can you help me? ${q.say || q.prompt}`;
       }
       G.sfx.boop();
-      G.ch.ask(card, q).then(() => {
+      const spellName = !little && G.PHONICS.alienNames.includes(a.name) && Math.random() < 0.6;
+      const asking = spellName
+        ? (m.close(), G.PHONICS.run({ word: a.name.toLowerCase(), pic: a.e, intro: `Spell ${a.name}'s name!`, lines: [`Hi! I'm ${a.name}! Can you spell my name?`, a.name] }).then(() => { G.modal(`<div style="display:flex;align-items:center;gap:14px"><div style="font-size:90px">${a.e}</div><h2 style="margin:0">${a.name} the alien</h2></div><div class="ch-card" style="min-height:200px;box-shadow:none"></div>`, { noClose: true }); card2 = G.$('.modal .ch-card'); mm = G.$('.modal-back'); }))
+        : G.ch.ask(card, q);
+      let card2 = card, mm = m;
+      asking.then(() => {
+        const card = card2, m = mm;
         G.addStars(2); p.stickers['alien-' + a.id] = 1; G.persist();
         card.innerHTML = `<div style="font-size:30px;font-weight:700;text-align:center">${a.e} ${a.name} says thank you!<br>+2 ⭐</div><button class="big-btn green">🚀 Keep flying</button>`;
         G.beep(G.pick([`Thank you! You're a great space friend! Bye bye!`, `Yay! ${a.name} is so happy!`, `Thanks, space friend! Beep boop!`]));

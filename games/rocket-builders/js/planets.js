@@ -364,6 +364,9 @@ G.screens.visit = {
         b.classList.remove('glow');
         if (S.busy) return; S.busy = true;
         await G.visitExtras.run(root, pl, S);
+        if (!S.alive) return;
+        const logWord = G.PHONICS.placeWords[id];
+        if (logWord && (!p.stickers[id] || Math.random() < 0.4)) await G.PHONICS.run({ word: logWord, intro: "Captain's log!", lines: [`Let's write in the captain's log! Today's word is ${logWord}.`, logWord] });
         S.busy = false;
         if (!S.alive) return;
         const firstMission = !p.stickers[id];
@@ -413,7 +416,7 @@ G.visitExtras = (function () {
         if (act.music) [523, 587, 659, 784, 880].slice(0, 3).forEach((f, k) => setTimeout(() => G.sfx.count(f / 30 - 10), k * 90));
         else G.sfx.chime();
         if (act.photo) { const fl = G.html('<div style="position:absolute;inset:0;background:#fff;z-index:95;transition:opacity .4s"></div>'); root.appendChild(fl); requestAnimationFrame(() => fl.style.opacity = 0); setTimeout(() => fl.remove(), 450); }
-        G.say(numWords[got] || String(got), { rate: 1.15 });
+        G.say(String(got), { rate: 1.15 });
         setTimeout(() => el.remove(), 500);
         if (got === n) setTimeout(() => G.beep(`${n}! You got them all!`).then(() => resolve()), 500);
       };
@@ -447,7 +450,7 @@ G.visitExtras = (function () {
     const old = astro.onclick;
     astro.onclick = () => {
       old && old(); jumps++;
-      G.say(numWords[jumps], { rate: 1.1 });
+      G.say(String(jumps), { rate: 1.1 });
       if (jumps === 3) {
         astro.onclick = old; astro.style.animation = '';
         setTimeout(async () => {
@@ -483,7 +486,7 @@ G.visitExtras = (function () {
     const play = playArea(root);
     for (let i = 0; i < n; i++) {
       const el = G.html(`<div class="tap-target" style="left:${6 + i * (70 / n) + Math.random() * 5}%;top:${60 + Math.random() * 14}%;font-size:64px">🦌</div>`);
-      el.onclick = () => { if (el.dataset.c) return; el.dataset.c = 1; got++; el.style.filter = 'drop-shadow(0 0 12px #ffd93d)'; el.insertAdjacentHTML('beforeend', `<div style="position:absolute;top:-30px;left:20px;font-size:28px;font-weight:700;color:#fff;text-shadow:0 2px 4px #000">${got}</div>`); G.sfx.chime(); G.say(numWords[got]); if (got === n) setTimeout(() => G.beep(`${n} deer! Hi, deer!`).then(resolve), 400); };
+      el.onclick = () => { if (el.dataset.c) return; el.dataset.c = 1; got++; el.style.filter = 'drop-shadow(0 0 12px #ffd93d)'; el.insertAdjacentHTML('beforeend', `<div style="position:absolute;top:-30px;left:20px;font-size:28px;font-weight:700;color:#fff;text-shadow:0 2px 4px #000">${got}</div>`); G.sfx.chime(); G.say(String(got)); if (got === n) setTimeout(() => G.beep(`${n} deer! Hi, deer!`).then(resolve), 400); };
       play.appendChild(el);
     }
   });
@@ -503,7 +506,7 @@ G.visitExtras = (function () {
     card.querySelector('.say-btn').onclick = say; say(); draw();
     card.querySelectorAll('.choice').forEach(b => b.onclick = async () => {
       if (n >= target) return;
-      card.dataset['c' + n] = b.dataset.f; n++; draw(); G.sfx.pop(); G.say(numWords[n] || String(n), { rate: 1.1 });
+      card.dataset['c' + n] = b.dataset.f; n++; draw(); G.sfx.pop(); G.say(String(n), { rate: 1.1 });
       if (n === target) {
         sd.insertAdjacentHTML('beforeend', '<div style="font-size:44px;animation:pop .4s">🍒</div>'); G.sfx.great();
         await G.wait(600);
@@ -546,7 +549,7 @@ G.visitExtras = (function () {
     card.querySelector('.say-btn').onclick = say; say(); draw();
     card.querySelector('.big-btn').onclick = async () => {
       if (placed >= total) return;
-      placed++; draw(); G.sfx.pop(); G.say(numWords[placed] || String(placed), { rate: 1.15 });
+      placed++; draw(); G.sfx.pop(); G.say(String(placed), { rate: 1.15 });
       const rowEnds = []; let acc = 0; for (let r = rows; r >= 1; r--) { acc += r; rowEnds.push(acc); }
       if (placed === total) {
         G.sfx.great();
@@ -574,7 +577,7 @@ G.visitExtras = (function () {
     const cands = card.querySelector('.cands');
     for (let i = 0; i < n; i++) {
       const c = G.html(`<button style="background:none;font-size:44px;display:flex;flex-direction:column;align-items:center;line-height:.9"><span class="fl" style="visibility:hidden">🔥</span><span style="display:inline-block;width:14px;height:50px;border-radius:4px;background:${!little && i >= kids[0].age ? '#ff6fb1' : '#9b6bff'}"></span></button>`);
-      c.onclick = () => { if (c.dataset.l) return; c.dataset.l = 1; c.querySelector('.fl').style.visibility = 'visible'; lit++; G.sfx.chime(); G.say(numWords[lit] || String(lit)); card.querySelector('.tri-n').textContent = lit; if (lit === n) done(); };
+      c.onclick = () => { if (c.dataset.l) return; c.dataset.l = 1; c.querySelector('.fl').style.visibility = 'visible'; lit++; G.sfx.chime(); G.say(String(lit)); card.querySelector('.tri-n').textContent = lit; if (lit === n) done(); };
       cands.appendChild(c);
     }
     const say = () => G.beep(card.querySelector('.ch-prompt span').textContent);

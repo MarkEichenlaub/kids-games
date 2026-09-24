@@ -145,6 +145,7 @@ G.screens.book = {
       <h3>🪐 Places I've explored (${places.filter(pl => p.stickers[pl.id]).length} of ${places.length})</h3><div class="sticker-grid places"></div>
       <h3>👽 Alien friends</h3><div class="sticker-grid aliens"></div>
       <h3>🔧 Rocket parts (${owned} of ${G.DATA.parts.length})</h3><div class="sticker-grid parts"></div>
+      <h3>🔤 Words I can spell (${Object.keys(p.words || {}).length})</h3><div class="word-list">${Object.keys(p.words || {}).map(w => `<button class="word-chip" data-w="${w}">${G.PHONICS.pic(w)} ${w}</button>`).join('') || '<span style="font-size:20px">Sound out words to fill this page!</span>'}</div>
       <h3>🏅 Stats</h3><div style="font-size:22px;line-height:1.7">⭐ ${p.stars} stars &nbsp; ✨ ${p.starBits} star bits &nbsp; 🚀 ${p.launched || 0} launches &nbsp; 📺 ${Object.keys(p.videosSeen).length} videos</div>
     </div>`;
     G.topbar(root, { title: `📒 ${G.kidName()}'s Sticker Book` });
@@ -168,6 +169,7 @@ G.screens.book = {
       el.onclick = () => { G.sfx.tap(); G.beep(got ? pt.name + '!' : `Earn this at ${G.whereToEarn(pt.id)}!`); };
       partsG.appendChild(el);
     });
+    root.querySelectorAll('.word-chip').forEach(b => b.onclick = () => { G.sfx.tap(); const w = b.dataset.w; G.sayMix([...w.split('').map(l => ({ snd: l })), w]); });
     G.beep(`${G.kidName()}'s sticker book! Land on planets and do their missions to get more stickers.`);
   },
 };
@@ -186,6 +188,9 @@ G.grownups = () => {
     <h3>Difficulty (it adjusts itself as they play)</h3>
     <p>Math follows Beast Academy levels 1 and 2: 0 = counting to 5, 1 = counting and sums to 5, 2 = within 10 and making ten, 3 = within 20 and skip counting, 4 = tens and ones, odd and even, 5 = two-digit sums and triangle numbers, 6 = hundreds and two-digit sums.</p>
     ${kids.map(k => `<div class="row"><b style="width:70px">${k.name}</b> Math ${lvlSel(k, 'math', 6)} Spelling ${lvlSel(k, 'words', 3)} Puzzles ${lvlSel(k, 'maze', 5)} Shapes ${lvlSel(k, 'shapes', 3)}</div>`).join('')}
+    <h3>Sounding out words</h3><p>Words are spelled the way they sound. Beep says each sound and she picks the letter. After 20 words she gets the whole alphabet instead of four letter choices.</p>
+    ${kids.map(k => { const pr = G.save.profiles[k.id]; return `<div class="row"><b style="width:70px">${k.name}</b><label style="margin:0"><input type="checkbox" data-full="${k.id}" ${pr && pr.flags.phonicsFull ? 'checked' : ''}> Whole alphabet now</label></div>`; }).join('')}
+    <div class="row"><b>Letter sounds:</b> ${'abcdefghijklmnoprstuvwyz'.split('').map(l => `<button class="big-btn small" data-snd="${l}" style="padding:6px 12px">${l}</button>`).join('')}</div>
     <h3>Birthdays</h3><p>Beep throws a party the week of each birthday. Saved on this device only.</p>
     ${kids.map(k => `<div class="row"><b style="width:70px">${k.name}</b> <input type="text" placeholder="MM-DD" maxlength="5" style="width:90px" data-bday="${k.id}" value="${(s.birthdays || {})[k.id] || ''}"></div>`).join('')}
     <h3>Progress</h3>
@@ -195,6 +200,8 @@ G.grownups = () => {
       <button class="big-btn small pink" data-reset="${k.id}">Start over</button></div>`).join('')}
   </div>`);
   m.querySelectorAll('[data-s]').forEach(c => c.onchange = () => { s[c.dataset.s] = c.checked; if (c.dataset.s === 'music') G.music(null); G.persist(); });
+  m.querySelectorAll('[data-full]').forEach(c => c.onchange = () => { ensure(c.dataset.full).flags.phonicsFull = c.checked; G.persist(); });
+  m.querySelectorAll('[data-snd]').forEach(b => b.onclick = () => { G.audio(); G.sayMix([{ snd: b.dataset.snd }]); });
   m.querySelectorAll('[data-bday]').forEach(inp => inp.onchange = () => { s.birthdays = s.birthdays || {}; s.birthdays[inp.dataset.bday] = /^\d\d-\d\d$/.test(inp.value) ? inp.value : ''; G.persist(); });
   m.querySelector('[data-rate]').oninput = e => { s.rate = +e.target.value; G.persist(); G.say('This is how fast I talk.'); };
   const ensure = id => { if (!G.save.profiles[id]) { const k = G.FAMILY.kid(id); const cur = G.save.current; G.usePro(id, k.name, k.little); G.save.current = cur; } return G.save.profiles[id]; };

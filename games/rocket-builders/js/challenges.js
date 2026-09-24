@@ -156,7 +156,7 @@ G.ch = (function () {
       else { n += a; added += a; G.sfx.pop(); }
       if (!task.pv && n > task.cap) { n = task.cap; added = n - task.pre; }
       draw();
-      if (task.count && a > 0) G.say(numWords[n] || String(n), { rate: 1.1 });
+      if (task.count && a > 0) G.say(String(n), { rate: 1.1 });
       if (n === task.target) {
         done = true; G.sfx.great();
         setTimeout(async () => {
@@ -180,7 +180,7 @@ G.ch = (function () {
     const letters = Object.keys(LETTER_WORD);
     const t = Math.random() < .3 ? kidL : pick(letters);
     const others = shuffle(letters.filter(l => l !== t)).slice(0, 2);
-    return { prompt: `Find the letter ${t}!`, visual: `<div class="word-pic">${t}</div>`, choices: shuffle([t, ...others]), answer: t, after: `${t}! ${t} is for ${LETTER_WORD[t]}${t === kidL ? ' and ' + G.kidName() : ''}!` };
+    return { prompt: `Find the letter ${t}!`, visual: `<div class="word-pic">${t}</div>`, choices: shuffle([t, ...others]), answer: t, after: `${t}! ${LETTER_WORD[t]} starts with ${t}!` + (t === kidL ? ` ${G.kidName()} starts with ${t} too!` : '') };
   };
   C.spell = (host, level) => new Promise(resolve => {
     const pool = G.DATA.words[G.clamp(level, 1, 3)];
@@ -200,10 +200,11 @@ G.ch = (function () {
     host.querySelector('.say-btn').onclick = speak; speak();
     const slots = host.querySelectorAll('.slot');
     host.querySelectorAll('.tile').forEach(t => t.onclick = () => {
+      if (pos >= word.length) return;
       const l = tiles[+t.dataset.i];
       if (l === word[pos]) {
         slots[pos].textContent = l; slots[pos].classList.add('filled'); slots[pos].classList.remove('next');
-        t.classList.add('gone'); G.sfx.snap(); G.say(l.toLowerCase() === 'a' ? 'ay' : l, { rate: 1.05 });
+        t.classList.add('gone'); G.sfx.snap(); G.say(l, { rate: 1.05 });
         pos++; wrongHere = 0;
         host.querySelectorAll('.tile').forEach(x => x.style.boxShadow = '');
         if (pos < word.length) slots[pos].classList.add('next');
@@ -498,10 +499,13 @@ G.ch = (function () {
   };
 
   // ---------- stations: a round of challenges then a prize ----------
+  // word lists the voice builder needs to know about
+  C.VOCAB = { things: THINGS.map(t => t[1]), letterWords: Object.values(LETTER_WORD), dots: Object.values(DOTS).map(d => d.name), shapes: Object.keys(SHAPES), colors: COLORS.map(c => c[0]) };
+
   C.STATIONS = {
     engine: { name: 'Engine Lab', ic: '🔥', bg: 'ch-bg-engine', lv: 'math', intro: 'Welcome to the Engine Lab! Solve number puzzles to build a stronger engine!' },
     fuel: { name: 'Fuel Depot', ic: '⛽', bg: 'ch-bg-fuel', lv: 'math', intro: 'This is the Fuel Depot! Fill the tanks just right to make a new fuel tank!' },
-    words: { name: 'Mission Control', ic: '🔤', bg: 'ch-bg-words', lv: 'words', intro: 'Mission Control needs help with words! Let\'s send messages to space!' },
+    words: { name: 'Mission Control', ic: '🔤', bg: 'ch-bg-words', lv: 'words', intro: 'Mission Control needs help with words! We send words to space one sound at a time.' },
     puzzle: { name: 'Puzzle Lab', ic: '🧩', bg: 'ch-bg-puzzle', lv: 'maze', intro: 'Puzzle Lab! Solve mazes and puzzles to earn a new nose cone!' },
     shapes: { name: 'Shape Shop', ic: '🔷', bg: 'ch-bg-shapes', lv: 'shapes', intro: 'The Shape Shop! Rockets are made of shapes. Find them to make new fins!' },
   };
@@ -509,6 +513,7 @@ G.ch = (function () {
     const little = G.isLittle();
     if (id === 'puzzle') return little ? 2 : 3;
     if (id === 'fuel') return little ? 3 : 4;
+    if (id === 'words') return little ? 3 : 4;
     return little ? 3 : 5;
   };
   C.runItem = (id, host, i) => {
@@ -517,7 +522,7 @@ G.ch = (function () {
     switch (id) {
       case 'engine': return C.ask(host, C.mathQ(little ? Math.min(lv.math, 1) : lv.math));
       case 'fuel': return C.fuel(host, C.fuelTask(little ? Math.min(lv.math, 1) : lv.math));
-      case 'words': return little ? C.ask(host, C.letterQ()) : C.spell(host, lv.words);
+      case 'words': { const [w, pic] = G.PHONICS.forLevel(little ? 1 : lv.words); host.innerHTML = `<div style="font-size:120px">📡</div>`; return G.PHONICS.run({ word: w, pic, intro: little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space!', lines: [little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space! Spell it with the letter sounds.', w] }); }
       case 'puzzle': { const order = little ? ['maze', 'jigsaw', 'dots'] : ['maze', 'dots', 'jigsaw']; const k = order[(i + (p.stationRounds.puzzle || 0)) % 3]; return C[k](host, lv.maze); }
       case 'shapes': return C.ask(host, C.shapeQ(lv.shapes));
     }

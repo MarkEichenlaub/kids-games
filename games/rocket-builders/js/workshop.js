@@ -70,6 +70,16 @@ G.screens.workshop = {
       }
       G.sfx.snap(); renderRocket(true); renderTray();
       const miss = G.rocketMissing(r);
+      const PH = G.PHONICS;
+      let word = null, lines;
+      if (!p.flags['label_' + def.cat] && PH.labels[def.cat]) {
+        p.flags['label_' + def.cat] = 1; word = PH.labelFor(def.cat);
+        lines = [`${def.name}! Let's make a label for it. The label says ${word}.`, word];
+      } else if (pid === arg.highlight && !p.flags['fixed_' + pid]) {
+        p.flags['fixed_' + pid] = 1; word = PH.toolFor();
+        lines = [`Beep needs a ${word} to fix your new part on!`, `Can you spell ${word}?`];
+      }
+      if (word) { G.persist(); PH.run({ word, lines, intro: 'Label your rocket part!' }).then(() => { if (!miss.length && !p.flags.builtOnce) { p.flags.builtOnce = 1; G.beep('Your rocket is ready! Tap Launch when you want to blast off!'); } else if (miss.length) G.beep(`Now add the ${D.cats.find(c => c.id === miss[0]).name.toLowerCase()}.`); }); p.flags.newParts = 0; return; }
       if (def.cat === 'engine' || def.cat === 'booster') G.beep(`Rocket power ${G.rocketPower(r)}! Now you can fly to ${G.ch.tierText(G.rocketPower(r))}.`);
       else if (def.cat === 'body' && r.bodies.length > 1) G.beep(r.bodies.length === 3 ? 'Three tanks! That\'s a tall rocket! Tap a tank again to swap the top one.' : 'Two tanks! More fuel!');
       else if (miss.length) { const next = D.cats.find(c => c.id === miss[0]); G.beep(`${def.name}! Now add the ${next.name.toLowerCase()}.`); }

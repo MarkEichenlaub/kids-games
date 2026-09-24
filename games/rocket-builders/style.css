@@ -304,3 +304,21 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 .grownup select, .grownup input { font-family: var(--font); font-size: 18px; padding: 6px 10px; border-radius: 10px; border: 2px solid #ccc; }
 .grownup .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 8px 0; }
 .grownup p { font-size: 16px; color: #555; }
+
+/* sounding out words */
+.phonics { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 6px 0; }
+.ph-top { display: flex; align-items: center; gap: 16px; }
+.ph-pic { font-size: clamp(70px, 12vw, 110px); line-height: 1; }
+.ph-intro { font-size: clamp(20px, 3vw, 28px); font-weight: 600; max-width: 460px; }
+.ph-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.ph-slot { cursor: pointer; font-family: var(--font); }
+.ph-slot.sounding { background: #fff3a8; border-color: #ffb703; transform: scale(1.12); transition: transform .15s; }
+.ph-slot.ghost { color: #d9d0f5; border-style: dashed; }
+.ph-slot.next { box-shadow: 0 0 0 5px rgba(255,79,154,.35); }
+.ph-keys { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 720px; }
+.ph-keys.full { gap: 6px; }
+.ph-keys.full .ph-key { width: clamp(44px, 6.5vw, 62px); height: clamp(50px, 7vw, 66px); font-size: clamp(26px, 4vw, 38px); }
+.ph-key { text-transform: none; }
+.ph-key.hint { box-shadow: 0 0 0 6px #ff4f9a, 0 0 28px #ff4f9a; animation: wobble 1s infinite; }
+.word-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.word-chip { background: #fff; border-radius: 999px; padding: 8px 16px; font-size: 24px; font-weight: 700; box-shadow: var(--shadow); }
