@@ -1,6 +1,13 @@
 {
   "games": [
     {
+      "id": "whats-hiding",
+      "title": "What's Hiding?",
+      "description": "Something is hiding behind a cloud in a photo of Mira and Maia. Guess what it is! Mira types her guess, Maia picks a picture.",
+      "preview": "previews/whats-hiding.svg",
+      "file": "games/whats-hiding/index.html"
+    },
+    {
       "id": "rocket-builders",
       "title": "Rocket Builders",
       "description": "Build your own rocket, earn new parts with math, spelling and puzzle missions, then fly it around the solar system and land on planets!",

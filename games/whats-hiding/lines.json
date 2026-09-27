@@ -1,0 +1,45 @@
+{
+  "who": "Who's playing?",
+  "hello": {
+    "mira": ["Hi Mira! Let's find what's hiding!", "Mira's here! Ready to guess?"],
+    "maia": ["Hi Maia! Let's find what's hiding!", "Maia's here! Ready to guess?"],
+    "both": ["Mira and Maia! Let's play together!"]
+  },
+  "turn": { "mira": "Mira's turn!", "maia": "Maia's turn!" },
+  "ask": {
+    "mira": "What is Mira holding?",
+    "maia": "What is Maia holding?",
+    "both": "What are Mira and Maia holding?",
+    "none": "What's hiding behind the cloud?"
+  },
+  "typeIt": "Type what you think it is!",
+  "isIt": "Is it",
+  "right": ["Yes!", "You got it!", "That's right!", "Hooray!", "Wow, great guess!", "Amazing!"],
+  "sounded": "You spelled it just like it sounds! Great job!",
+  "closeSpell": "Yes! Almost perfect spelling!",
+  "wrong": ["Hmm, not quite. Try again!", "Good guess, but no! Try again!", "Nope! Want to peek?"],
+  "wrongLittle": ["Not that one! Try again!", "Hmm, nope! Try another one!"],
+  "peek": ["Let's peek!", "Peek a little more!"],
+  "giveUp": "Here it is!",
+  "tickle": ["Hee hee! That tickles!", "Hey! I'm hiding something!", "Boing!"],
+  "jar": "You filled the star jar!",
+  "sticker": "You got a new sticker!",
+  "again": "Want to play again?",
+  "words": {
+    "apple": ["🍎", "an apple"], "banana": ["🍌", "a banana"], "teddy bear": ["🧸", "a teddy bear"],
+    "book": ["📖", "a book"], "cup": ["🥤", "a cup"], "cookie": ["🍪", "a cookie"],
+    "flower": ["🌸", "a flower"], "balloon": ["🎈", "a balloon"], "ice cream": ["🍦", "an ice cream"],
+    "hat": ["👒", "a hat"], "dog": ["🐶", "a dog"], "car": ["🚗", "a car"], "shoe": ["👟", "a shoe"],
+    "spoon": ["🥄", "a spoon"], "crayon": ["🖍️", "a crayon"], "umbrella": ["☂️", "an umbrella"],
+    "fish": ["🐟", "a fish"], "pumpkin": ["🎃", "a pumpkin"], "leaf": ["🍂", "a leaf"],
+    "duck": ["🦆", "a duck"], "strawberry": ["🍓", "a strawberry"], "carrot": ["🥕", "a carrot"],
+    "key": ["🔑", "a key"], "kite": ["🪁", "a kite"], "pizza": ["🍕", "a pizza"],
+    "cupcake": ["🧁", "a cupcake"], "cat": ["🐱", "a cat"], "dinosaur": ["🦕", "a dinosaur"],
+    "egg": ["🥚", "an egg"], "shell": ["🐚", "a shell"], "toothbrush": ["🪥", "a toothbrush"],
+    "star": ["⭐", "a star"], "donut": ["🍩", "a donut"], "frog": ["🐸", "a frog"],
+    "butterfly": ["🦋", "a butterfly"], "phone": ["📱", "a phone"], "ball": ["⚽", "a ball"],
+    "sock": ["🧦", "a sock"], "bunny": ["🐰", "a bunny"], "truck": ["🚚", "a truck"],
+    "shovel": ["🪏", "a shovel"], "bottle": ["🍼", "a bottle"], "bubbles": ["🫧", "bubbles"],
+    "cake": ["🎂", "a cake"], "watermelon": ["🍉", "a watermelon"], "unicorn": ["🦄", "a unicorn"]
+  }
+}
