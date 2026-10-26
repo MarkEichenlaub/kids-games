@@ -48,14 +48,17 @@ G.PHONICS = (function () {
     return G.shuffle([...set]);
   };
 
-  // the modal: returns a promise of how many wrong taps there were
+  // the modal: returns a promise of how many wrong taps there were.
+  // Escape stops sounding out: P.skipped is true afterwards so a caller can leave instead of carrying on.
+  P.skipped = false;
   P.run = (opts) => new Promise(resolve => {
+    P.skipped = false;
     const p = G.P();
     const little = G.isLittle();
     const word = opts.word.toLowerCase(), letters = word.split('');
     const pic = opts.pic || P.pic(word);
     const full = !little && (p.flags.phonicsFull || (p.flags.phonicsDone || 0) >= 20);
-    let pos = 0, mistakes = 0, wrongHere = 0, busy = false;
+    let pos = 0, mistakes = 0, wrongHere = 0, busy = false, over = false;
     const m = G.modal(`<div class="phonics">
       <div class="ph-top"><div class="ph-pic">${pic}</div><div class="ph-intro">${opts.intro || 'Sound it out!'}</div></div>
       <div class="ph-btns"><button class="big-btn small blue" data-a="hear">🔊 Hear the word</button><button class="big-btn small" data-a="slow">🐢 Sound it out</button></div>
@@ -72,16 +75,17 @@ G.PHONICS = (function () {
     };
     const glowRight = () => keysEl.querySelectorAll('.ph-key').forEach(b => b.classList.toggle('hint', b.dataset.k === letters[pos]));
 
-    const askSound = () => P.speak(little
+    const askSound = () => !over && P.speak(little
       ? [`What sound does ${word} start with?`, snd(letters[0]), `Which letter says`, snd(letters[0])]
       : [pos === 0 ? `What's the first sound in ${word}?` : pos === letters.length - 1 ? "What's the last sound?" : "What's the next sound?", snd(letters[pos])]);
-    const slow = async () => { for (let i = 0; i < letters.length; i++) { slots[i].classList.add('sounding'); await P.speak([snd(letters[i])]); await G.wait(150); slots[i].classList.remove('sounding'); } await P.speak([word]); };
+    const slow = async () => { for (let i = 0; i < letters.length; i++) { if (over) return; slots[i].classList.add('sounding'); await P.speak([snd(letters[i])]); await G.wait(150); slots[i].classList.remove('sounding'); } if (!over) await P.speak([word]); };
 
     m.querySelector('[data-a=hear]').onclick = () => { G.sfx.tap(); P.speak([word]); };
     m.querySelector('[data-a=slow]').onclick = () => { G.sfx.tap(); slow(); };
     slots.forEach((s, i) => s.onclick = () => { G.sfx.tap(); if (i <= pos || little) P.speak([snd(letters[i])]); });
 
     const finish = async () => {
+      over = true;
       keysEl.innerHTML = '';
       G.sfx.great(); G.confetti(50);
       await G.wait(300);
@@ -98,7 +102,7 @@ G.PHONICS = (function () {
     };
 
     const press = async (k, btn) => {
-      if (busy) return;
+      if (busy || over) return;
       busy = true;
       const want = letters[pos];
       if (k === want) {
@@ -110,7 +114,7 @@ G.PHONICS = (function () {
         renderKeys();
         await P.speak([snd(k), `Yes! That's ${L(k)}.`]);
         busy = false;
-        askSound();
+        if (!over) askSound();
       } else {
         mistakes++; wrongHere++;
         if (btn) { btn.classList.remove('wrong'); void btn.offsetWidth; btn.classList.add('wrong'); }
@@ -118,15 +122,17 @@ G.PHONICS = (function () {
         const sameSound = (k === 'c' && want === 'k') || (k === 'k' && want === 'c');
         if (sameSound) await P.speak([`${L(k)} makes that sound too! But ${word} uses ${L(want)}.`]);
         else await P.speak([`That's ${L(k)}. It says`, snd(k), `We need`, snd(want)]);
-        if (wrongHere >= 2) { glowRight(); P.speak(['Look for the glowing letter!']); }
+        if (wrongHere >= 2 && !over) { glowRight(); P.speak(['Look for the glowing letter!']); }
         busy = false;
       }
     };
-    const onKey = e => { if (!m.isConnected) { window.removeEventListener('keydown', onKey); return; } const k = e.key && e.key.toLowerCase(); if (/^[a-z]$/.test(k) && (full || keysEl.querySelector(`[data-k="${k}"]`))) press(k, keysEl.querySelector(`[data-k="${k}"]`)); };
+    const skip = () => { over = true; P.skipped = true; window.removeEventListener('keydown', onKey); G.hush(); G.sfx.tap(); m.close(); };
+    const onKey = e => { if (!m.isConnected) { window.removeEventListener('keydown', onKey); return; } if (e.key === 'Escape') { e.preventDefault(); if (!over) skip(); return; } const k = e.key && e.key.toLowerCase(); if (/^[a-z]$/.test(k) && (full || keysEl.querySelector(`[data-k="${k}"]`))) press(k, keysEl.querySelector(`[data-k="${k}"]`)); };
     window.addEventListener('keydown', onKey);
     renderKeys();
     (async () => {
       await P.speak(opts.lines || [opts.intro || '', word]);
+      if (over) return;
       if (!little && !p.flags.phonicsIntro) { p.flags.phonicsIntro = 1; await P.speak(['Listen to each sound, and tap the letter that makes it. Tap the turtle to hear the word slowly.']); }
       askSound();
     })();

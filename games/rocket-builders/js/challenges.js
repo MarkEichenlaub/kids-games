@@ -521,7 +521,7 @@ G.ch = (function () {
     switch (id) {
       case 'engine': return C.ask(host, C.mathQ(little ? Math.min(lv.math, 1) : lv.math));
       case 'fuel': return C.fuel(host, C.fuelTask(little ? Math.min(lv.math, 1) : lv.math));
-      case 'words': { const [w, pic] = G.PHONICS.forLevel(little ? 1 : lv.words); host.innerHTML = `<div style="font-size:120px">📡</div>`; return G.PHONICS.run({ word: w, pic, intro: little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space!', lines: [little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space! Spell it with the letter sounds.', w] }); }
+      case 'words': { const [w, pic] = G.PHONICS.forLevel(little ? 1 : lv.words); host.innerHTML = `<div style="font-size:120px">📡</div>`; return G.PHONICS.run({ word: w, pic, intro: little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space!', lines: [little ? 'Mission Control needs a letter!' : 'Mission Control is sending a word to space! Spell it with the letter sounds.', w] }).then(n => { if (G.PHONICS.skipped) G.go('hub'); return n; }); }
       case 'puzzle': { const order = little ? ['maze', 'jigsaw', 'dots'] : ['maze', 'dots', 'jigsaw']; const k = order[(i + (p.stationRounds.puzzle || 0)) % 3]; return C[k](host, lv.maze); }
       case 'shapes': return C.ask(host, C.shapeQ(lv.shapes));
     }
