@@ -371,7 +371,7 @@ G.screens.visit = {
       ${ground}
       <div class="props"></div>
       <div class="parked"></div>
-      <div class="astro">${G.art.crewFor(p.rocket)[0].img ? `<img src="${G.art.crewFor(p.rocket)[0].img}" style="width:84px;height:84px;border-radius:50%;border:6px solid #fff;box-shadow:0 0 0 4px #c9d1f5">` : '🧑‍🚀'}</div>
+      <div class="astro">${G.art.crewFor(p.rocket)[0].img ? `<img src="${G.art.crewFor(p.rocket)[0].img}" style="width:84px;height:84px;border-radius:50%;border:6px solid #fff;box-shadow:0 0 0 4px #c9d1f5;background:#bfeeff">` : '🧑‍🚀'}</div>
       <div class="play"></div>
       <div class="visit-panel"><h2>${pl.sticker || ''} ${pl.name}</h2><div class="fact"></div>
         <div class="visit-actions">

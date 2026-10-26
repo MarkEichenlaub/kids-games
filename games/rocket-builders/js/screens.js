@@ -12,7 +12,7 @@ G.screens.title = {
       <div class="title-sub">Build a rocket. Fly to space. Explore the stars!</div>
       <div class="profile-row">${kids.map(k => {
         const prof = G.save.profiles[k.id];
-        const face = prof && prof.face ? `<img src="${prof.face}">` : k.face;
+        const face = `<img src="${prof && prof.face || G.AVATARS[k.id]}">`;
         return `<button class="profile-card" data-k="${k.id}" style="border-color:${k.color}"><div class="face" style="background:${k.color}33">${face}</div>${k.name}<small>${prof ? '⭐ ' + prof.stars : k.blurb}</small></button>`;
       }).join('')}</div>
     </div><button class="corner-link">⚙️ Grown-ups</button>`;

@@ -120,7 +120,7 @@ G.art = (function () {
   A.crewFor = (r) => {
     const p = G.P();
     const list = (G.DATA && G.DATA.crew) || [];
-    const get = id => { if (id === 'me' && p && p.face) return { img: p.face }; const c = list.find(c => c.id === id); return c ? { e: c.e } : { e: '👧' }; };
+    const get = id => { if (id === 'me' && p && p.face) return { img: p.face }; const av = G.avatarFor(id, p); if (av) return { img: av }; const c = list.find(c => c.id === id); return c ? { e: c.e } : { e: '👧' }; };
     const first = get(r.crew || 'kid');
     const second = get(r.crew2 || (r.crew === 'kid' || !r.crew ? 'sis' : 'kid'));
     return [first, second];

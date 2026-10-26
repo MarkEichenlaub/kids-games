@@ -149,7 +149,8 @@ G.screens.workshop = {
         D.crew.forEach(c => {
           const isMe = c.id === 'me';
           const label = c.id === 'kid' ? G.kidName() : c.id === 'sis' ? G.FAMILY.kid(p.id)?.sis || 'Sister' : c.name;
-          const face = isMe && p.face ? `<img src="${p.face}" style="width:70%;height:70%;border-radius:50%;object-fit:cover">` : `<span class="emoji" style="font-size:40px">${c.e}</span>`;
+          const av = isMe ? p.face : G.avatarFor(c.id, p);
+          const face = av ? `<img src="${av}" style="width:70%;height:70%;border-radius:50%;object-fit:cover">` : `<span class="emoji" style="font-size:40px">${c.e}</span>`;
           const card = G.html(`<div class="part-card${(r.crew || 'kid') === c.id ? ' used' : ''}" style="flex-direction:column">${face}<small style="font-weight:600;font-size:13px">${label}</small></div>`);
           card.onclick = () => {
             if (isMe && !p.face) { G.pickPhoto(() => { r.crew = 'me'; renderRocket(true); renderTray(); }); return; }
