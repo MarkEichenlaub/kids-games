@@ -245,16 +245,17 @@
       B.pt(632, 60, 2), B.pt(955, 60, 2), B.pt(955, 958, 2), B.pt(582, 936, 2), B.pt(935, 550, 2), B.pt(696, 530, 2), B.pt(784, 736, 2), B.pt(752, 455, 2)],
   };
 
-  // furniture that is in the house on moving day, set out as in the listing photos
-  // (kids can move all of it): [type, x, y, quarter-turns]
+  // The furniture on moving day is our own, drawn from photos of the old house. Where each
+  // piece will really go is not decided yet, so this is a first guess the kids can rearrange:
+  // [type, x, y, quarter-turns]
   M.defaults = {
-    living: [A.item('rugGeo', 705, 848), A.item('sofa', 676, 940, 2), A.item('armchair', 628, 752), A.item('armchair', 808, 800, 1), A.item('coffee', 705, 848), A.item('plant', 606, 955), A.item('piano', 728, 736)],
-    dining: [A.item('rugBeige', 913, 824), A.item('dtable', 913, 824)],
+    living: [A.item('ourRugNavy', 700, 852, 1), A.item('ourSofaBlack', 676, 938, 2), A.item('ourCouchWhite', 636, 760), A.item('ourChairWhite', 806, 852, 1), A.item('ourPiano', 728, 750), A.item('ourStarLamp', 606, 955)],
+    dining: [A.item('ourRugTrellis', 913, 824), A.item('ourDining', 913, 824)],
     courtyard: [['ball', 2, 34, 0]],
-    bedA: [B.item('bedPink', 652, 99), B.item('dresser', 771, 128, 1), B.item('box', 730, 190)],
-    bedB: [B.item('bedPurple', 934, 99), B.item('dresser', 812, 128, 3), B.item('box', 860, 190)],
-    primary: [B.item('rugGray', 690, 850), B.item('bigbed', 630, 850, 3), B.item('nightstand', 586, 783), B.item('nightstand', 586, 916)],
-    den: [B.item('armchair', 940, 790), B.item('bookshelf', 880, 961, 2), B.item('box', 850, 860)],
+    bedA: [B.item('ourBedIron', 664, 100), B.item('ourNightYellow', 722, 60), B.item('ourRugStar', 730, 170), B.item('box', 765, 120)],
+    bedB: [B.item('ourBedTent', 934, 99), B.item('ourDresser', 812, 128, 3), B.item('box', 860, 190)],
+    primary: [B.item('ourBedBig', 630, 850, 3), B.item('ourDesk', 760, 925, 2), B.item('box', 730, 790)],
+    den: [B.item('ourRugRainbow', 880, 862), B.item('ourShelfWhite', 950, 860, 1), B.item('ourShelfTall', 836, 962, 2), B.item('ourDollhouse', 830, 775), B.item('ourLoveseat', 818, 868, 3), B.item('ourCoffee', 884, 868, 1), B.item('ourPlayKitchen', 930, 958, 2), B.item('ourBasket', 936, 780)],
   };
 
   // ---------- walking grid ----------

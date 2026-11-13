@@ -1,7 +1,7 @@
 // Core: saved state, sound, Beep's voice, pop-ups, effects.
 window.G = (function () {
   const G = {};
-  const SAVE_KEY = 'newHouse.v2';
+  const SAVE_KEY = 'newHouse.v3';
 
   // ---------- utils ----------
   G.rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));

@@ -26,6 +26,8 @@
     decorHi: 'Let\'s decorate! Drag things to move them. Tap a picture to add something new. The flag is for obstacle courses.',
     decorDone: 'It looks great!',
     boxPop: 'Surprise!',
+    // the three views
+    view: { '2d': 'Back to the map!', tilt: 'Here is our house in three D! Tap the arrows to turn it around.', walk: 'Now you are walking inside the house!' },
     // obstacle courses
     course: {
       found: 'An obstacle course! Tap the flag button to run it.',

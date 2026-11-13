@@ -16,6 +16,7 @@
     if (!cv) return;
     dpr = Math.min(2, window.devicePixelRatio || 1); vw = root.clientWidth; vh = root.clientHeight;
     cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr); cv.style.width = vw + 'px'; cv.style.height = vh + 'px';
+    if (G.V3.ok) G.V3.resize(vw, vh);
   }
   const basePpf = () => G.clamp(Math.min(vw / 34, vh / 21), 18, 64);
   function aimCamera(dt, snap) {
@@ -38,13 +39,14 @@
     const k = snap ? 1 : Math.min(1, dt * 5);
     W.cam.x += (tx - W.cam.x) * k; W.cam.y += (ty - W.cam.y) * k; W.cam.ppf += (ppf - W.cam.ppf) * (snap ? 1 : Math.min(1, dt * 4));
   }
-  W.toScreen = (x, y) => [(x - W.cam.x) * W.cam.ppf + vw / 2, (y - W.cam.y) * W.cam.ppf + vh / 2];
-  W.toWorld = (sx, sy) => [(sx - vw / 2) / W.cam.ppf + W.cam.x, (sy - vh / 2) / W.cam.ppf + W.cam.y];
+  // the flat map by default; the 3D view answers instead while it is on
+  W.toScreen = (x, y) => G.V3.on ? G.V3.toScreen(x, y) : [(x - W.cam.x) * W.cam.ppf + vw / 2, (y - W.cam.y) * W.cam.ppf + vh / 2];
+  W.toWorld = (sx, sy, pick) => G.V3.on ? G.V3.toWorld(sx, sy, pick) : [(sx - vw / 2) / W.cam.ppf + W.cam.x, (sy - vh / 2) / W.cam.ppf + W.cam.y];
 
   // ---------- little effects in the world ----------
   W.puff = (x, y, ch = '✨', n = 6, floor = W.floor) => { for (let i = 0; i < n; i++) W.parts.push({ x, y, floor, vx: (Math.random() - 0.5) * 4, vy: -1.5 - Math.random() * 3, life: 0.7 + Math.random() * 0.5, age: 0, ch, size: 0.5 + Math.random() * 0.4 }); };
   W.celebrate = (x, y) => { const p = W.player; W.puff(x ?? p.x, (y ?? p.y) - 2, '⭐', 8); G.confetti(50); };
-  W.screenOf = ch => W.toScreen(ch.x, ch.y - 3.6);
+  W.screenOf = ch => G.V3.on ? G.V3.toScreen(ch.x, ch.y, 4.2) : W.toScreen(ch.x, ch.y - 3.6);
 
   // ---------- things lying around (boxes, hidden toys, packages) ----------
   W.addProp = p => { W.removeProp(p.id); W.props.push(Object.assign({ size: 1.3, r: 1.1, bob: 1, floor: 1 }, p)); return p; };
@@ -218,7 +220,7 @@
   function onDown(e) {
     if (W.mode === 'cut' || G.modalOpen()) return;
     G.audio();
-    const r = cv.getBoundingClientRect(), [wx, wy] = W.toWorld(e.clientX - r.left, e.clientY - r.top);
+    const r = cv.getBoundingClientRect(), [wx, wy] = W.toWorld(e.clientX - r.left, e.clientY - r.top, true);
     if (W.mode === 'decor') { G.decor.down(wx, wy, e); return; }
     let hit = null, bd = 1e9;
     for (const tb of touchables()) {
@@ -236,7 +238,7 @@
     if (!held || W.mode !== 'play') return;
     if (W.t - heldAt > 0.14) { heldAt = W.t; W.walkTo(wx, wy); }
   }
-  function onUp(e) { held = false; if (W.mode === 'decor') G.decor.up(e); }
+  function onUp(e) { held = false; if (W.mode === 'decor') G.decor.up(e); G.V3.release && G.V3.release(); }
   const KEYMAP = { ArrowLeft: 'l', ArrowRight: 'r', ArrowUp: 'u', ArrowDown: 'd', a: 'l2', d: 'r2', w: 'u2', s: 'd2', A: 'l2', D: 'r2', W: 'u2', S: 'd2' };
   function onKey(e) {
     if (G.current !== 'world') return;
@@ -256,7 +258,8 @@
     if (W.floor !== p.floor) { W.floor = p.floor; hud.floor.textContent = p.floor === 2 ? '⬆️ Upstairs' : '⬇️ Downstairs'; }
     if (W.mode === 'play' && !G.modalOpen()) {
       // player one
-      const dx = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), dy = (keys.d ? 1 : 0) - (keys.u ? 1 : 0);
+      let dx = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), dy = (keys.d ? 1 : 0) - (keys.u ? 1 : 0);
+      if (G.V3.on && (dx || dy)) [dx, dy] = G.V3.keyDir(dx, dy); // arrow keys follow the way the 3D view is turned
       const sp = SPEED * (p.slow || 1);
       if (G.course.locked()) { p.path = null; p.moving = false; }
       else if (dx || dy) { p.path = null; p.then = null; const n = Math.hypot(dx, dy); p.moving = tryMove(p, dx / n, dy / n, sp * dt); }
@@ -408,7 +411,7 @@
   function loop(ts) {
     raf = requestAnimationFrame(loop);
     const dt = Math.min(0.05, (ts - last) / 1000 || 0); last = ts;
-    try { tick(dt); aimCamera(dt); draw(); } catch (e) { console.error(e); }
+    try { tick(dt); if (G.V3.on) { G.V3.render(dt, W.t); arrow(); } else { aimCamera(dt); draw(); } } catch (e) { console.error(e); }
   }
 
   // ---------- the play screen ----------
@@ -439,6 +442,7 @@
           <div class="pill course hidden" id="course-pill"></div>
           <button class="round-btn hidden" id="btn-stop" title="Stop">✖</button>
           <div class="pill quest hidden" id="quest-pill"></div>
+          <button class="round-btn wide" id="btn-view" title="Change the view">🗺️</button>
           <button class="round-btn hidden" id="btn-photo" title="Real photo">📷</button>
           <button class="round-btn wide" id="btn-pass" title="Passport">📖 <span id="stamp-count"></span></button>
           <div class="pill">⭐ <span class="star-count">0</span></div>
@@ -447,6 +451,12 @@
           <button class="big-btn go hidden" id="btn-go" title="Run the obstacle course">🏁</button>
           <button class="big-btn hidden" id="btn-decor" title="Decorate">🎨</button>
           <button class="big-btn hidden" id="btn-act" title="Touch">👆</button>
+        </div>
+        <div class="hud turn hidden" id="turn-btns">
+          <button class="round-btn" id="btn-turnl" title="Turn the house">↪️</button>
+          <button class="round-btn" id="btn-turnr" title="Turn the house">↩️</button>
+          <button class="round-btn" id="btn-zin" title="Closer">➕</button>
+          <button class="round-btn" id="btn-zout" title="Farther">➖</button>
         </div>
         <div id="polaroid" class="polaroid hidden"></div>
         <div id="arrow" class="guide-arrow hidden">➤</div>
@@ -467,6 +477,18 @@
       W.npcs.push({ id: 'baba', who: 'baba', floor: 1, x: M.floors[1].spots.baba[0], y: M.floors[1].spots.baba[1], apron: 1, onTap: n => G.Q.talk(n) });
       aimCamera(0, true); updateHud();
       cv.addEventListener('pointerdown', onDown); cv.addEventListener('pointermove', onMove);
+      // the 3D view: its own canvas over the map, and a button that steps map -> dollhouse -> walking inside
+      const VIEWS = ['2d', 'tilt', 'walk'], VICON = { '2d': '🗺️', tilt: '🏠', walk: '👀' };
+      const c3 = G.V3.ok && G.V3.init(root), vbtn = G.$('#btn-view', root), turn = G.$('#turn-btns', root);
+      const setView = (m, quiet) => { G.V3.set(m); m = G.V3.mode; vbtn.textContent = VICON[m]; turn.classList.toggle('hidden', m !== 'tilt'); if (!quiet) G.beep(G.T('view.' + m)); };
+      if (c3) {
+        c3.addEventListener('pointerdown', onDown); c3.addEventListener('pointermove', onMove);
+        c3.addEventListener('wheel', e => { e.preventDefault(); G.V3.zoom(e.deltaY > 0 ? 1.1 : 0.9); }, { passive: false });
+        vbtn.onclick = () => { G.sfx.whoosh(); setView(VIEWS[(VIEWS.indexOf(G.V3.mode) + 1) % 3]); };
+        G.$('#btn-turnl', root).onclick = () => { G.sfx.tap(); G.V3.turn(1); }; G.$('#btn-turnr', root).onclick = () => { G.sfx.tap(); G.V3.turn(-1); };
+        G.$('#btn-zin', root).onclick = () => { G.sfx.tap(); G.V3.zoom(0.85); }; G.$('#btn-zout', root).onclick = () => { G.sfx.tap(); G.V3.zoom(1.18); };
+        setView(G.save.settings.view || '2d', true);
+      } else vbtn.classList.add('hidden');
       window.addEventListener('pointerup', onUp); window.addEventListener('pointercancel', onUp);
       window.addEventListener('resize', resize);
       G.$('#btn-menu', root).onclick = () => { G.sfx.tap(); G.menu(); };
@@ -482,7 +504,7 @@
       G.Q.begin();
     },
     leave() {
-      cancelAnimationFrame(raf); G.music(false); G.onBeepTap = null; G.course.stop(true);
+      cancelAnimationFrame(raf); G.music(false); G.onBeepTap = null; G.course.stop(true); if (G.V3.ok) { const m = G.V3.mode; G.V3.dispose(); G.V3.on = false; G.save.settings.view = m; }
       window.removeEventListener('pointerup', onUp); window.removeEventListener('pointercancel', onUp); window.removeEventListener('resize', resize);
       for (const k in keys) keys[k] = false;
       if (W.mode === 'decor') G.decor.close(true);

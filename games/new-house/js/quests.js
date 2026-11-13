@@ -150,7 +150,7 @@
       },
       aimBed(d) {
         d.bed = null;
-        for (const r of ['bedA', 'bedB']) for (const it of G.itemsIn(r)) if (!d.bed && /^(bed|bunk)/.test(it.t)) d.bed = { floor: 2, x: it.x, y: it.y };
+        for (const r of ['bedA', 'bedB']) for (const it of G.itemsIn(r)) if (!d.bed && /bed|bunk/i.test(it.t)) d.bed = { floor: 2, x: it.x, y: it.y };
         if (!d.bed) { const c = M.roomCenter('bedA'); d.bed = { floor: 2, x: c[0], y: c[1] }; }
         W.setTarget({ floor: 2, x: d.bed.x, y: d.bed.y, tall: -1 });
       },

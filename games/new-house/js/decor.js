@@ -74,6 +74,7 @@
       return;
     }
     const list = Object.values(G.ITEMS).filter(d => d.cat === st.tab && G.hasItem(d.id));
+    list.sort((a, b) => (b.ours ? 1 : 0) - (a.ours ? 1 : 0)); // our own things first
     const locked = Object.values(G.ITEMS).filter(d => d.cat === st.tab && !G.hasItem(d.id)).length;
     box.innerHTML = list.map(btn).join('') + (locked ? `<div class="item-locked" title="More come in packages">📦 × ${locked}</div>` : '');
   }

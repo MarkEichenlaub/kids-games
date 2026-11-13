@@ -6,8 +6,15 @@ The house in the game is traced from the listing's two floor plan drawings: ever
 window and door in `js/map.js` is given in pixels on those drawings and converted to feet,
 so the rooms are the real rooms at the real sizes. What is built in (kitchen, bathrooms,
 laundry, fireplace and shelves, closets, the desk at the top of the stairs, the courtyard
-and porch) is placed from the listing photos. The furniture on day one is the staging
-furniture from those photos; the kids can move all of it.
+and porch) is placed from the listing photos. The furniture on day one is our own, drawn
+from photos of the old house (the rainbow rug, the blue rug, the black and white sofas,
+the piano, the dinner table, the white shelves, the dollhouse, the beds); where each piece
+really goes is a first guess, and the kids can move all of it.
+
+Three views, on the button at the top: the flat map, a 3D dollhouse you can turn and zoom,
+and walking inside in 3D. Everything works in all three, including decorating and obstacle
+courses. The 3D scene is built from the same map and drawings (`js/view3d.js`, with
+three.js in `vendor/`, MIT license).
 
 - Pick who is playing, then a costume (the closets change it later).
 - Walk by tapping, or with the arrow keys. Space touches the nearest thing. A second
@@ -59,6 +66,6 @@ originals and the key from `G:\My Drive\kids-games-private`.
 `js/map.js` is the floor plan (feet, north up). `js/art.js` and `js/people.js` draw
 everything. `js/items.js` is the furniture. `js/lines.js` holds every sentence Beep
 says. `js/world.js` is walking and the camera, `js/acts.js` what things do when
-touched, `js/decor.js` decorating, `js/course.js` obstacle courses, `js/quests.js` the jobs and their little games,
+touched, `js/decor.js` decorating, `js/course.js` obstacle courses, `js/view3d.js` the 3D views, `js/quests.js` the jobs and their little games,
 `js/town.js` the neighborhood, `js/screens.js` the title, costumes, passport and
 grown-ups page.

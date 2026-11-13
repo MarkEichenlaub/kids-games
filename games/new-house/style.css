@@ -139,6 +139,11 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 .world:has(.decor-drawer) .hud.side { bottom: 196px; }
 .world:has(.decor-drawer) ~ .beep { display: none; }
 
+/* ---------- the 3D view ---------- */
+#cv3 { position: absolute; inset: 0; touch-action: none; display: block; }
+#dark3 { position: absolute; inset: 0; pointer-events: none; }
+.hud.turn { position: absolute; left: 12px; top: 84px; display: grid; grid-template-columns: 56px 56px; gap: 8px; z-index: 20; }
+
 /* ---------- obstacle course ---------- */
 .big-btn.go { background: var(--green); animation: pulse 1.4s infinite; }
 .pill.course { background: #fff; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
