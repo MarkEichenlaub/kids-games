@@ -337,6 +337,10 @@ window.G = (function () {
         const buf = await fetch('data/info.bin').then(r => r.arrayBuffer());
         G.houseInfo = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, cryptoKey, buf.slice(12))));
       } catch (e) { }
+      if (probe) try { // the real neighborhood map
+        const buf = await fetch('data/town.bin').then(r => r.arrayBuffer());
+        G.townData = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, cryptoKey, buf.slice(12))));
+      } catch (e) { }
       return !!probe;
     } catch (e) { cryptoKey = null; return false; }
   };

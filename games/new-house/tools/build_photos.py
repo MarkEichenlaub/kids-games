@@ -6,7 +6,8 @@ each one, strips its metadata, and encrypts it with AES-GCM into data/p/, using 
 same family key as What's Hiding? (so a device unlocked for that game shows these too).
 data/index.json only says which encrypted files belong to which room. The house
 number shown on the plaques comes from info.json in the same Drive folder, sealed the
-same way into data/info.bin.
+same way into data/info.bin; the neighborhood map comes from town.json there (made by
+build_town.py, which lives in that folder too), sealed into data/town.bin.
 
 Usage:  python tools/build_photos.py        (prints the unlock link at the end)
 """
@@ -65,10 +66,12 @@ def main():
             os.remove(os.path.join(OUT, 'p', f))
     json.dump({'probe': index['living'][0], 'rooms': index}, open(os.path.join(OUT, 'index.json'), 'w'))
     # the house number for the plaques by the front door and the garage, sealed like the photos
-    info = open(os.path.join(PRIVATE, 'new-house', 'info.json'), 'rb').read()
-    iv = secrets.token_bytes(12)
-    with open(os.path.join(OUT, 'info.bin'), 'wb') as f:
-        f.write(iv + aes.encrypt(iv, info, None))
+    # sealed like the photos: the house number, and the neighborhood map (streets, places, names)
+    for src, dst in (('info.json', 'info.bin'), ('town.json', 'town.bin')):
+        raw = open(os.path.join(PRIVATE, 'new-house', src), 'rb').read()
+        iv = secrets.token_bytes(12)
+        with open(os.path.join(OUT, dst), 'wb') as f:
+            f.write(iv + aes.encrypt(iv, raw, None))
     print(f'{len(made)} photos, {total / 1e6:.1f} MB encrypted')
     print('Unlock link (keep private):', URL + '#k=' + k)
 

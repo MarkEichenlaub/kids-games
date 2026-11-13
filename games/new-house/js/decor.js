@@ -40,7 +40,7 @@
       const a = b.dataset.a;
       if (b.dataset.tab) { st.tab = b.dataset.tab; G.sfx.tap(); fill(); if (st.tab === 'course' && !G.P().done.courseHi) { G.P().done.courseHi = 1; G.persist(); G.beep(G.T('course.buildHi')); } }
       else if (a === 'done') D.close();
-      else if (a === 'turn' && st.sel) { st.sel.r = ((st.sel.r || 0) + 1) % 4; clampIn(st.sel, st.rects); G.sfx.snap(); G.persist(); }
+      else if (a === 'turn' && st.sel) { st.sel.r = ((st.sel.r || 0) + 3) % 4; /* counterclockwise, like the arrows on the button */ clampIn(st.sel, st.rects); G.sfx.snap(); G.persist(); }
       else if (a === 'away' && st.sel) { st.items.splice(st.items.indexOf(st.sel), 1); select(null); G.sfx.whoosh(); G.persist(); fill(); }
       else if (a === 'dice') { G.course.surprise(st.room.id); st.items = G.itemsIn(st.room.id); select(null); G.sfx.gift(); G.confetti(30); G.beep(G.T('course.surprise')); fill(); }
       else if (a === 'go') { const id = st.room.id; if (G.course.valid(id)) { D.close(true); G.Q.onDecor && G.Q.onDecor(id); G.course.start(id); } else { G.sfx.oops(); G.beep(G.T('course.' + G.course.missing(id))); } }

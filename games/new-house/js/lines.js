@@ -85,9 +85,16 @@
     foundToy: toy => `You found the ${toy}!`,
     // the neighborhood
     town: {
-      map: 'Where do you want to go?', pool: 'This is our pool! Tap the pool toys to swim to them.', poolDone: 'You are a great swimmer!',
-      play: 'This is the playground! Tap the slide or the swing.', playDone: 'Wheee! That was fun!', park: 'This is the park near our house. Can you catch the butterflies?', parkDone: 'You caught them all! Now they fly away home.',
-      school: 'This is the school near our house. So many new friends to meet!', library: 'This is the library. It is a short walk from our house. So many books!', home: 'Back home we go!',
+      map: 'Where do you want to go?', home: 'Back home we go!', drive: 'Let\'s get in the car! Maia\'s school is a short drive away.',
+      pool: 'This is our pool! Tap the pool toys to swim to them.', poolDone: 'You are a great swimmer!',
+      play: 'This is the little park right by our house! Tap the slide or the swing.', playDone: 'Wheee! That was fun!',
+      park: 'This is the big park up the street. Can you catch the butterflies?', parkDone: 'You caught them all! Now they fly away home.',
+      school: 'This is Mira\'s new school! Mira starts kindergarten here in January. Find the door with the big K!',
+      schoolK: 'This is the kindergarten room! This is where Mira will learn and play.',
+      grade1: 'That is a first grade room. Try another door!', grade2: 'That is a second grade room. Try another door!', grade3: 'That is a third grade room. Try another door!',
+      kinder: 'This is Maia\'s new school! First, tap the backpack to hang it up.', kinderPlay: 'Now let\'s play! Tap the slide.', kinderDone: 'Wheee! Maia\'s new school has a great playground.',
+      library: 'This is the library. It is a short walk from our house. Tap the doors to go inside!',
+      libraryIn: 'Pick a book! Tap three books to read them.', libraryDone: 'What great books! You can borrow books here with a library card.',
     },
   };
   // first visit to each room

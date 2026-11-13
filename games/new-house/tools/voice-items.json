@@ -1125,6 +1125,21 @@
   "say": "Where do you want to go?"
  },
  {
+  "hash": "azek4v",
+  "text": "Back home we go!",
+  "say": "Back home we go!"
+ },
+ {
+  "hash": "1e5kb8i",
+  "text": "Let's get in the car!",
+  "say": "Let's get in the car!"
+ },
+ {
+  "hash": "tvb7qo",
+  "text": "Maia's school is a short drive away.",
+  "say": "Maia's school is a short drive away."
+ },
+ {
   "hash": "j3tg2h",
   "text": "This is our pool!",
   "say": "This is our pool!"
@@ -1140,9 +1155,9 @@
   "say": "You are a great swimmer!"
  },
  {
-  "hash": "1wlxqb5",
-  "text": "This is the playground!",
-  "say": "This is the playground!"
+  "hash": "qoxwpp",
+  "text": "This is the little park right by our house!",
+  "say": "This is the little park right by our house!"
  },
  {
   "hash": "yo1koo",
@@ -1160,9 +1175,9 @@
   "say": "That was fun!"
  },
  {
-  "hash": "17dypa0",
-  "text": "This is the park near our house.",
-  "say": "This is the park near our house."
+  "hash": "16bfcmr",
+  "text": "This is the big park up the street.",
+  "say": "This is the big park up the street."
  },
  {
   "hash": "1kux1p1",
@@ -1180,14 +1195,74 @@
   "say": "Now they fly away home."
  },
  {
-  "hash": "1dwpvac",
-  "text": "This is the school near our house.",
-  "say": "This is the school near our house."
+  "hash": "17w4o0u",
+  "text": "This is Mira's new school!",
+  "say": "This is Meera's new school!"
  },
  {
-  "hash": "1poi2pd",
-  "text": "So many new friends to meet!",
-  "say": "So many new friends to meet!"
+  "hash": "1c3syi",
+  "text": "Mira starts kindergarten here in January.",
+  "say": "Meera starts kindergarten here in January."
+ },
+ {
+  "hash": "12ya0wt",
+  "text": "Find the door with the big K!",
+  "say": "Find the door with the big K!"
+ },
+ {
+  "hash": "1wvg3qb",
+  "text": "This is the kindergarten room!",
+  "say": "This is the kindergarten room!"
+ },
+ {
+  "hash": "141kylo",
+  "text": "This is where Mira will learn and play.",
+  "say": "This is where Meera will learn and play."
+ },
+ {
+  "hash": "8zxcap",
+  "text": "That is a first grade room.",
+  "say": "That is a first grade room."
+ },
+ {
+  "hash": "mv91bj",
+  "text": "Try another door!",
+  "say": "Try another door!"
+ },
+ {
+  "hash": "1hwwbvp",
+  "text": "That is a second grade room.",
+  "say": "That is a second grade room."
+ },
+ {
+  "hash": "12abnyg",
+  "text": "That is a third grade room.",
+  "say": "That is a third grade room."
+ },
+ {
+  "hash": "dh46dr",
+  "text": "This is Maia's new school!",
+  "say": "This is Maia's new school!"
+ },
+ {
+  "hash": "gzubbm",
+  "text": "First, tap the backpack to hang it up.",
+  "say": "First, tap the backpack to hang it up."
+ },
+ {
+  "hash": "1twi5ri",
+  "text": "Now let's play!",
+  "say": "Now let's play!"
+ },
+ {
+  "hash": "1skdprc",
+  "text": "Tap the slide.",
+  "say": "Tap the slide."
+ },
+ {
+  "hash": "ko4mxi",
+  "text": "Maia's new school has a great playground.",
+  "say": "Maia's new school has a great playground."
  },
  {
   "hash": "y1zc7z",
@@ -1200,14 +1275,29 @@
   "say": "It is a short walk from our house."
  },
  {
-  "hash": "fnpo8",
-  "text": "So many books!",
-  "say": "So many books!"
+  "hash": "1nxgjr3",
+  "text": "Tap the doors to go inside!",
+  "say": "Tap the doors to go inside!"
  },
  {
-  "hash": "azek4v",
-  "text": "Back home we go!",
-  "say": "Back home we go!"
+  "hash": "820n8k",
+  "text": "Pick a book!",
+  "say": "Pick a book!"
+ },
+ {
+  "hash": "1xgextj",
+  "text": "Tap three books to read them.",
+  "say": "Tap three books to read them."
+ },
+ {
+  "hash": "j2cot8",
+  "text": "What great books!",
+  "say": "What great books!"
+ },
+ {
+  "hash": "1xfcfkz",
+  "text": "You can borrow books here with a library card.",
+  "say": "You can borrow books here with a library card."
  },
  {
   "hash": "p6z04l",

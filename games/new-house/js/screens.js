@@ -99,7 +99,7 @@
   G.passport = () => {
     const P = G.P(), k = G.kid();
     const stamp = r => P.stamps[r.id] ? `<button class="pstamp got" data-room="${r.id}"><span>${M.roomIcon(r)}</span><b>${M.roomName(r)}</b></button>` : `<div class="pstamp"><span>❔</span><b>&nbsp;</b></div>`;
-    const town = [['pool', '🏊'], ['play', '🛝'], ['park', '🌳'], ['school', '🏫'], ['library', '📚']];
+    const town = [['pool', '🏊'], ['play', '🛝'], ['park', '🌳'], ['school', '🏫'], ['kinder', '🧸'], ['library', '📚']];
     const box = G.modal(`<div class="passport"><h2>📖 ${k.name} · ⭐ ${P.stars}</h2>
       <h3>⬇️</h3><div class="pgrid">${M.rooms.filter(r => r.floor === 1).map(stamp).join('')}</div>
       <h3>⬆️</h3><div class="pgrid">${M.rooms.filter(r => r.floor === 2).map(stamp).join('')}</div>

@@ -34,40 +34,9 @@ three.js in `vendor/`, MIT license).
   against the clock, clearing the obstacles in order. Baba's first job is a course in the
   courtyard (Maia gets one built for her; Mira builds her own).
 - 17 tiny friends hide inside things around the house.
-- The sign on the sidewalk leads to the pool, the playground, the park, the school and
-  the library.
-
-Progress is saved in the browser, per kid; the furniture and paint are shared.
-
-## Privacy
-
-This repo is public, so nothing here says where the house is. The house number on the
-plaques by the front door and the garage is sealed in `data/info.bin` and shows only
-with the family key; without it the plaques are blank. The real photos of the
-rooms are AES-encrypted in `data/` with the same family key as What's Hiding?; a device
-that has opened Dad's link for that game shows them here too (the camera button, the
-passport, and a snapshot the first time you enter a room). Without the key the game
-plays the same, minus the photos. The key can also be pasted under Grown-ups.
-
-## Changing the game
-
-After changing any file in `js/` or `style.css`, raise the `?v=` number on the script and
-stylesheet lines in `index.html`, so browsers that have the old files saved fetch the new
-ones together.
-
-## Rebuilding
-
-    node tools/build-voice.mjs && python tools/render_voice.py   # after changing js/lines.js
-    python tools/build_photos.py                                  # after changing the photo list
-
-`render_voice.py` needs `pip install edge-tts` and ffmpeg. `build_photos.py` reads the
-originals and the key from `G:\My Drive\kids-games-private`.
-
-## Files
-
-`js/map.js` is the floor plan (feet, north up). `js/art.js` and `js/people.js` draw
-everything. `js/items.js` is the furniture. `js/lines.js` holds every sentence Beep
-says. `js/world.js` is walking and the camera, `js/acts.js` what things do when
-touched, `js/decor.js` decorating, `js/course.js` obstacle courses, `js/view3d.js` the 3D views, `js/quests.js` the jobs and their little games,
-`js/town.js` the neighborhood, `js/screens.js` the title, costumes, passport and
-grown-ups page.
+- The sign on the sidewalk opens the neighborhood. With the family key it is the real map
+  (the streets around our house, sealed in `data/town.bin`): the pool, the little park, the
+  big park, Mira's school, the library, and Maia's school a car ride away. Without the key it
+  is a made-up little town with the same places. Each place is a scene drawn to look like
+  the real one, with something to do (swim to the pool toys, slide and swing, catch
+  butterflies, find the kindergarten door, hang up a backpack and slide, read three books).

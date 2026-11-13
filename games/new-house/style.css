@@ -200,46 +200,29 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 @keyframes floatz { 0% { transform: translate(-50%, 0) scale(.8); opacity: 0; } 50% { opacity: 1; } 100% { transform: translate(-30%, -90px) scale(1.2); opacity: 0; } }
 
 /* ---------- the neighborhood ---------- */
-.town { position: absolute; inset: 0; z-index: 40; overflow: hidden; }
-.town.map { background: #9bd67a; }
-.road { position: absolute; background: #c9c5ba; border: 4px solid #fff; border-radius: 30px; }
-.road.r1 { left: 6%; right: 6%; top: 49%; height: 36px; } .road.r2 { left: 26%; top: 20%; bottom: 14%; width: 36px; } .road.r3 { left: 74%; top: 16%; bottom: 20%; width: 36px; }
-.town .deco { position: absolute; font-size: clamp(40px, 7vw, 76px); transform: translate(-50%, -50%); pointer-events: none; }
-.place { position: absolute; transform: translate(-50%, -50%); background: #fff; border-radius: 26px; padding: 8px 16px 10px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; border: 4px solid var(--yellow); z-index: 2; }
-.place span { font-size: clamp(44px, 8vw, 80px); line-height: 1.1; } .place b { font-size: clamp(15px, 2.2vw, 22px); } .place i { position: absolute; right: -10px; top: -14px; font-size: 30px; font-style: normal; }
-.place.home { border-color: var(--pink); }
-.place:hover { transform: translate(-50%, -54%) scale(1.05); }
-.town-kid { position: absolute; transform: translate(-50%, -62%); transition: left .8s, top .8s; pointer-events: none; z-index: 3; }
+.town { position: absolute; inset: 0; z-index: 40; overflow: hidden; background: #c2e3a0; }
+.town.map { display: flex; align-items: center; justify-content: center; }
+.town-frame { position: relative; height: 100%; max-width: 100%; max-height: 100%; }
+.town-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.place { position: absolute; transform: translate(-50%, -50%); background: #fff; border-radius: 18px; padding: 4px 10px 6px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; border: 4px solid var(--yellow); z-index: 2; white-space: nowrap; }
+.place span { font-size: clamp(30px, 5.6vh, 58px); line-height: 1.1; } .place b { font-size: clamp(13px, 2.2vh, 20px); } .place em { font-size: clamp(11px, 1.6vh, 15px); font-style: normal; color: #9b6bff; font-weight: 600; }
+.place i { position: absolute; right: -10px; top: -14px; font-size: 26px; font-style: normal; } .place u { position: absolute; left: -16px; top: -14px; font-size: 26px; text-decoration: none; }
+.place.home { border-color: var(--pink); } .place.kinder { transform: translate(-100%, -50%); }
+.place:hover { filter: brightness(1.05); }
+.town-kid { position: absolute; transform: translate(35%, -105%); transition: left 1s ease-in-out, top 1s ease-in-out, opacity .3s; pointer-events: none; z-index: 3; width: 64px !important; height: 64px !important; }
 .town-kid.hop { animation: hop .3s 3; } @keyframes hop { 50% { margin-top: -22px; } }
+.town-car { position: absolute; transform: translate(-50%, -60%) scaleX(-1); font-size: 54px; transition: left 2s ease-in, top 2s ease-in; z-index: 4; pointer-events: none; }
 .town-back { position: absolute; left: 12px; top: 12px; z-index: 6; }
 .town-pol { position: absolute; right: 14px; top: 14px; width: min(240px, 32vw); background: #fff; padding: 8px; border-radius: 8px; box-shadow: var(--shadow); transform: rotate(3deg); z-index: 6; cursor: pointer; transition: width .3s; }
 .town-pol.big { width: min(760px, 90vw); transform: none; } .town-pol img { width: 100%; display: block; border-radius: 4px; }
-.town.pool { background: #ead9bd; }
-.water { position: absolute; left: 12%; right: 12%; top: 20%; bottom: 20%; background: repeating-linear-gradient(170deg, #59c7f2 0 40px, #6fd3f7 40px 80px); border: 12px solid #fff; border-radius: 40px; box-shadow: inset 0 0 40px rgba(0, 80, 140, .35); }
-.floaty { position: absolute; transform: translate(-50%, -50%); font-size: clamp(44px, 8vw, 82px); background: none; animation: bob 2.2s infinite ease-in-out; transition: opacity .5s .4s; }
-.floaty.gone { opacity: 0; pointer-events: none; }
-.spa { position: absolute; left: 3%; top: 34%; width: clamp(64px, 9vw, 110px); aspect-ratio: 1; border-radius: 50%; background: #6fd3f7; border: 8px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 34px; cursor: pointer; }
-.town.play { background: linear-gradient(180deg, #8fd3ff 0 46%, #c9b08a 46% 100%); }
-.shade { position: absolute; left: 12%; top: 12%; width: 46%; height: 0; border-left: 23vw solid transparent; border-right: 23vw solid transparent; border-bottom: 9vh solid #2a9aa8; opacity: .85; width: 0; }
-.slide-set { position: absolute; left: 14%; top: 26%; width: 34%; height: 52%; background: none; }
-.slide-set .tower { position: absolute; left: 12%; top: 8%; width: 24%; height: 92%; background: repeating-linear-gradient(180deg, #ffb347 0 14px, #e08a1e 14px 18px); border-radius: 10px; border: 4px solid #4a3f63; }
-.slide-set .chute { position: absolute; left: 34%; top: 14%; width: 70%; height: 26%; background: #ffd93d; border: 4px solid #4a3f63; border-radius: 16px; transform-origin: left top; transform: rotate(38deg); }
-.swing-set { position: absolute; left: 62%; top: 20%; width: 26%; height: 52%; background: none; }
-.swing-set .bar { position: absolute; left: 0; right: 0; top: 0; height: 14px; background: #4a3f63; border-radius: 8px; }
-.swing-set .rope { position: absolute; left: 50%; top: 10px; width: 6px; height: 70%; background: #8a5a3c; transform-origin: top center; }
-.swing-set .seat { position: absolute; left: -34px; bottom: -12px; width: 74px; height: 14px; background: #ff6f6f; border-radius: 6px; border: 3px solid #4a3f63; }
-.rope.swinging, .town-kid.swinging { animation: swing 1.6s ease-in-out infinite; }
-.town-kid.swinging { transform-origin: 50% -180%; }
+.scene-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.scene-svg .swinging { animation: swing 1.6s ease-in-out infinite; transform-box: view-box; }
 @keyframes swing { 0%, 100% { rotate: 24deg; } 50% { rotate: -24deg; } }
-.town.park { background: linear-gradient(180deg, #8fd3ff 0 30%, #8fd16a 30% 100%); }
-.fly { position: absolute; font-size: clamp(40px, 7vw, 72px); background: none; animation: flit 9s infinite ease-in-out; }
-.fly.f0 { left: 20%; top: 40%; } .fly.f1 { left: 60%; top: 30%; animation-duration: 11s; } .fly.f2 { left: 40%; top: 60%; animation-duration: 8s; } .fly.f3 { left: 75%; top: 55%; animation-duration: 12s; } .fly.f4 { left: 30%; top: 22%; animation-duration: 10s; }
-@keyframes flit { 0%, 100% { transform: translate(0, 0) rotate(-8deg); } 25% { transform: translate(12vw, -8vh) rotate(10deg); } 50% { transform: translate(-6vw, 9vh) rotate(-12deg); } 75% { transform: translate(-13vw, -5vh) rotate(8deg); } }
-.fly.gone { opacity: 0; pointer-events: none; transition: opacity .3s; }
-.town.card { background: linear-gradient(180deg, #ffe9a8, #ffd0e6); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
-.big-place { font-size: clamp(120px, 26vw, 240px); line-height: 1; }
-.bop { font-size: clamp(40px, 7vw, 70px); background: #fff; border-radius: 22px; width: clamp(64px, 11vw, 110px); aspect-ratio: 1; box-shadow: 0 4px 10px rgba(20, 10, 60, .18); }
-.bop.boing { animation: hop .3s; }
+.scene-svg .fly { animation: flit 9s infinite ease-in-out; transform-box: fill-box; transition: opacity .3s; }
+.scene-svg .fly.f1 { animation-duration: 11s; } .scene-svg .fly.f2 { animation-duration: 8s; } .scene-svg .fly.f3 { animation-duration: 12s; } .scene-svg .fly.f4 { animation-duration: 10s; }
+@keyframes flit { 0%, 100% { transform: translate(0, 0); } 25% { transform: translate(140px, -80px); } 50% { transform: translate(-60px, 70px); } 75% { transform: translate(-130px, -40px); } }
+.scene-svg .floaty { animation: bobf 2.2s infinite ease-in-out; transition: opacity .5s; } @keyframes bobf { 50% { transform: translateY(-12px); } }
+.scene-svg .door, .scene-svg .book, .scene-svg .bell, .scene-svg .pack, .scene-svg .slide, .scene-svg .doors { transition: filter .15s; } .scene-svg g[style*=pointer]:hover { filter: brightness(1.08); }
 
 @media (max-width: 700px) {
   .pill { font-size: 16px; padding: 8px 12px; } .round-btn { width: 46px; height: 46px; font-size: 22px; } .pill.small { display: none; }
