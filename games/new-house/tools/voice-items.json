@@ -230,6 +230,11 @@
   "say": "Tap a picture to add something new."
  },
  {
+  "hash": "1rangeo",
+  "text": "The flag is for obstacle courses.",
+  "say": "The flag is for obstacle courses."
+ },
+ {
   "hash": "50hs2d",
   "text": "It looks great!",
   "say": "It looks great!"
@@ -238,6 +243,176 @@
   "hash": "1kxbue2",
   "text": "Surprise!",
   "say": "Surprise!"
+ },
+ {
+  "hash": "10do6wk",
+  "text": "An obstacle course!",
+  "say": "An obstacle course!"
+ },
+ {
+  "hash": "q7vfa2",
+  "text": "Tap the flag button to run it.",
+  "say": "Tap the flag button to run it."
+ },
+ {
+  "hash": "sbve8a",
+  "text": "Ready, set, go!",
+  "say": "Ready, set, go!"
+ },
+ {
+  "hash": "1mxvodt",
+  "text": "Zigzag around the cones!",
+  "say": "Zigzag around the cones!"
+ },
+ {
+  "hash": "1p6pzm8",
+  "text": "Jump over the hurdle!",
+  "say": "Jump over the hurdle!"
+ },
+ {
+  "hash": "1pz5ghw",
+  "text": "Crawl through the tunnel!",
+  "say": "Crawl through the tunnel!"
+ },
+ {
+  "hash": "dcqpld",
+  "text": "Walk along the balance beam!",
+  "say": "Walk along the balance beam!"
+ },
+ {
+  "hash": "cjpq8t",
+  "text": "Hop on every stepping stone!",
+  "say": "Hop on every stepping stone!"
+ },
+ {
+  "hash": "1yh5url",
+  "text": "Hop into the hoop!",
+  "say": "Hop into the hoop!"
+ },
+ {
+  "hash": "yyw1yf",
+  "text": "Bounce on the bouncer!",
+  "say": "Bounce on the bouncer!"
+ },
+ {
+  "hash": "1gqx21v",
+  "text": "Climb over the pillow mountain!",
+  "say": "Climb over the pillow mountain!"
+ },
+ {
+  "hash": "14q1ovh",
+  "text": "Stand on the spinner and spin!",
+  "say": "Stand on the spinner and spin!"
+ },
+ {
+  "hash": "1lrsgrr",
+  "text": "Now run to the finish line!",
+  "say": "Now run to the finish line!"
+ },
+ {
+  "hash": "8skmy7",
+  "text": "You finished the obstacle course!",
+  "say": "You finished the obstacle course!"
+ },
+ {
+  "hash": "11ftzg9",
+  "text": "What a run!",
+  "say": "What a run!"
+ },
+ {
+  "hash": "2jkrmz",
+  "text": "You made it to the finish line!",
+  "say": "You made it to the finish line!"
+ },
+ {
+  "hash": "1iwc57a",
+  "text": "That is your fastest time ever!",
+  "say": "That is your fastest time ever!"
+ },
+ {
+  "hash": "uewk4c",
+  "text": "Not yet!",
+  "say": "Not yet!"
+ },
+ {
+  "hash": "rdl18r",
+  "text": "Follow the star to the next obstacle.",
+  "say": "Follow the star to the next obstacle."
+ },
+ {
+  "hash": "1cwlpys",
+  "text": "Hot, hot, hot!",
+  "say": "Hot, hot, hot!"
+ },
+ {
+  "hash": "1q6u61k",
+  "text": "The floor is lava!",
+  "say": "The floor is lava!"
+ },
+ {
+  "hash": "3b9mr2",
+  "text": "Oops!",
+  "say": "Oops!"
+ },
+ {
+  "hash": "feftjp",
+  "text": "Tap the jump button to jump over it.",
+  "say": "Tap the jump button to jump over it."
+ },
+ {
+  "hash": "1twgd87",
+  "text": "Whoa, you slipped off!",
+  "say": "Whoa, you slipped off!"
+ },
+ {
+  "hash": "1rp2se8",
+  "text": "Try the beam again.",
+  "say": "Try the beam again."
+ },
+ {
+  "hash": "10kxq4k",
+  "text": "Your course needs a green start flag.",
+  "say": "Your course needs a green start flag."
+ },
+ {
+  "hash": "uu3j5w",
+  "text": "Your course needs a checkered finish line.",
+  "say": "Your course needs a checkered finish line."
+ },
+ {
+  "hash": "3v18om",
+  "text": "Put an obstacle between the flags.",
+  "say": "Put an obstacle between the flags."
+ },
+ {
+  "hash": "1hxvmhe",
+  "text": "Your course is ready!",
+  "say": "Your course is ready!"
+ },
+ {
+  "hash": "qbkcl5",
+  "text": "Ta-da!",
+  "say": "Ta-da!"
+ },
+ {
+  "hash": "1p0686g",
+  "text": "A surprise course!",
+  "say": "A surprise course!"
+ },
+ {
+  "hash": "rqoxd4",
+  "text": "Build an obstacle course!",
+  "say": "Build an obstacle course!"
+ },
+ {
+  "hash": "dh70cw",
+  "text": "Put down a start flag, some obstacles, and a finish line.",
+  "say": "Put down a start flag, some obstacles, and a finish line."
+ },
+ {
+  "hash": "5r3fdc",
+  "text": "Or tap the dice for a surprise.",
+  "say": "Or tap the dice for a surprise."
  },
  {
   "hash": "4rke31",
@@ -330,14 +505,24 @@
   "say": "This tank keeps our water warm."
  },
  {
+  "hash": "q5lrn",
+  "text": "It has its own little nook.",
+  "say": "It has its own little nook."
+ },
+ {
   "hash": "1qoq7vn",
   "text": "This box has the switches for all the lights.",
   "say": "This box has the switches for all the lights."
  },
  {
-  "hash": "ksxblj",
-  "text": "This box helps keep the house cool.",
-  "say": "This box helps keep the house cool."
+  "hash": "1vipcai",
+  "text": "The air conditioner hides in this white box.",
+  "say": "The air conditioner hides in this white box."
+ },
+ {
+  "hash": "2smpay",
+  "text": "It keeps the house cool.",
+  "say": "It keeps the house cool."
  },
  {
   "hash": "44s0co",
@@ -355,9 +540,14 @@
   "say": "The dryer makes our clothes warm and dry."
  },
  {
-  "hash": "4g2rfh",
-  "text": "This is our mailbox.",
-  "say": "This is our mailbox."
+  "hash": "12reen2",
+  "text": "Hop, hop, hop along the stepping stones!",
+  "say": "Hop, hop, hop along the stepping stones!"
+ },
+ {
+  "hash": "1xthg1v",
+  "text": "Towels and sheets live in this cabinet.",
+  "say": "Towels and sheets live in this cabinet."
  },
  {
   "hash": "ycv1vs",
@@ -413,11 +603,6 @@
   "hash": "larq8k",
   "text": "A nice place to sit outside.",
   "say": "A nice place to sit outside."
- },
- {
-  "hash": "1bv16rq",
-  "text": "Rock, rock, rock!",
-  "say": "Rock, rock, rock!"
  },
  {
   "hash": "154nk66",
@@ -685,6 +870,46 @@
   "say": "The sun is up."
  },
  {
+  "hash": "2x27v9",
+  "text": "Baba says: Let's build an obstacle course!",
+  "say": "Baba says: Let's build an obstacle course!"
+ },
+ {
+  "hash": "kon4dd",
+  "text": "Go to the courtyard and tap the paint button.",
+  "say": "Go to the courtyard and tap the paint button."
+ },
+ {
+  "hash": "ipynqa",
+  "text": "Then tap the flag.",
+  "say": "Then tap the flag."
+ },
+ {
+  "hash": "1ctow2g",
+  "text": "Baba says: I built an obstacle course in the courtyard!",
+  "say": "Baba says: I built an obstacle course in the courtyard!"
+ },
+ {
+  "hash": "gywu9k",
+  "text": "Go there and tap the flag button.",
+  "say": "Go there and tap the flag button."
+ },
+ {
+  "hash": "11al4ax",
+  "text": "What a course!",
+  "say": "What a course!"
+ },
+ {
+  "hash": "1ixb9rc",
+  "text": "Now tap the flag button and run it.",
+  "say": "Now tap the flag button and run it."
+ },
+ {
+  "hash": "1hpcj9y",
+  "text": "You are an obstacle course champion!",
+  "say": "You are an obstacle course champion!"
+ },
+ {
   "hash": "avaf6a",
   "text": "Baba says: Let's make pancakes!",
   "say": "Baba says: Let's make pancakes!"
@@ -935,6 +1160,11 @@
   "say": "Our house is the yellow one with the blue door."
  },
  {
+  "hash": "xlmpy8",
+  "text": "The path goes along the trees.",
+  "say": "The path goes along the trees."
+ },
+ {
   "hash": "vad68p",
   "text": "This is the front porch.",
   "say": "This is the front porch."
@@ -950,9 +1180,9 @@
   "say": "This is the living room."
  },
  {
-  "hash": "zs43vg",
-  "text": "It has a fireplace and a big window.",
-  "say": "It has a fireplace and a big window."
+  "hash": "19ijrad",
+  "text": "It has a fireplace, shelves beside it, and a fan on the ceiling.",
+  "say": "It has a fireplace, shelves beside it, and a fan on the ceiling."
  },
  {
   "hash": "1xxpjv0",
@@ -990,19 +1220,29 @@
   "say": "This is the little bathroom downstairs."
  },
  {
+  "hash": "18qjfmm",
+  "text": "It is next to the garage door.",
+  "say": "It is next to the garage door."
+ },
+ {
   "hash": "1i6qr41",
   "text": "This is the garage.",
   "say": "This is the garage."
  },
  {
-  "hash": "5cniht",
-  "text": "The car sleeps in here.",
-  "say": "The car sleeps in here."
+  "hash": "115v4fl",
+  "text": "The car sleeps in here, and the big door opens to the alley.",
+  "say": "The car sleeps in here, and the big door opens to the alley."
  },
  {
   "hash": "1h3gjav",
   "text": "This is the courtyard.",
   "say": "This is the courtyard."
+ },
+ {
+  "hash": "16exjl4",
+  "text": "It goes all along the side of the house.",
+  "say": "It goes all along the side of the house."
  },
  {
   "hash": "1379i7z",
@@ -1015,9 +1255,9 @@
   "say": "This is the alley behind the house."
  },
  {
-  "hash": "tgsvll",
-  "text": "The car drives in this way.",
-  "say": "The car drives in this way."
+  "hash": "18tb33y",
+  "text": "The car drives in this way, and the moving truck is here!",
+  "say": "The car drives in this way, and the moving truck is here!"
  },
  {
   "hash": "ot5z1h",
@@ -1025,9 +1265,9 @@
   "say": "You are upstairs!"
  },
  {
-  "hash": "1up8m37",
-  "text": "This hall has a little desk for drawing.",
-  "say": "This hall has a little desk for drawing."
+  "hash": "9xkk6u",
+  "text": "There is a little desk at the top of the stairs.",
+  "say": "There is a little desk at the top of the stairs."
  },
  {
   "hash": "o3fmtw",

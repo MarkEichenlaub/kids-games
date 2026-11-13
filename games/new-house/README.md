@@ -1,7 +1,13 @@
 # Our New House
 
-A game for Mira and Maia to get to know the new house before moving day. The house in the
-game follows the real floor plan, room for room.
+A game for Mira and Maia to get to know the new house before moving day.
+
+The house in the game is traced from the listing's two floor plan drawings: every wall,
+window and door in `js/map.js` is given in pixels on those drawings and converted to feet,
+so the rooms are the real rooms at the real sizes. What is built in (kitchen, bathrooms,
+laundry, fireplace and shelves, closets, the desk at the top of the stairs, the courtyard
+and porch) is placed from the listing photos. The furniture on day one is the staging
+furniture from those photos; the kids can move all of it.
 
 - Pick who is playing, then a costume (the closets change it later).
 - Walk by tapping, or with the arrow keys. Space touches the nearest thing. A second
@@ -9,9 +15,15 @@ game follows the real floor plan, room for room.
 - Every room gives a stamp the first time you walk in. All 20 stamps earn a pet.
 - The paint button in a bedroom, the living room, the dining room, the den or the
   courtyard opens decorating: drag furniture, add things from the drawer, paint.
-- Mama and Baba hand out jobs (unpack boxes, find the hiding stuffed animals, match
-  socks, bedtime, pancakes, plant flowers, fix the lights, go to the pool). Each job
+- Mama and Baba hand out jobs (an obstacle course, unpack boxes, find the hiding stuffed
+  animals, match socks, bedtime, pancakes, plant flowers, fix the lights, go to the pool). Each job
   ends with a package on the porch that adds two new things to the drawer.
+- Obstacle courses: the flag tab in the decorating drawer has a start flag, a finish line
+  and ten kinds of obstacle (cones, hurdle, tunnel, balance beam, stepping stones, hoop,
+  bouncer, pillow mountain, spinner, lava). The dice builds a surprise course. A room with
+  a start, a finish and at least one obstacle shows a flag button: tap it to run the course
+  against the clock, clearing the obstacles in order. Baba's first job is a course in the
+  courtyard (Maia gets one built for her; Mira builds her own).
 - 17 tiny friends hide inside things around the house.
 - The sign on the sidewalk leads to the pool, the playground, the park, the school and
   the library.
@@ -39,6 +51,6 @@ originals and the key from `G:\My Drive\kids-games-private`.
 `js/map.js` is the floor plan (feet, north up). `js/art.js` and `js/people.js` draw
 everything. `js/items.js` is the furniture. `js/lines.js` holds every sentence Beep
 says. `js/world.js` is walking and the camera, `js/acts.js` what things do when
-touched, `js/decor.js` decorating, `js/quests.js` the jobs and their little games,
+touched, `js/decor.js` decorating, `js/course.js` obstacle courses, `js/quests.js` the jobs and their little games,
 `js/town.js` the neighborhood, `js/screens.js` the title, costumes, passport and
 grown-ups page.

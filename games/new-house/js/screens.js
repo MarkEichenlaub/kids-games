@@ -104,8 +104,10 @@
       <h3>⬇️</h3><div class="pgrid">${M.rooms.filter(r => r.floor === 1).map(stamp).join('')}</div>
       <h3>⬆️</h3><div class="pgrid">${M.rooms.filter(r => r.floor === 2).map(stamp).join('')}</div>
       <h3>🔎 ${Object.keys(P.glims).length}/${G.FRIENDS.length}</h3><div class="pfriends">${G.FRIENDS.map(f => `<span class="${P.glims[f.id] ? 'got' : ''}" title="${P.glims[f.id] ? f.name : ''}">${P.glims[f.id] ? f.icon : '❔'}</span>`).join('')}</div>
+      ${G.photosFor('plans').length ? '<button class="btn small" data-plans="1">🗺️ The real floor plan</button>' : ''}
       <h3>🗺️</h3><div class="pfriends">${town.map(t => `<span class="${P.done['town_' + t[0]] ? 'got' : ''}">${P.done['town_' + t[0]] ? t[1] : '❔'}</span>`).join('')}</div></div>`, { cls: 'wide' });
     box.onclick = e => {
+      if (e.target.closest('[data-plans]')) { G.sfx.tap(); return W.photoModal({ id: 'plans', icon: '🗺️', name: 'floor plan' }); }
       const b = e.target.closest('[data-room]'); if (!b) return;
       const r = M.room(b.dataset.room); G.sfx.tap();
       if (G.photosFor(r.id).length) W.photoModal(r); else G.beep(G.roomLine(r));

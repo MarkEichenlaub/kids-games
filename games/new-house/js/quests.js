@@ -2,8 +2,8 @@
 (() => {
   const W = G.W, M = G.MAP;
   const Q = G.Q = { active: null };
-  const GIVES = { mama: ['unpack', 'socks', 'hide', 'bedtime'], baba: ['pancakes', 'garden', 'lights', 'swim'] };
-  const ICON = { intro: '🔔', unpack: '📦', socks: '🧦', hide: '🧸', bedtime: '🌙', pancakes: '🥞', garden: '🌷', lights: '🔦', swim: '🏊' };
+  const GIVES = { mama: ['unpack', 'socks', 'hide', 'bedtime'], baba: ['course', 'pancakes', 'garden', 'lights', 'swim'] };
+  const ICON = { intro: '🔔', unpack: '📦', socks: '🧦', hide: '🧸', bedtime: '🌙', pancakes: '🥞', course: '🏁', garden: '🌷', lights: '🔦', swim: '🏊' };
   const little = () => G.isLittle();
   const P = () => G.P();
 
@@ -36,7 +36,7 @@
   Q.finish = finish;
 
   // ---------- packages ----------
-  const PKG = [12.2, 58.7];
+  const PKG = M.floors[1].spots.pkg;
   function spawnPkg() {
     if (!(G.save.house.pendingPkg > 0) || W.prop('pkg')) return;
     W.addProp({ id: 'pkg', floor: 1, x: PKG[0], y: PKG[1], icon: '📦', tag: '🎀', size: 1.7, r: 1.3, glow: 1, onTap: openPkg });
@@ -66,15 +66,13 @@
   function intro() {
     Q.active = { id: 'intro', step: 0, data: {} };
     M.fixture('doorbell').hint = true;
-    aim(1, 12.2, 58);
+    aim(1, ...M.floors[1].spots.bell);
     marks();
     say(G.T('intro1')).then(() => { if (Q.active && Q.active.id === 'intro' && Q.active.step === 0 && !W.player.moving && !W.player.path) G.beep(G.T('introMove')); });
   }
 
   // ---------- jobs ----------
-  const BOX_SPOTS = [[1, 5, 47], [1, 11, 36], [1, 10.5, 24.5], [1, 9, 9], [1, 19, 51], [1, 2, 34], [1, 12, 59], [2, 12, 15], [2, 11, 37], [2, 16, 19], [2, 7, 5], [2, 18, 6], [2, 17, 48], [2, 6, 51]];
-  const HIDE_SPOTS = [[1, 1.1, 42.6], [1, 22.8, 52.6], [1, 9.4, 39.6], [1, 22.6, 17.8], [1, -6, 46], [1, 4.4, 27], [1, 20.2, 26.4], [1, 22.6, 59.6], [1, -5.8, 4],
-    [2, 4, 9.6], [2, 22.6, 9.6], [2, 22.6, 54.8], [2, 1.2, 54.8], [2, 22.4, 30.4], [2, 6.8, 29.2], [2, 12.6, 41.8], [2, 12.6, 24.6]];
+  const BOX_SPOTS = M.spots.boxes, HIDE_SPOTS = M.spots.hides;
   const nearestProp = prefix => {
     const p = W.player; let best = null, bd = 1e9;
     for (const q of W.props) if (q.id.startsWith(prefix)) { const d = G.dist(p.x, p.y, q.x, q.y) + (q.floor === p.floor ? 0 : 60); if (d < bd) { bd = d; best = q; } }
@@ -173,13 +171,32 @@
     garden: {
       start() { G.save.house.flowers = {}; G.persist(); say(G.T('q.garden.start')); this.next(); },
       next() { const id = ['pot1', 'pot2', 'pot3', 'pot4'].find(k => !((G.save.house.flowers[k] || {}).stage >= 2)); if (id) aimFx(id); return id; },
-      garden() { if (!this.next()) { for (let i = 0; i < 6; i++) W.puff(-4 + i * 1.5, 34 + (i % 3), '🦋', 1, 1); finish(); } },
+      garden() { if (!this.next()) { for (let i = 0; i < 6; i++) W.puff(-3 + i * 1.8, 33 + (i % 3) * 1.5, '🦋', 1, 1); finish(); } },
       hint() { say(Q.active.line); this.next(); },
     },
     lights: {
       start() { W.dark = true; G.sfx.oops(); say(G.T('q.lights.start')); aimFx('panel'); M.fixture('panel').alert = true; },
       act(d, f) { if (f.id === 'panel') { simonGame(() => { W.dark = false; f.alert = false; f.on = true; G.sfx.sparkle(); finish(); }); return true; } },
       hint() { say(Q.active.line); aimFx('panel'); },
+    },
+    // build an obstacle course (Beep builds it for the little one), then run it
+    course: {
+      start(d) {
+        d.room = 'courtyard';
+        if (little()) { if (!G.course.valid('courtyard')) G.course.surprise('courtyard'); step(2); say(G.T('q.course.startLittle')); }
+        else say(G.T('q.course.start'));
+        this.aim(d);
+      },
+      aim(d) { const p = G.course.parts(d.room); if (p.start) aim(M.room(d.room).floor, p.start.x, p.start.y); else aimRoom(d.room); },
+      decorOpen(d, room) { d.room = room; if (Q.active.step === 0) step(1); },
+      decor(d, room) {
+        if (Q.active.step > 1) return;
+        d.room = room;
+        if (G.course.valid(room)) { step(2); say(G.T('q.course.run'), true); this.aim(d); }
+        else say(G.T('course.' + G.course.missing(room)), true);
+      },
+      course(d) { finish(); },
+      hint(d) { say(Q.active.line); this.aim(d); },
     },
     swim: {
       start() { say(G.T('q.swim.start')); aimFx('sign'); },
@@ -206,7 +223,7 @@
       if (f.id !== 'doorbell' || a.step !== 0) return false;
       G.sfx.doorbell(); f.on = true; setTimeout(() => { f.on = false; }, 700); f.hint = false;
       a.step = 1; const p = P(); p.intro = true; p.stamps.yard = 1; p.stamps.porch = 1; G.persist(); W.updateHud();
-      say(G.T('intro2')); aim(1, 9, 50);
+      say(G.T('intro2')); aim(1, ...M.floors[1].spots.inside);
       return true;
     }
     const q = QUEST[a.id]; return !!(q.act && q.act(a.data, f));
@@ -224,6 +241,9 @@
     }
     const q = QUEST[a.id]; if (q.room) q.room(a.data, id);
   };
+  Q.onDecorOpen = room => { const a = Q.active; if (a && QUEST[a.id] && QUEST[a.id].decorOpen) QUEST[a.id].decorOpen(a.data, room); };
+  Q.onDecor = room => { const a = Q.active; if (a && QUEST[a.id] && QUEST[a.id].decor) QUEST[a.id].decor(a.data, room); };
+  Q.onCourse = room => { const a = Q.active; if (a && QUEST[a.id] && QUEST[a.id].course) QUEST[a.id].course(a.data, room); };
   Q.onGarden = () => { const a = Q.active; if (a && a.id === 'garden') QUEST.garden.garden(); };
   Q.onTown = place => { const a = Q.active; if (a && QUEST[a.id] && QUEST[a.id].town) QUEST[a.id].town(a.data, place); };
   Q.onTownClose = () => { const a = Q.active; if (a && QUEST[a.id] && QUEST[a.id].townClose) QUEST[a.id].townClose(a.data); };
@@ -235,7 +255,7 @@
       if (W.prop('pkg')) { W.setTarget({ floor: 1, x: PKG[0], y: PKG[1], tall: -1.5 }); G.beep(G.T('pkgCome')); return true; }
       return false;
     }
-    if (a.id === 'intro') { if (a.step === 0) { say(G.T('intro1')); aim(1, 12.2, 58); } return true; }
+    if (a.id === 'intro') { if (a.step === 0) { say(G.T('intro1')); aim(1, ...M.floors[1].spots.bell); } return true; }
     if (W.target && W.target.floor !== W.floor && a.id !== 'hide') { G.beep(G.T(W.floor === 1 ? 'upstairsHint' : 'downstairsHint')); return true; }
     QUEST[a.id].hint(a.data); return true;
   };

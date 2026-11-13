@@ -7,8 +7,8 @@
   const clear = () => { timers.forEach(clearTimeout); timers = []; };
   const kidPic = (size = 110) => { const p = W.player; const c = G.kidPicture(p.who, p.costume, size); c.className = 'town-kid'; return c; };
   const PLACES = [
-    { id: 'pool', icon: '🏊', name: 'Pool', x: 22, y: 30 }, { id: 'play', icon: '🛝', name: 'Playground', x: 40, y: 64 }, { id: 'park', icon: '🌳', name: 'Park', x: 72, y: 26 },
-    { id: 'school', icon: '🏫', name: 'School', x: 84, y: 66 }, { id: 'library', icon: '📚', name: 'Library', x: 12, y: 72 },
+    { id: 'pool', icon: '🏊', name: 'Pool', x: 66, y: 20 }, { id: 'play', icon: '🛝', name: 'Playground', x: 14, y: 30 }, { id: 'park', icon: '🌳', name: 'Park', x: 16, y: 70 },
+    { id: 'school', icon: '🏫', name: 'School', x: 86, y: 62 }, { id: 'library', icon: '📚', name: 'Library', x: 42, y: 84 },
   ];
   const sticker = id => { const P = G.P(); if (!P.done['town_' + id]) { P.done['town_' + id] = 1; G.addStars(3); G.persist(); } G.Q.onTown(id); };
 

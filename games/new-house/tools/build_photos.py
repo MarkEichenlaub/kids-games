@@ -22,12 +22,12 @@ OUT = os.path.join(GAME, 'data')
 URL = 'https://markeichenlaub.github.io/kids-games/games/new-house/'
 LONG_SIDE, QUALITY = 1100, 74
 
-# room id (js/map.js, plus the three neighborhood places) -> listing photo numbers
+# room id (js/map.js, plus the three neighborhood places and the two floor plans) -> listing photo numbers
 ROOMS = {
-    'yard': [4, 7], 'porch': [8], 'living': [3, 12], 'dining': [13], 'kitchen': [1, 18, 16], 'powder': [43],
-    'garage': [44, 45], 'courtyard': [46, 47], 'alley': [49], 'landing': [35], 'bedA': [36, 37], 'bedB': [38, 39],
-    'kidsbath': [41], 'laundry': [42], 'bigcloset': [34], 'bigbath': [31, 33], 'sunhall': [21], 'primary': [22, 24],
-    'den': [27, 29], 'pool': [56, 55], 'play': [58, 51, 53], 'park': [54, 59],
+    'yard': [4, 7, 5, 6], 'porch': [8], 'living': [3, 12, 9, 10, 11], 'dining': [13, 15, 14, 17], 'kitchen': [1, 2, 16, 18, 19, 20],
+    'powder': [43], 'garage': [44, 45], 'courtyard': [46, 47, 48], 'alley': [49, 50], 'landing': [35], 'bedA': [36, 37], 'bedB': [38, 39, 40],
+    'kidsbath': [41], 'laundry': [42], 'bigcloset': [34], 'bigbath': [31, 32, 33], 'sunhall': [21], 'primary': [22, 24, 23, 26],
+    'den': [27, 29, 28, 30, 25], 'pool': [56, 55], 'play': [58, 51, 53, 57], 'park': [54, 59, 60, 52], 'plans': [61, 62],
 }
 
 

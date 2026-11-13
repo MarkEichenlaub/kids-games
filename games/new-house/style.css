@@ -139,6 +139,20 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 .world:has(.decor-drawer) .hud.side { bottom: 196px; }
 .world:has(.decor-drawer) ~ .beep { display: none; }
 
+/* ---------- obstacle course ---------- */
+.big-btn.go { background: var(--green); animation: pulse 1.4s infinite; }
+.pill.course { background: #fff; font-variant-numeric: tabular-nums; letter-spacing: 1px; }
+.countdown { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: min(38vw, 300px); font-weight: 700; color: #fff; text-shadow: 0 8px 0 var(--pink), 0 0 40px rgba(0, 0, 0, .35); pointer-events: none; z-index: 30; }
+.item-btn.dice { font-size: 48px; background: #fff3c4; }
+.course-check { flex: 0 0 auto; display: flex; gap: 6px; align-items: center; font-size: 26px; font-weight: 700; padding: 0 6px; }
+.course-check span { width: 46px; height: 46px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; opacity: .45; }
+.course-check span.ok { background: #c9f5d6; opacity: 1; box-shadow: 0 0 0 3px var(--green); }
+.go-btn { flex: 0 0 auto; background: var(--green); font-size: 22px; padding: 10px 20px; }
+.go-btn.off { background: #b9bccb; }
+.course-done { text-align: center; min-width: 280px; }
+.course-done h2 { font-size: 70px; margin: 0; } .course-done .time { font-size: 54px; font-weight: 700; } .course-done .stars { font-size: 50px; letter-spacing: 6px; color: #d9a441; }
+.course-done .best { font-size: 60px; animation: pulse 1s infinite; } .course-done .row { margin-top: 14px; } .course-done .btn { font-size: 34px; }
+
 /* ---------- little games ---------- */
 .mini { min-width: min(640px, 84vw); text-align: center; padding-top: 10px; }
 .mini-top .ask { font-size: 44px; font-weight: 700; letter-spacing: 4px; }

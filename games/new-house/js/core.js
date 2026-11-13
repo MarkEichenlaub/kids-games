@@ -1,7 +1,7 @@
 // Core: saved state, sound, Beep's voice, pop-ups, effects.
 window.G = (function () {
   const G = {};
-  const SAVE_KEY = 'newHouse.v1';
+  const SAVE_KEY = 'newHouse.v2';
 
   // ---------- utils ----------
   G.rand = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -116,6 +116,7 @@ window.G = (function () {
     open: () => { tone(220, 0.08, 'triangle', 0.2); tone(330, 0.12, 'triangle', 0.2, 0.07); },
     close: () => { tone(330, 0.08, 'triangle', 0.2); tone(200, 0.1, 'triangle', 0.22, 0.07); },
     click: () => tone(1400, 0.03, 'square', 0.12),
+    count: n => tone(n > 0 ? 520 : 880, n > 0 ? 0.16 : 0.5, 'square', 0.14),
     hoot: () => { tone(392, 0.25, 'sine', 0.3, 0, 350); tone(350, 0.4, 'sine', 0.3, 0.32, 300); },
     squeak: () => tone(1200, 0.12, 'sine', 0.2, 0, 1900),
     meow: () => tone(700, 0.4, 'triangle', 0.2, 0, 480),

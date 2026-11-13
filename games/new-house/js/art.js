@@ -82,32 +82,38 @@
   // ---------- ground and floors ----------
   const fillRect = (c, q, style) => { c.fillStyle = style; c.fillRect(q[0], q[1], q[2] - q[0], q[3] - q[1]); };
   A.ground = (c, floor, t) => {
-    const F = G.MAP.floors[floor], b = F.bounds;
+    const F = G.MAP.floors[floor], b = F.bounds, SIDE = -8.6;
+    const roof = q => { fillRect(c, q, A.floorStyle('roof')); c.strokeStyle = OL; c.lineWidth = 0.1; c.strokeRect(q[0], q[1], q[2] - q[0], q[3] - q[1]); };
     if (floor === 1) {
-      fillRect(c, [b[0] - 30, b[1] - 30, b[2] + 30, b[3] + 30], '#a9d98a');
-      // neighbours' houses on both sides and across the alley
-      for (const q of [[-40, -6, -7.6, 62], [27.6, -6, 60, 62]]) { fillRect(c, q, A.floorStyle('roof')); c.strokeStyle = OL; c.lineWidth = 0.1; c.strokeRect(q[0], q[1], q[2] - q[0], q[3] - q[1]); }
-      fillRect(c, [23.8, 0, 27, 61], '#cfc7b8');
-      fillRect(c, [-40, -9, 60, -0.3], '#d6d0c5');
-      for (let x = -36; x < 60; x += 22) { fillRect(c, [x, -24, x + 18, -9.5], A.floorStyle('roof')); box(c, x + 2, -10.2, 14, 0.7, '#fff', 0.1); }
-      // front lawn, sidewalk, street
-      fillRect(c, [-40, 61, 60, 68], A.floorStyle('lawn'));
-      fillRect(c, [-40, 68, 60, 71.6], A.floorStyle('sidewalk'));
-      fillRect(c, [-40, 71.6, 60, 110], '#8d919c');
-      fillRect(c, [-40, 71.6, 60, 72], '#c4c0b6');
-      c.fillStyle = '#f5e9a0'; for (let x = -38; x < 60; x += 6) c.fillRect(x, 79.8, 3, 0.3);
-      // courtyard, porch
-      for (const q of [[-7, -0.3, 3, 28.3], [-7, 28.3, 8.4, 40.8], [-7, 40.8, 0, 61]]) fillRect(c, q, A.floorStyle('concrete'));
-      for (const q of [[0, 56.3, 23.8, 61], [15.4, 54, 23.8, 56.3]]) fillRect(c, q, A.floorStyle('porch'));
-      // porch steps
-      box(c, 9.8, 61, 4.8, 0.9, '#c2c2c8', 0.1);
+      fillRect(c, [b[0] - 30, b[1] - 30, b[2] + 30, b[3] + 40], '#a9d98a');
+      // the alley, with the garages of the houses across it
+      fillRect(c, [-45, -13, 65, 0.4], '#d6d0c5');
+      c.strokeStyle = 'rgba(120,115,105,.35)'; c.lineWidth = 0.06; for (let x = -40; x < 60; x += 12) { c.beginPath(); c.moveTo(x, -13); c.lineTo(x, 0.4); c.stroke(); }
+      for (let x = -42; x < 60; x += 33) { roof([x, -40, x + 26, -13]); box(c, x + 3, -13.7, 16, 0.7, '#fff', 0.1); }
+      // the houses on both sides: one neighbor's wall closes our courtyard, the other's courtyard touches our far wall
+      roof([-40, -1, SIDE - 0.5, 62]); roof([-40 - 33, -1, -40 - 2, 62]);
+      fillRect(c, [24.6, 0.4, 33.2, 62], '#e0d3bf'); roof([33.2, -1, 60, 62]);
+      line(c, [24.6, 0.4, 33.2, 0.4], '#b98a5e', 0.3);
+      // our courtyard: scored concrete, and a bark path past the chimney to the front gate
+      fillRect(c, [SIDE, 0.4, 3.06, 28.9], A.floorStyle('concrete')); fillRect(c, [SIDE, 28.9, 8.65, 41.38], A.floorStyle('concrete'));
+      fillRect(c, [SIDE, 41.38, 0, 57.9], '#b98d6f');
+      c.fillStyle = A.floorStyle('concrete'); c.beginPath(); c.moveTo(SIDE, 41.3); c.lineTo(0, 41.3); c.lineTo(0, 42.2); c.quadraticCurveTo(-4, 44.6, SIDE, 42.6); c.closePath(); c.fill();
+      // porch
+      for (const q of [[-0.3, 57.28, 24.5, 62.9], [15.63, 54.77, 24.5, 57.28]]) fillRect(c, q, A.floorStyle('porch'));
+      // front: lawn, then the path that runs along the green belt, then the trees
+      fillRect(c, [-45, 62.9, 65, 73], A.floorStyle('lawn'));
+      fillRect(c, [-45, 73, 65, 77], A.floorStyle('sidewalk'));
+      fillRect(c, [-45, 77, 65, 120], '#8fca6c');
+      for (let i = 0; i < 9; i++) { const x = -38 + i * 11.5, y = 81 + (i % 3) * 2.2, r = 3 + (i % 2); circ(c, x, y, r, '#5fae52', '#3f8a3a'); circ(c, x - 1, y - 1, r * 0.55, '#78c466', null); }
     } else {
       fillRect(c, [b[0] - 30, b[1] - 30, b[2] + 30, b[3] + 30], '#bfdcef');
-      // looking down from upstairs: the porch roof, the courtyard and the treetops
-      fillRect(c, [-0.6, 56, 24.4, 61.6], A.floorStyle('roof'));
-      fillRect(c, [-0.4, 40.6, 8.4, 43.2], A.floorStyle('roof'));
-      c.globalAlpha = 0.55; fillRect(c, [-7, 0, 3, 43], '#d9cdb9'); fillRect(c, [3, 30.4, 8.4, 40.6], '#d9cdb9'); c.globalAlpha = 1;
-      for (const [x, y, r] of [[-5, 26, 2.2], [3, 65, 2.6], [22, 65, 2.8], [27.5, 20, 2], [-6, 50, 1.6]]) { circ(c, x, y, r, '#6fbf5e', null); circ(c, x - r * 0.3, y - r * 0.3, r * 0.6, '#86d273', null); }
+      // looking down from upstairs: the neighbors' roofs, our courtyard, the porch roof and the treetops
+      roof([-40, -1, SIDE - 0.5, 62]); roof([33.2, -1, 60, 62]);
+      c.globalAlpha = 0.6; fillRect(c, [SIDE - 0.5, -0.5, 3, 30.8], '#d9cdb9'); fillRect(c, [SIDE - 0.5, 30.8, 8.6, 43.3], '#d9cdb9'); fillRect(c, [SIDE - 0.5, 43.3, -0.2, 58], '#b98d6f'); fillRect(c, [24.6, 0, 33.2, 62], '#d9cdb9');
+      fillRect(c, [-45, -14, 65, -0.5], '#cfcabf'); c.globalAlpha = 1;
+      roof([-0.8, 55.4, 14, 63.2]); roof([14, 56.7, 24.9, 63.2]); roof([2.6, 30.7, 8.6, 43.3]);
+      fillRect(c, [-2.5, 44, -0.2, 53.6], '#c9a57b');
+      for (const [x, y, r] of [[-6.5, 26, 2], [-5, 65, 2.6], [24, 68, 2.8], [-7, -4, 2.2]]) { circ(c, x, y, r, '#6fbf5e', null); circ(c, x - r * 0.3, y - r * 0.3, r * 0.6, '#86d273', null); }
       for (let i = 0; i < 4; i++) { const x = ((t * 0.5 + i * 13) % 50) - 14, y = -2 + i * 17; c.fillStyle = 'rgba(255,255,255,.7)'; c.beginPath(); c.ellipse(x - 30 + (i % 2) * 62, y, 2.2, 0.9, 0, 0, TAU); c.fill(); }
     }
   };
@@ -149,28 +155,32 @@
       c.closePath(); c.fill();
     }
   };
+  const WALLCOL = { t: '#d6ad7f', y: '#f3de8c', c: '#f6f1e6', pony: '#fffdf8' };
   A.walls = (c, floor) => {
     const F = G.MAP.floors[floor];
     const stroke = (segs, col, w, dx = 0, dy = 0) => { c.strokeStyle = col; c.lineWidth = w; c.lineCap = 'square'; c.beginPath(); for (const s of segs) { c.moveTo(s[0] + dx, s[1] + dy); c.lineTo(s[2] + dx, s[3] + dy); } c.stroke(); };
     stroke(F.walls, 'rgba(40,30,70,.16)', 0.6, 0.14, 0.22);
     stroke(F.walls, OL, 0.62);
     stroke(F.walls, '#fffdf8', 0.44);
+    // outside walls show what the house is made of: tan stucco, yellow siding on the front
+    for (const k of ['t', 'y', 'c']) stroke(F.walls.filter(s => s[4] === k), WALLCOL[k], 0.44);
     c.lineCap = 'butt';
     for (const w of F.windows) {
       if (w[4] === 'pass') { line(c, [w[0], w[1], w[2], w[3]], OL, 0.62); line(c, [w[0], w[1], w[2], w[3]], MARBLE, 0.46); continue; }
       c.lineCap = 'butt'; c.strokeStyle = OL; c.lineWidth = 0.62; c.beginPath(); c.moveTo(w[0], w[1]); c.lineTo(w[2], w[3]); c.stroke();
       c.strokeStyle = '#9fdcff'; c.lineWidth = 0.44; c.beginPath(); c.moveTo(w[0], w[1]); c.lineTo(w[2], w[3]); c.stroke();
-      c.strokeStyle = '#fff'; c.lineWidth = 0.1; c.beginPath(); c.moveTo((w[0] + w[2]) / 2 - (w[1] === w[3] ? 0 : 0.22), (w[1] + w[3]) / 2 - (w[1] === w[3] ? 0.22 : 0)); c.lineTo((w[0] + w[2]) / 2 + (w[1] === w[3] ? 0 : 0.22), (w[1] + w[3]) / 2 + (w[1] === w[3] ? 0.22 : 0)); c.stroke();
+      const h = w[1] === w[3]; c.strokeStyle = '#fff'; c.lineWidth = 0.1; c.beginPath(); c.moveTo((w[0] + w[2]) / 2 - (h ? 0 : 0.22), (w[1] + w[3]) / 2 - (h ? 0.22 : 0)); c.lineTo((w[0] + w[2]) / 2 + (h ? 0 : 0.22), (w[1] + w[3]) / 2 + (h ? 0.22 : 0)); c.stroke();
     }
     for (const d of F.doors) {
       const a = d[3] * Math.PI / 180, ex = d[0] + Math.cos(a) * d[2], ey = d[1] + Math.sin(a) * d[2];
-      line(c, [d[0], d[1], ex, ey], OL, 0.26); line(c, [d[0], d[1], ex, ey], floor === 1 && d[1] === 56.3 ? '#2f4a6b' : '#fff', 0.14);
+      line(c, [d[0], d[1], ex, ey], OL, 0.26); line(c, [d[0], d[1], ex, ey], d[4] === 'front' ? '#2f4a6b' : d[4] === 'glass' ? '#bfe6ff' : '#fff', 0.14);
       circ(c, d[0] + Math.cos(a) * (d[2] - 0.3) - Math.sin(a) * 0.14, d[1] + Math.sin(a) * (d[2] - 0.3) + Math.cos(a) * 0.14, 0.08, GOLD, null);
     }
     for (const f of F.fences) {
       const [x1, y1, x2, y2, kind] = f; if (kind === 'none') continue;
       const len = Math.hypot(x2 - x1, y2 - y1), n = Math.max(1, Math.round(len / (kind === 'wood' ? 1.2 : 0.7)));
-      if (kind === 'wood') { line(c, [x1, y1, x2, y2], OL, 0.42); line(c, [x1, y1, x2, y2], '#b98a5e', 0.28); for (let i = 0; i <= n; i++) circ(c, x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n, 0.17, '#a37548', null); }
+      if (kind === 'neighbor') { line(c, [x1 - 0.25, y1, x2 - 0.25, y2], OL, 0.72); line(c, [x1 - 0.25, y1, x2 - 0.25, y2], WALLCOL.t, 0.54); for (let i = 1; i < 6; i++) { const yy = y1 + (y2 - y1) * i / 6; line(c, [x1 - 0.25, yy - 0.6, x1 - 0.25, yy + 0.6], '#9fdcff', 0.3); } }
+      else if (kind === 'wood') { line(c, [x1, y1, x2, y2], OL, 0.42); line(c, [x1, y1, x2, y2], '#b98a5e', 0.28); for (let i = 0; i <= n; i++) circ(c, x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n, 0.17, '#a37548', null); }
       else if (kind === 'hedge') { for (let i = 0; i <= n * 2; i++) circ(c, x1 + (x2 - x1) * i / (n * 2), y1 + (y2 - y1) * i / (n * 2), 0.75, i % 2 ? '#6dbb5c' : '#7dc96b', null); }
       else { line(c, [x1, y1, x2, y2], OL, 0.3); line(c, [x1, y1, x2, y2], '#fff', 0.18); for (let i = 0; i <= n; i++) circ(c, x1 + (x2 - x1) * i / n, y1 + (y2 - y1) * i / n, 0.13, '#fff', OL); }
     }
@@ -180,7 +190,12 @@
   // each gets (ctx, fixture, time); fixture.on is its switch
   const X = A.fx = {};
   X.counter = (c, f) => marble(c, f.x, f.y, f.w, f.h);
-  X.island = (c, f) => { marble(c, f.x, f.y, f.w, f.h, 0.2); circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.62, '#fff'); emoji(c, '🍏', f.x + f.w / 2, f.y + f.h / 2, 0.75); };
+  X.island = (c, f, t) => {
+    marble(c, f.x, f.y, f.w, f.h, 0.2); circ(c, f.x + f.w / 2, f.y + f.h * 0.28, 0.55, '#fff'); emoji(c, '🍏', f.x + f.w / 2, f.y + f.h * 0.28, 0.7);
+    // the gold lamp with glass balls that hangs over it
+    line(c, [f.x + f.w / 2, f.y + f.h * 0.5, f.x + f.w / 2, f.y + f.h * 0.92], GOLD, 0.09);
+    for (let i = 0; i < 5; i++) { const yy = f.y + f.h * (0.52 + i * 0.1), dx = (i % 2 ? 0.42 : -0.42); line(c, [f.x + f.w / 2, yy, f.x + f.w / 2 + dx, yy], GOLD, 0.06); circ(c, f.x + f.w / 2 + dx, yy, 0.22, `rgba(255,250,215,${0.75 + 0.2 * Math.sin(t * 2 + i)})`, 'rgba(180,150,80,.7)'); }
+  };
   X.stool = (c, f) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.5, '#d9a66c'); circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.36, null, '#b9854c'); };
   X.cooktop = (c, f, t) => {
     box(c, f.x, f.y, f.w, f.h, '#3a3d46', 0.1);
@@ -210,24 +225,25 @@
     line(c, [f.x + 0.1, f.y + 0.3, f.x + 0.1, f.y + f.h - 0.3], '#7f8794', 0.1);
     if (f.on) emoji(c, '🍪', f.x + f.w / 2 - 0.1, f.y + f.h / 2, 0.8);
   };
-  X.kdesk = (c, f) => { marble(c, f.x, f.y, f.w, f.h); emoji(c, '📓', f.x + 0.8, f.y + 0.8, 0.7); emoji(c, '✏️', f.x + 1.7, f.y + 0.9, 0.6); emoji(c, '🖍️', f.x + 2.6, f.y + 0.8, 0.6); };
+  X.kdesk = (c, f) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x, f.y, f.w, 0.5, CAB, 0.06); emoji(c, '📓', f.x + 0.9, f.y + 1.1, 0.65); emoji(c, '✏️', f.x + 2.2, f.y + 1.15, 0.55); emoji(c, '🖍️', f.x + 3.5, f.y + 1.1, 0.55); };
   X.pshelf = (c, f) => {
     box(c, f.x, f.y, f.w, f.h, CAB, 0.08);
     const long = f.w > f.h, n = Math.floor((long ? f.w : f.h) / 0.95), E = ['🥫', '🍝', '🥣', '🍯', '🍪', '🍚', '🥜', '🧃'];
     for (let i = 0; i < n; i++) emoji(c, E[(i + (long ? 0 : 4)) % E.length], long ? f.x + 0.55 + i * 0.95 : f.x + f.w / 2, long ? f.y + f.h / 2 : f.y + 0.55 + i * 0.95, 0.72);
   };
   X.fireplace = (c, f, t) => {
-    marble(c, f.x, f.y, f.w * 0.62, f.h, 0.1);
-    box(c, f.x + f.w * 0.5, f.y + f.h * 0.14, f.w * 0.5, f.h * 0.72, '#f1ede6', 0.08);
-    box(c, f.x + f.w * 0.3, f.y + f.h * 0.24, f.w * 0.55, f.h * 0.52, '#2a2530', 0.1);
+    // seen from above: the marble hearth fills the bump in the wall, and the fire opens toward the room
+    marble(c, f.x, f.y, f.w, f.h, 0.08);
+    box(c, f.x + f.w * 0.3, f.y + f.h * 0.18, f.w * 0.7, f.h * 0.64, '#2a2530', 0.08);
+    box(c, f.x + f.w - 0.22, f.y + f.h * 0.14, 0.22, f.h * 0.72, '#fff', 0.05);
     if (f.on) {
-      for (let i = 0; i < 4; i++) { const yy = f.y + f.h * (0.32 + i * 0.12), s = 0.5 + 0.12 * Math.sin(t * 9 + i * 2); emoji(c, '🔥', f.x + f.w * 0.58, yy, s * 1.3, -Math.PI / 2); }
-      c.fillStyle = `rgba(255,170,60,${0.12 + 0.04 * Math.sin(t * 7)})`; c.beginPath(); c.ellipse(f.x + f.w + 1.6, f.y + f.h / 2, 2.6, 3.6, 0, 0, TAU); c.fill();
-    } else emoji(c, '🪵', f.x + f.w * 0.58, f.y + f.h / 2, 0.8, -Math.PI / 2);
+      for (let i = 0; i < 4; i++) { const yy = f.y + f.h * (0.28 + i * 0.15), s = 0.5 + 0.12 * Math.sin(t * 9 + i * 2); emoji(c, '🔥', f.x + f.w * 0.62, yy, s * 1.3, -Math.PI / 2); }
+      c.fillStyle = `rgba(255,170,60,${0.12 + 0.04 * Math.sin(t * 7)})`; c.beginPath(); c.ellipse(f.x + f.w + 1.8, f.y + f.h / 2, 2.8, 3.4, 0, 0, TAU); c.fill();
+    } else emoji(c, '🪵', f.x + f.w * 0.62, f.y + f.h / 2, 0.8, -Math.PI / 2);
   };
-  X.builtin = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); const n = Math.floor(f.h / 0.95); for (let i = 0; i < n; i++) emoji(c, ['📚', '🪴', '🖼️', '📚', '🏺'][i % 5], f.x + f.w / 2, f.y + 0.55 + i * 0.95, 0.75); };
-  X.lowshelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); const n = Math.floor(f.h / 1.1); for (let i = 0; i < n; i++) { line(c, [f.x, f.y + i * 1.1, f.x + f.w, f.y + i * 1.1], '#cfcbc2', 0.04); emoji(c, ['📚', '🧺', '🧸', '📚', '🪴', '🎲', '📚', '🧩', '🪀', '📚'][i % 10], f.x + f.w / 2, f.y + 0.55 + i * 1.1, 0.72); } };
-  X.nook = (c, f) => { marble(c, f.x, f.y, f.w, f.h); emoji(c, '💡', f.x + 0.9, f.y + 0.7, 0.75); emoji(c, '📚', f.x + 0.9, f.y + 2.1, 0.75); emoji(c, '🖍️', f.x + 0.9, f.y + 3.5, 0.65); circ(c, f.x + f.w + 0.9, f.y + f.h / 2, 0.55, '#d9a66c'); };
+  X.builtin = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); marble(c, f.x + 0.5, f.y + 0.15, f.w - 0.6, f.h - 0.3, 0.08); circ(c, f.x + 0.42, f.y + f.h / 2, 0.36, '#dfeaf2', '#555'); emoji(c, '🪴', f.x + f.w * 0.62, f.y + 0.8, 0.6); emoji(c, '🏺', f.x + f.w * 0.62, f.y + f.h - 0.8, 0.6); };
+  X.lowshelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); const n = Math.floor(f.h / 1.1); for (let i = 0; i < n; i++) { line(c, [f.x, f.y + i * (f.h / n), f.x + f.w, f.y + i * (f.h / n)], '#cfcbc2', 0.04); emoji(c, ['📚', '🧺', '🧸', '📚', '🪴', '🎲', '📚', '🧩', '🪀', '📚'][i % 10], f.x + f.w / 2, f.y + (i + 0.5) * (f.h / n), 0.7); } };
+  X.nook = (c, f) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x + f.w - 0.5, f.y, 0.5, f.h, CAB, 0.06); emoji(c, '💡', f.x + 0.9, f.y + 0.8, 0.7); emoji(c, '📚', f.x + 0.9, f.y + f.h / 2, 0.7); emoji(c, '🖍️', f.x + 0.9, f.y + f.h - 0.8, 0.6); circ(c, f.x - 0.9, f.y + f.h * 0.42, 0.55, '#d9a66c'); };
   X.toilet = (c, f, t) => local(c, f, (w, h) => {
     box(c, -w / 2 + 0.15, -h / 2, w - 0.3, h * 0.3, '#fff', 0.12);
     oval(c, 0, h * 0.12, w * 0.4, h * 0.36, '#fff'); oval(c, 0, h * 0.12, w * 0.27, h * 0.24, f.on ? '#7cc4ff' : '#dff1ff', '#b9c6d6');
@@ -237,7 +253,7 @@
   const basin = (c, x, y, on, t) => { oval(c, x, y, 0.62, 0.45, '#fff', '#b9c6d6'); if (on) circ(c, x, y, 0.2 + 0.04 * Math.sin(t * 20), 'rgba(90,170,255,.85)', null); else circ(c, x, y, 0.06, '#889', null); };
   X.vanity = (c, f, t) => local(c, f, (w, h) => { marble(c, -w / 2, -h / 2, w, h); basin(c, 0, 0.12, f.on, t); faucet(c, 0, -h / 2 + 0.2); });
   X.vanity2 = (c, f, t) => { marble(c, f.x, f.y, f.w, f.h); for (const v of [0.27, 0.73]) { c.save(); c.translate(f.x + f.w / 2, f.y + f.h * v); c.rotate(Math.PI / 2); basin(c, 0, 0.1, f.on, t); faucet(c, 0, -0.62); c.restore(); } };
-  X.lsink = (c, f, t) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x + 0.5, f.y + 0.5, f.w - 0.8, f.h - 1, '#fff', 0.2, '#b9c6d6'); if (f.on) circ(c, f.x + f.w / 2 + 0.1, f.y + f.h / 2, 0.25, 'rgba(90,170,255,.85)', null); c.save(); c.translate(f.x + 0.25, f.y + f.h / 2); c.rotate(-Math.PI / 2); faucet(c, 0, 0); c.restore(); };
+  X.lsink = (c, f, t) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x + 0.6, f.y + 0.45, f.w - 0.85, f.h - 0.9, '#fff', 0.2, '#b9c6d6'); if (f.on) circ(c, f.x + f.w / 2 + 0.2, f.y + f.h / 2, 0.25, 'rgba(90,170,255,.85)', null); c.save(); c.translate(f.x + 0.3, f.y + f.h / 2); c.rotate(-Math.PI / 2); faucet(c, 0, 0); c.restore(); };
   X.shower = (c, f, t) => {
     box(c, f.x, f.y, f.w, f.h, '#f3f1ee', 0.1);
     c.save(); rr(c, f.x, f.y, f.w, f.h, 0.1); c.clip(); c.fillStyle = '#3c3c46'; for (let i = 0; i < f.w / 0.42; i++) for (let j = 0; j < f.h / 0.42; j++) { c.beginPath(); c.arc(f.x + 0.3 + i * 0.42 + (j % 2) * 0.21, f.y + 0.3 + j * 0.42, 0.09, 0, TAU); c.fill(); } c.restore();
@@ -267,18 +283,24 @@
   X.doorsign = (c, f) => { const r = G.MAP.room(f.room); circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.62, '#fff8d6', '#e2c15a'); emoji(c, G.MAP.roomIcon(r), f.x + f.w / 2, f.y + f.h / 2, 0.8); };
   X.block = (c, f) => box(c, f.x, f.y, f.w, f.h, '#fffdf8', 0.05);
   X.stairs1 = (c, f) => {
-    const n = 11, sw = (f.w - 1.6) / n;
-    for (let i = 0; i < n; i++) box(c, f.x + i * sw, f.y, sw, f.h, i % 2 ? '#e3cba8' : '#ecd9bc', 0.02, '#b89b74');
-    c.fillStyle = '#e6d2b3'; c.fillRect(f.x + n * sw, f.y, 1.6, f.h); line(c, [f.x + n * sw, f.y, f.x + f.w, f.y + f.h], '#b89b74', 0.05); line(c, [f.x + n * sw, f.y + f.h, f.x + f.w, f.y], '#b89b74', 0.05);
-    emoji(c, '⬆️', f.x + 1.4, f.y + f.h / 2, 0.9, Math.PI / 2);
+    // ten steps up along the garage wall, then the steps fan around the corner
+    const x0 = f.x + 0.8, n = 9, sw = 0.838, turn = x0 + n * sw;
+    box(c, f.x, f.y, 0.8, f.h + 1.2, '#ecd9bc', 0.3, '#b89b74');
+    for (let i = 0; i < n; i++) box(c, x0 + i * sw, f.y, sw, f.h, i % 2 ? '#e3cba8' : '#ecd9bc', 0.02, '#b89b74');
+    c.fillStyle = '#e6d2b3'; c.fillRect(turn, f.y, f.x + f.w - turn, f.h); c.strokeStyle = '#b89b74'; c.lineWidth = 0.05; c.strokeRect(turn, f.y, f.x + f.w - turn, f.h);
+    line(c, [turn, f.y, f.x + f.w, f.y + f.h], '#b89b74', 0.05); line(c, [turn, f.y, f.x + f.w, f.y + f.h * 0.45], '#b89b74', 0.05); line(c, [turn, f.y, turn + (f.x + f.w - turn) * 0.5, f.y + f.h], '#b89b74', 0.05);
+    emoji(c, '⬆️', x0 + 1.2, f.y + f.h / 2, 0.9, Math.PI / 2);
   };
   X.stairs2 = (c, f) => {
-    // lower run (going down), the turn, and the short upper run that reaches the hall
-    c.fillStyle = 'rgba(60,45,90,.25)'; c.fillRect(f.x, f.y + 4.3, 6.2, 4);
-    for (let i = 0; i < 8; i++) box(c, f.x + 0.2 + i * 0.75, f.y + 4.5, 0.75, 3.6, i % 2 ? '#d5bd98' : '#dfc9a8', 0.02, '#a88c66');
-    box(c, f.x + 6.2, f.y, 3.3, 8.3, '#e6d2b3', 0.02, '#b89b74'); line(c, [f.x + 6.2, f.y + 8.3, f.x + 9.5, f.y + 4], '#b89b74', 0.05); line(c, [f.x + 6.2, f.y + 4, f.x + 9.5, f.y], '#b89b74', 0.05); line(c, [f.x + 6.2, f.y + 4, f.x + 9.5, f.y + 4], '#b89b74', 0.05);
-    for (let i = 0; i < 3; i++) box(c, f.x + 4.1 + i * 0.7, f.y + 0.2, 0.7, 3.5, i % 2 ? '#e3cba8' : '#ecd9bc', 0.02, '#b89b74');
-    emoji(c, '⬇️', f.x + 5.1, f.y + 1.9, 0.9, -Math.PI / 2);
+    // from above: the lower steps (going down), the turn, and the last steps up to the hall
+    const lx = f.x, ly = f.y + 4.36, lw = 6.06, lh = f.h - 4.36;
+    c.fillStyle = 'rgba(60,45,90,.22)'; c.fillRect(lx, ly - 0.2, lw, lh + 0.2);
+    for (let i = 0; i < 8; i++) box(c, lx + 0.2 + i * 0.73, ly, 0.73, lh - 0.1, i % 2 ? '#d5bd98' : '#dfc9a8', 0.02, '#a88c66');
+    box(c, f.x + 6.06, f.y, f.w - 6.06, f.h, '#e6d2b3', 0.02, '#b89b74');
+    for (const [ex, ey] of [[f.x + f.w, f.y], [f.x + f.w, f.y + f.h * 0.5], [f.x + f.w, f.y + f.h], [f.x + 6.06 + 1.6, f.y + f.h]]) line(c, [f.x + 6.5, f.y + 3.94, ex, ey], '#b89b74', 0.05);
+    for (let i = 0; i < 3; i++) box(c, f.x + 4.3 + i * 0.73, f.y, 0.73, 3.27, i % 2 ? '#e3cba8' : '#ecd9bc', 0.02, '#b89b74');
+    box(c, f.x + 4.3, f.y + 3.27, 2.2, 1.2, '#e6d2b3', 0.02, '#b89b74');
+    emoji(c, '⬇️', f.x + 5.4, f.y + 1.6, 0.9, -Math.PI / 2);
   };
   // garage
   X.garagedoor = (c, f) => {
@@ -296,7 +318,7 @@
     circ(c, x + 1, y + 0.5, 0.36, lit ? '#fff7a8' : '#f4f4e0'); circ(c, x + w - 1, y + 0.5, 0.36, lit ? '#fff7a8' : '#f4f4e0');
     box(c, x + 0.7, y + h - 0.6, 1.2, 0.36, '#ff5d5d', 0.1); box(c, x + w - 1.9, y + h - 0.6, 1.2, 0.36, '#ff5d5d', 0.1);
   };
-  X.shelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#b8bfca', 0.06); ['📦', '🧰', '🪣', '🏀', '📦', '🧴'].forEach((e, i) => emoji(c, e, f.x + f.w / 2, f.y + 0.6 + i * 0.95, 0.8)); };
+  X.shelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#eef0f3', 0.06, '#aab'); const n = Math.floor(f.h / 1.3); for (let i = 0; i < n; i++) emoji(c, ['📦', '🧰', '🪣', '🏀', '📦', '🧴', '📦'][i % 7], f.x + f.w / 2, f.y + 0.7 + i * 1.3, 0.8); };
   X.panel = (c, f, t) => { box(c, f.x, f.y, f.w, f.h, '#9aa3b2', 0.06); for (let i = 0; i < 4; i++) box(c, f.x + 0.12, f.y + 0.2 + i * 0.44, 0.26, 0.28, f.on ? '#ffd93d' : '#3c4150', 0.04, null); if (f.alert) emoji(c, '⚡', f.x + 1, f.y + 1 + Math.sin(t * 6) * 0.15, 0.9); };
   X.heater = (c, f) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, f.w * 0.46, '#dfe3e8'); circ(c, f.x + f.w / 2, f.y + f.h / 2, f.w * 0.3, '#eef1f4', '#aab'); circ(c, f.x + f.w * 0.3, f.y + f.h * 0.3, 0.13, '#c0392b', null); circ(c, f.x + f.w * 0.7, f.y + f.h * 0.3, 0.13, '#2e86de', null); };
   X.opener = (c, f, t) => { box(c, f.x, f.y, f.w, f.h, '#fff', 0.08); circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.14, G.save.house.garageOpen ? '#4cd97b' : '#ff6f6f', null); };
@@ -312,22 +334,20 @@
     c.restore();
   };
   // outside
-  X.mat = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#b08a5a', 0.1); A.text(c, 'HOME', f.x + f.w / 2, f.y + f.h / 2, 0.55, '#5a4326'); };
+  X.mat = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#c9a26a', 0.1); A.text(c, 'home', f.x + f.w / 2, f.y + f.h / 2, 0.6, '#5a4326'); };
   X.doorbell = (c, f, t) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.24, '#fff'); circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.11, f.on ? '#ffd93d' : '#ff9f43', null); if (f.hint) emoji(c, '👆', f.x + f.w / 2 + 0.2, f.y + f.h + 0.6 + Math.sin(t * 6) * 0.15, 0.9); };
   X.flowerpot = (c, f, t) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.55, '#4b5568'); for (let i = 0; i < 5; i++) emoji(c, '🌼', f.x + f.w / 2 + Math.cos(i * 1.26) * 0.3, f.y + f.h / 2 + Math.sin(i * 1.26) * 0.3 - (f.on ? Math.abs(Math.sin(t * 8 + i)) * 0.15 : 0), 0.5); };
   X.column = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#fff', 0.08); box(c, f.x + 0.14, f.y + 0.14, f.w - 0.28, f.h - 0.28, '#f1f1f4', 0.05, '#c9c9d2'); };
-  X.rocker = (c, f, t) => { const s = f.on ? Math.sin(t * 5) * 0.12 : 0; box(c, f.x + 0.3, f.y + 0.3 + s, f.w - 0.6, f.h - 0.6, '#fff', 0.3); box(c, f.x + 0.3, f.y + 0.2 + s, f.w - 0.6, 0.45, '#eee', 0.15); box(c, f.x + 0.55, f.y + 0.8 + s, f.w - 1.1, f.h - 1.3, '#7fb5e6', 0.25); };
   X.walk = (c, f) => { c.fillStyle = A.floorStyle('sidewalk'); c.fillRect(f.x, f.y, f.w, f.h); c.strokeStyle = 'rgba(120,115,105,.5)'; c.lineWidth = 0.05; c.strokeRect(f.x, f.y, f.w, f.h); };
   X.bush = (c, f) => { const n = Math.round(f.w / 1.1); for (let i = 0; i < n; i++) circ(c, f.x + 0.7 + i * (f.w - 1.4) / Math.max(1, n - 1), f.y + f.h / 2 + (i % 2 ? 0.15 : -0.15), 0.95, i % 2 ? '#5fae52' : '#74c365', '#3f8a3a'); };
   X.tree = (c, f, t) => { const cx = f.x + f.w / 2, cy = f.y + f.h / 2, s = f.on ? Math.sin(t * 16) * 0.08 : 0; circ(c, cx, cy, 0.5, '#8a5a3c'); c.globalAlpha = 0.9; circ(c, cx + s, cy - 0.5, f.w * 0.62, '#62b455', '#3f8a3a'); circ(c, cx - 0.6 + s, cy - 1, f.w * 0.36, '#7dc96b', null); c.globalAlpha = 1; };
   X.banana = (c, f, t) => { const cx = f.x + f.w / 2, cy = f.y + f.h / 2; for (let i = 0; i < 7; i++) { c.save(); c.translate(cx, cy); c.rotate(i * 0.9 + (f.on ? Math.sin(t * 14) * 0.1 : 0)); oval(c, 0.9, 0, 1.1, 0.4, i % 2 ? '#4fb060' : '#66c773', '#2f8046'); line(c, [0.1, 0, 1.9, 0], '#2f8046', 0.04); c.restore(); } };
-  X.mailbox = (c, f, t) => { box(c, f.x + 0.15, f.y + 0.1, f.w - 0.3, f.h - 0.2, '#3b6fb5', 0.3); box(c, f.x + f.w - 0.3, f.y + 0.2, 0.2, 0.45, f.on || f.mail ? '#ff5d5d' : '#c33', 0.05, null); if (f.mail) emoji(c, '✉️', f.x + f.w / 2, f.y - 0.5 + Math.sin(t * 5) * 0.12, 0.8); };
   X.truck = (c, f, t) => {
     box(c, f.x, f.y, f.w * 0.72, f.h, '#fff', 0.3); box(c, f.x + f.w * 0.74, f.y + 0.4, f.w * 0.26, f.h - 0.8, '#ffb347', 0.6); box(c, f.x + f.w * 0.84, f.y + 0.8, f.w * 0.1, f.h - 1.6, '#bfe6ff', 0.3);
-    A.text(c, 'MOVING DAY', f.x + f.w * 0.36, f.y + f.h * 0.38, 1.1, '#ff6fb1', 700); emoji(c, '📦', f.x + f.w * 0.2, f.y + f.h * 0.7, 1.3); emoji(c, '📦', f.x + f.w * 0.36, f.y + f.h * 0.72, 1.1); emoji(c, '🪑', f.x + f.w * 0.52, f.y + f.h * 0.7, 1.2);
+    A.text(c, 'MOVING DAY', f.x + f.w * 0.36, f.y + f.h * 0.36, 1.1, '#ff6fb1', 700); emoji(c, '📦', f.x + f.w * 0.2, f.y + f.h * 0.7, 1.3); emoji(c, '📦', f.x + f.w * 0.36, f.y + f.h * 0.72, 1.1); emoji(c, '🪑', f.x + f.w * 0.52, f.y + f.h * 0.7, 1.2);
   };
   X.sign = (c, f, t) => { box(c, f.x + f.w / 2 - 0.1, f.y + 0.4, 0.2, 1.3, '#8a5a3c', 0.04); box(c, f.x - 0.5, f.y - 0.8, f.w + 1, 1.3, '#fff8d6', 0.2, '#b9902f'); emoji(c, '🏊', f.x + 0.1, f.y - 0.15, 0.8); emoji(c, '🛝', f.x + 1.2, f.y - 0.15, 0.8); emoji(c, '👈', f.x - 1.2, f.y - 0.1 + Math.sin(t * 4) * 0.1, 0.8); };
-  X.bistro = (c, f) => { const cx = f.x + f.w / 2, cy = f.y + f.h / 2; circ(c, cx - 1.3, cy, 0.6, '#2e2e36'); circ(c, cx - 1.3, cy, 0.38, '#4a4a55', null); circ(c, cx + 1.3, cy, 0.6, '#2e2e36'); circ(c, cx + 1.3, cy, 0.38, '#4a4a55', null); circ(c, cx, cy, 0.7, '#3a3a44'); emoji(c, '🪴', cx, cy, 0.7); };
+  X.bistro = (c, f) => { const cx = f.x + f.w / 2, cy = f.y + f.h / 2; for (const s of [-1, 1]) { circ(c, cx + s * 1.75, cy, 0.78, '#2e2e36'); circ(c, cx + s * 1.75, cy, 0.5, '#4a4a55', null); } circ(c, cx, cy, 0.62, '#3a3a44'); emoji(c, '🪴', cx, cy, 0.6); };
   X.planter = (c, f, t) => {
     const cx = f.x + f.w / 2, cy = f.y + f.h / 2, st = (G.save.house.flowers[f.id] || {});
     circ(c, cx, cy, 0.8, '#c9703f'); circ(c, cx, cy, 0.6, '#6b4428', '#8a5a3c');
@@ -335,10 +355,22 @@
     if (st.stage >= 2) { for (let i = 0; i < 3; i++) emoji(c, st.kind || '🌷', cx + (i - 1) * 0.45, cy - 0.2 - (i === 1 ? 0.3 : 0) + Math.sin(t * 2 + i) * 0.04, 0.85); }
     if (f.wet) drops(c, cx - 0.6, cy - 1.4, 1.2, 1.3, t, 6);
   };
-  X.acbox = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#c9a57b', 0.06); c.strokeStyle = '#a37548'; c.lineWidth = 0.05; c.save(); rr(c, f.x, f.y, f.w, f.h, 0.06); c.clip(); for (let i = -6; i < 8; i++) { c.beginPath(); c.moveTo(f.x + i * 0.5, f.y); c.lineTo(f.x + i * 0.5 + f.h, f.y + f.h); c.moveTo(f.x + i * 0.5 + f.h, f.y); c.lineTo(f.x + i * 0.5, f.y + f.h); c.stroke(); } c.restore(); };
-  X.spigot = (c, f, t) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, 0.24, GOLD); c.strokeStyle = '#4cae6a'; c.lineWidth = 0.14; c.beginPath(); c.arc(f.x - 0.7, f.y + 1.2, 0.55, 0, TAU); c.stroke(); c.beginPath(); c.arc(f.x - 0.7, f.y + 1.2, 0.32, 0, TAU); c.stroke(); if (f.on) drops(c, f.x - 0.3, f.y + 0.3, 0.8, 0.9, t, 5); };
-  X.gate = (c, f) => { line(c, [f.x, f.y, f.x + 0.9, f.y + (f.y < 5 ? 2.9 : -2.9)], OL, 0.36); line(c, [f.x, f.y, f.x + 0.9, f.y + (f.y < 5 ? 2.9 : -2.9)], '#c79a6d', 0.24); };
+  X.acbox = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#fff', 0.06); c.strokeStyle = '#c9ccd3'; c.lineWidth = 0.05; c.save(); rr(c, f.x, f.y, f.w, f.h, 0.06); c.clip(); for (let i = -8; i < 10; i++) { c.beginPath(); c.moveTo(f.x + i * 0.45, f.y); c.lineTo(f.x + i * 0.45 + f.h, f.y + f.h); c.moveTo(f.x + i * 0.45 + f.h, f.y); c.lineTo(f.x + i * 0.45, f.y + f.h); c.stroke(); } c.restore(); };
+  X.gate = (c, f) => { const d = f.dir || 1; line(c, [f.x, f.y, f.x + 0.8, f.y + d * (f.w - 0.2)], OL, 0.36); line(c, [f.x, f.y, f.x + 0.8, f.y + d * (f.w - 0.2)], '#c79a6d', 0.24); };
   X.bins = (c, f) => { [['#3a3a44', 0], ['#2e7dd1', 1], ['#3fa35a', 2]].forEach(([col, i]) => { box(c, f.x + i * 0.95, f.y + 0.3, 0.85, 1.9, col, 0.15); box(c, f.x + i * 0.95, f.y + 0.2, 0.85, 0.5, col, 0.12); }); };
 
+  // a ceiling fan, seen as its turning shadow on the floor
+  X.fan = (c, f, t) => {
+    const cx = f.x + f.w / 2, cy = f.y + f.h / 2, r = f.w / 2;
+    c.save(); c.translate(cx, cy); c.rotate(t * 1.6); c.fillStyle = 'rgba(90,60,40,.16)';
+    for (let i = 0; i < 5; i++) { c.rotate(TAU / 5); c.beginPath(); c.ellipse(r * 0.55, 0, r * 0.45, r * 0.13, 0, 0, TAU); c.fill(); }
+    c.restore(); circ(c, cx, cy, r * 0.16, 'rgba(255,246,200,.5)', null);
+  };
+  X.steps = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#c2c2c8', 0.08); line(c, [f.x, f.y + f.h / 2, f.x + f.w, f.y + f.h / 2], '#9a9aa5', 0.05); };
+  X.mulch = (c, f) => { c.fillStyle = '#9c5a3c'; c.fillRect(f.x, f.y, f.w, f.h); c.fillStyle = 'rgba(60,30,15,.25)'; for (let i = 0; i < f.w * 3; i++) c.fillRect(f.x + ((i * 0.37) % f.w), f.y + ((i * 0.91) % f.h), 0.18, 0.08); };
+  X.plantbed = (c, f, t) => { c.fillStyle = '#8a5236'; c.fillRect(f.x, f.y, f.w, f.h); const n = Math.floor(f.h / 2.6); for (let i = 0; i < n; i++) { const cx = f.x + f.w / 2, cy = f.y + 1.4 + i * (f.h - 2) / Math.max(1, n - 1); for (let k = 0; k < 7; k++) { c.save(); c.translate(cx, cy); c.rotate(k * 0.9 + i); oval(c, 0.55, 0, 0.6, 0.16, k % 2 ? '#4f9a6a' : '#63b07c', '#2f7046'); c.restore(); } } };
+  X.stones = (c, f) => { const n = Math.floor(f.h / 1.7); for (let i = 0; i < n; i++) box(c, f.x + (i % 2 ? 0.25 : 0), f.y + 0.2 + i * (f.h / n), f.w - 0.25, f.h / n - 0.45, i % 2 ? '#b9b3a8' : '#c8c2b6', 0.25, '#8f897d'); };
+  X.linen = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); line(c, [f.x + f.w, f.y + f.h / 2, f.x + f.w - 0.5, f.y + f.h / 2], '#cfcbc2', 0.04); circ(c, f.x + f.w - 0.2, f.y + f.h * 0.4, 0.07, GOLD, null); circ(c, f.x + f.w - 0.2, f.y + f.h * 0.6, 0.07, GOLD, null); emoji(c, '🧺', f.x + f.w * 0.42, f.y + f.h * 0.3, 0.7); emoji(c, '🧻', f.x + f.w * 0.42, f.y + f.h * 0.72, 0.6); };
+  X.sliders = (c, f) => { box(c, f.x, f.y + f.h * 0.1, f.w * 0.55, f.h * 0.4, '#fff', 0.03); box(c, f.x + f.w * 0.45, f.y + f.h * 0.5, f.w * 0.55, f.h * 0.4, '#fff', 0.03); };
   A.fixture = (c, f, t) => { const fn = X[f.t]; if (fn) fn(c, f, t); };
 })();

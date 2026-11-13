@@ -92,14 +92,59 @@
   toy('puzzle', 'Puzzle', '🧩', 1.1); toy('books', 'Stack of Books', '📚', 1.2); toy('crown', 'Crown', '👑', 1.1, { sfx: 'sparkle' }); toy('castle', 'Castle', '🏰', 1.8); toy('blocks', 'Blocks', '🧱', 1.3, { sfx: 'thump' });
   toy('box', 'Moving Box', '📦', 1.6, { box: 1 });
 
+  // ---------- obstacle course pieces ----------
+  // course.kind says how a piece is cleared: center (reach the middle), stay (stand there a moment),
+  // points (touch every spot), ends (go in one end and out the other), cross (jump over the line).
+  const piece = (id, name, w, h, draw, course, extra) => def(id, name, 'course', w, h, draw, Object.assign({ course, icon: '🏁' }, extra));
+  const flagLine = (c, w, h, cols, word, wordCol) => {
+    const n = 10, sw = w / n;
+    for (let i = 0; i < n; i++) for (let j = 0; j < 2; j++) { c.fillStyle = cols[(i + j) % 2]; c.fillRect(-w / 2 + i * sw, -h / 2 + 0.2 + j * (h - 0.4) / 2, sw, (h - 0.4) / 2); }
+    c.strokeStyle = OL; c.lineWidth = 0.06; c.strokeRect(-w / 2, -h / 2 + 0.2, w, h - 0.4);
+    for (const s of [-1, 1]) { circ(c, s * (w / 2 + 0.05), 0, 0.26, '#fff'); emoji(c, word, s * (w / 2 + 0.05), -0.75, 0.9); }
+  };
+  piece('cStart', 'Start Flag', 4, 1.4, (c, w, h) => flagLine(c, w, h, ['#4cd97b', '#c9f5d6'], '🟢'), { kind: 'start' }, { flat: 1, icon: '🟢' });
+  piece('cFinish', 'Finish Line', 4, 1.4, (c, w, h) => flagLine(c, w, h, ['#2b2b33', '#fff'], '🏁'), { kind: 'finish' }, { flat: 1, icon: '🏁' });
+  piece('cCones', 'Zigzag Cones', 2.9, 6.4, (c, w, h, t, it) => {
+    c.setLineDash([0.25, 0.25]); c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 0.09; c.beginPath(); c.moveTo(0.95, -3); c.bezierCurveTo(1.6, -1.4, -1.6, -1, -0.95, 0); c.bezierCurveTo(-1.6, 1, 1.6, 1.4, 0.95, 3); c.stroke(); c.setLineDash([]);
+    for (const y of [-2.1, 0, 2.1]) { oval(c, 0, y + 0.18, 0.42, 0.16, 'rgba(40,30,70,.18)', null); c.beginPath(); c.moveTo(-0.34, y + 0.2); c.lineTo(0, y - 0.55); c.lineTo(0.34, y + 0.2); c.closePath(); c.fillStyle = '#ff7a2f'; c.fill(); c.strokeStyle = OL; c.lineWidth = 0.05; c.stroke(); line(c, [-0.17, y - 0.12, 0.17, y - 0.12], '#fff', 0.09); }
+  }, { kind: 'points', pts: [[0.95, -2.1], [-0.95, 0], [0.95, 2.1]], r: 0.8, bump: [[0, -2.1], [0, 0], [0, 2.1]] });
+  piece('cHurdle', 'Hurdle', 3.8, 1.3, (c, w, h) => {
+    for (const s of [-1, 1]) box(c, s * (w / 2 - 0.2) - 0.14, -0.5, 0.28, 1, '#fff', 0.08);
+    box(c, -w / 2 + 0.2, -0.16, w - 0.4, 0.32, '#ff5d5d', 0.1); for (let i = 0; i < 4; i++) box(c, -w / 2 + 0.55 + i * 0.86, -0.16, 0.36, 0.32, '#fff', 0.02, null);
+  }, { kind: 'cross', half: 1.7 });
+  piece('cTunnel', 'Crawl Tunnel', 2.6, 6.2, (c, w, h, t, it) => {
+    for (let i = 0; i < 7; i++) box(c, -w / 2, -h / 2 + i * (h / 7), w, h / 7, ['#4d8dff', '#37c9d6', '#4cd97b', '#ffd93d', '#ff9f43', '#ff6fb1', '#9b6bff'][i], 0.25);
+    for (const s of [-1, 1]) oval(c, 0, s * (h / 2 - 0.1), w / 2 - 0.25, 0.3, '#2a2460', OL);
+    if (it && it._bump) { const b = it._bump; circ(c, 0, G.clamp(b, -h / 2 + 0.8, h / 2 - 0.8), 0.9, 'rgba(255,255,255,.35)', null); emoji(c, '👀', 0, G.clamp(b, -h / 2 + 0.8, h / 2 - 0.8), 0.6); }
+  }, { kind: 'ends', ends: [[0, -2.7], [0, 2.7]], r: 0.95, slow: 0.7, hide: 1 }, { over: 1 });
+  piece('cBeam', 'Balance Beam', 1.4, 6.6, (c, w, h) => {
+    for (const s of [-1, 1]) box(c, -0.6, s * (h / 2 - 0.5) - 0.2, 1.2, 0.4, '#8a5a3c', 0.08);
+    box(c, -0.32, -h / 2, 0.64, h, '#e0a85e', 0.12); line(c, [0, -h / 2 + 0.3, 0, h / 2 - 0.3], '#c98a3c', 0.05);
+  }, { kind: 'ends', ends: [[0, -2.9], [0, 2.9]], r: 0.7, slow: 0.6, strict: 0.62 });
+  piece('cStones', 'Stepping Stones', 3, 6.6, (c, w, h) => {
+    [[-0.6, -2.4], [0.6, -0.8], [-0.6, 0.8], [0.6, 2.4]].forEach(([x, y], i) => { oval(c, x, y + 0.1, 0.72, 0.6, 'rgba(40,30,70,.16)', null); oval(c, x, y, 0.7, 0.58, ['#9ad0ff', '#b9f0c8', '#ffe08a', '#ffc4e1'][i], OL); });
+  }, { kind: 'points', pts: [[-0.6, -2.4], [0.6, -0.8], [-0.6, 0.8], [0.6, 2.4]], r: 0.72, hop: 1, safe: 1 });
+  piece('cHoop', 'Hoop', 2.8, 2.8, (c, w, h, t) => { c.strokeStyle = OL; c.lineWidth = 0.34; c.beginPath(); c.arc(0, 0, 1.15, 0, TAU); c.stroke(); const cols = ['#ff6fb1', '#ffd93d', '#4cd97b', '#4d8dff']; for (let i = 0; i < 8; i++) { c.strokeStyle = cols[i % 4]; c.lineWidth = 0.22; c.beginPath(); c.arc(0, 0, 1.15, i * TAU / 8, (i + 1) * TAU / 8); c.stroke(); } emoji(c, '✨', 0, 0, 0.6 + 0.1 * Math.sin(t * 5)); }, { kind: 'center', r: 0.8 });
+  piece('cTramp', 'Bouncer', 3.2, 3.2, (c, w, h) => { circ(c, 0, 0, w / 2, '#ff6fb1'); circ(c, 0, 0, w / 2 - 0.42, '#2a2460'); emoji(c, '⭐', 0, 0, 1); }, { kind: 'center', r: 1 }, { bounce: 1.1 });
+  piece('cPillows', 'Pillow Mountain', 3.8, 3.2, (c, w, h) => {
+    [[-0.9, 0.5, '#ffc4e1', -0.2], [0.9, 0.55, '#b9e3ff', 0.25], [0, -0.5, '#fff3b0', 0.05], [-0.2, 0.2, '#d6c5ff', -0.1], [0.4, -0.1, '#c9f5d6', 0.3]].forEach(([x, y, col, a]) => { c.save(); c.translate(x, y); c.rotate(a); box(c, -0.95, -0.6, 1.9, 1.2, col, 0.4); line(c, [-0.5, 0, 0.5, 0], 'rgba(0,0,0,.08)', 0.05); c.restore(); });
+  }, { kind: 'center', r: 0.9, slow: 0.45 }, { bounce: 0.25 });
+  piece('cSpin', 'Spinner', 2.4, 2.4, (c, w, h, t, it) => { c.save(); c.rotate(it && it.on ? t * 9 : t * 0.6); for (let i = 0; i < 6; i++) { c.beginPath(); c.moveTo(0, 0); c.arc(0, 0, w / 2, i * TAU / 6, (i + 1) * TAU / 6); c.closePath(); c.fillStyle = i % 2 ? '#9b6bff' : '#ffd93d'; c.fill(); } c.restore(); circ(c, 0, 0, w / 2, null, OL); circ(c, 0, 0, 0.2, '#fff'); }, { kind: 'stay', r: 0.75, secs: 1.1 }, { flat: 1 });
+  piece('cLava', 'Lava Floor', 5, 4, (c, w, h, t) => {
+    box(c, -w / 2, -h / 2, w, h, '#ff5a1f', 0.6, '#b3270a'); c.save(); rr(c, -w / 2, -h / 2, w, h, 0.6); c.clip();
+    for (let i = 0; i < 9; i++) { const x = -w / 2 + ((i * 0.83 + 0.3) % 1) * w, y = -h / 2 + ((i * 0.57 + 0.2) % 1) * h, r = 0.35 + 0.18 * Math.sin(t * 2.5 + i * 1.7); oval(c, x, y, r * 1.5, r, '#ffb300', null); oval(c, x, y, r * 0.8, r * 0.5, '#fff06a', null); }
+    c.restore();
+  }, { kind: 'lava' }, { flat: 1, icon: '🌋' });
+
   G.ITEMS = I;
-  G.CATS = [['furniture', '🛏️', 'Furniture'], ['toys', '🧸', 'Toys'], ['rugs', '🌈', 'Rugs'], ['plants', '🪴', 'Plants and lights'], ['paint', '🎨', 'Paint']];
+  G.CATS = [['course', '🏁', 'Obstacle course'], ['furniture', '🛏️', 'Furniture'], ['toys', '🧸', 'Toys'], ['rugs', '🌈', 'Rugs'], ['plants', '🪴', 'Plants and lights'], ['paint', '🎨', 'Paint']];
+  G.COURSE_ITEMS = ['cStart', 'cCones', 'cHurdle', 'cTunnel', 'cBeam', 'cStones', 'cHoop', 'cTramp', 'cPillows', 'cSpin', 'cLava', 'cFinish'];
   // what the house has on day one, and what comes later in packages (two at a time, in this order)
   G.START_ITEMS = ['bedPink', 'bedPurple', 'bedBlue', 'bedGreen', 'bigbed', 'dresser', 'nightstand', 'desk', 'bookshelf', 'toychest', 'sofa', 'armchair', 'coffee', 'dtable', 'piano', 'beanbag', 'slide', 'sandbox',
     'rugGeo', 'rugBeige', 'rugGray', 'rugRainbow', 'rugStar', 'plant', 'flowers', 'lamp', 'teddy', 'ball', 'blocks', 'books', 'box'];
   G.PACKAGE_ITEMS = ['tent', 'unicorntoy', 'bunk', 'owltoy', 'trampoline', 'starlights', 'fishtank', 'panda', 'dollhouse', 'rugHeart', 'playkitchen', 'bunnytoy', 'ballpit', 'rugSpace', 'easel', 'dinotoy',
     'traintable', 'rugRoad', 'rockinghorse', 'nightlight', 'rugHop', 'robot', 'tv', 'rockettoy', 'globe', 'drum', 'bigplant', 'guitar', 'castle', 'car', 'kite', 'train', 'balloon', 'crown', 'puzzle'];
-  G.hasItem = id => G.START_ITEMS.includes(id) || G.save.house.unlocked.includes(id);
+  G.hasItem = id => G.START_ITEMS.includes(id) || G.COURSE_ITEMS.includes(id) || G.save.house.unlocked.includes(id);
   G.itemsIn = roomId => {
     const h = G.save.house;
     if (!h.items[roomId]) h.items[roomId] = (G.MAP.defaults[roomId] || []).map(d => ({ t: d[0], x: d[1], y: d[2], r: d[3] || 0 }));

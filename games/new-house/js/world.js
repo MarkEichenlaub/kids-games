@@ -22,8 +22,10 @@
     const p = W.player, F = M.floors[W.floor];
     let tx = p.x, ty = p.y - 1.2, ppf = basePpf();
     if (W.mode === 'decor' && W.decor) {
-      const q = W.decor.rect; ppf = Math.min(vw / (q[2] - q[0] + 3), (vh - 260) / (q[3] - q[1] + 1.5));
-      tx = (q[0] + q[2]) / 2; ty = (q[1] + q[3]) / 2 + 60 / ppf;
+      const q = W.decor.box, fit = Math.min(vw / (q[2] - q[0] + 3), (vh - 260) / (q[3] - q[1] + 1.5));
+      ppf = Math.max(fit, Math.min(24, basePpf()));
+      const big = ppf > fit + 0.01;
+      tx = big ? W.decor.cx : (q[0] + q[2]) / 2; ty = (big ? W.decor.cy : (q[1] + q[3]) / 2) + 60 / ppf;
     } else if (W.p2 && W.sis.floor === p.floor) {
       const s = W.sis; tx = (p.x + s.x) / 2; ty = (p.y + s.y) / 2 - 1.2;
       ppf = G.clamp(Math.min(vw / (Math.abs(p.x - s.x) + 12), vh / (Math.abs(p.y - s.y) + 10)), 12, ppf);
@@ -209,7 +211,7 @@
       if (d2 <= REACH + 1.2) touch(tb);
     });
   }
-  W.act = () => { const tb = nearest(REACH + 0.4); if (tb) touch(tb); else { G.sfx.tap(); W.player.hopV = 5; } };
+  W.act = () => { if (G.course.run) return G.course.jump(); const tb = nearest(REACH + 0.4); if (tb) touch(tb); else { G.sfx.tap(); W.player.hopV = 5; } };
 
   // ---------- pointer and keys ----------
   let held = false, heldAt = 0;
@@ -223,7 +225,7 @@
       const pad = tb.kind === 'fx' && tb.w * tb.h < 1 ? 0.7 : 0.25;
       if (wx > tb.x - pad && wx < tb.x + tb.w + pad && wy > tb.y - pad && wy < tb.y + tb.h + pad) { const d = G.dist(wx, wy, tb.x + tb.w / 2, tb.y + tb.h / 2) - (tb.kind === 'prop' || tb.kind === 'npc' ? 2 : 0); if (d < bd) { bd = d; hit = tb; } }
     }
-    if (hit) { goTouch(hit); return; }
+    if (hit && !G.course.run) { goTouch(hit); return; }
     held = true; heldAt = 0;
     if (!W.walkTo(wx, wy)) G.sfx.click();
     W.tapMark = { x: wx, y: wy, age: 0 };
@@ -251,11 +253,14 @@
     const p = W.player;
     for (const ch of [p, W.sis]) { ch.t += dt; if (ch.hop > 0 || ch.hopV) { ch.hopV -= 30 * dt; ch.hop += ch.hopV * dt; if (ch.hop <= 0) { ch.hop = 0; ch.hopV = 0; } } }
     if (W.mode === 'cut') { tickCut(dt); return; }
+    if (W.floor !== p.floor) { W.floor = p.floor; hud.floor.textContent = p.floor === 2 ? '⬆️ Upstairs' : '⬇️ Downstairs'; }
     if (W.mode === 'play' && !G.modalOpen()) {
       // player one
       const dx = (keys.r ? 1 : 0) - (keys.l ? 1 : 0), dy = (keys.d ? 1 : 0) - (keys.u ? 1 : 0);
-      if (dx || dy) { p.path = null; p.then = null; const n = Math.hypot(dx, dy); p.moving = tryMove(p, dx / n, dy / n, SPEED * dt); }
-      else if (p.path) { p.moving = follow(p, dt, SPEED); if (!p.path) { p.moving = false; const th = p.then; p.then = null; if (th) th(); } }
+      const sp = SPEED * (p.slow || 1);
+      if (G.course.locked()) { p.path = null; p.moving = false; }
+      else if (dx || dy) { p.path = null; p.then = null; const n = Math.hypot(dx, dy); p.moving = tryMove(p, dx / n, dy / n, sp * dt); }
+      else if (p.path) { p.moving = follow(p, dt, sp); if (!p.path) { p.moving = false; const th = p.then; p.then = null; if (th) th(); } }
       else p.moving = false;
       // stairs
       const z = M.floors[p.floor].stairs.zone;
@@ -270,8 +275,9 @@
       else s.moving = false;
     }
     if (W.pet) { W.pet.t += dt; tagAlong(W.pet, s.floor === p.floor && W.pet.buddy === 'sis' ? s : p, 1.8, -1.1, dt, 8.5); }
-    // balls roll, hopscotch sings, beds bounce
+    // balls roll, hopscotch sings, beds bounce, obstacle courses run
     itemsTick(dt);
+    if (W.mode === 'play') G.course.tick(dt);
     // which room?
     const r = M.roomAt(p.floor, p.x, p.y);
     if ((r ? r.id : null) !== W.roomId) enterRoom(r);
@@ -314,7 +320,15 @@
     }
   }
   let hintT = 0;
-  function hintTick(dt) { hintT -= dt; if (hintT > 0) return; hintT = 0.15; W.near = W.mode === 'play' ? nearest(REACH) : null; hud.act.classList.toggle('hidden', !W.near); }
+  function hintTick(dt) {
+    hintT -= dt; if (hintT > 0) return; hintT = 0.15;
+    const run = G.course.run;
+    W.near = W.mode === 'play' && !run ? nearest(REACH) : null;
+    hud.act.classList.toggle('hidden', !W.near && !run); hud.act.textContent = run ? '⬆️' : '👆';
+    const can = W.mode === 'play' && !run && W.roomId && G.course.valid(W.roomId);
+    hud.go.classList.toggle('hidden', !can);
+    if (can && !G.P().done.say_courseFound && G.P().intro) { G.P().done.say_courseFound = 1; G.persist(); G.beep(G.T('course.found'), { queue: true }); }
+  }
 
   // ---------- drawing ----------
   function draw() {
@@ -325,11 +339,11 @@
     const vis = (x, y, w, h) => x + w > W.cam.x - hw && x < W.cam.x + hw && y + h > W.cam.y - hh && y < W.cam.y + hh;
     A.ground(c, fl, t); A.floors(c, fl);
     for (const f of F.fixtures) if (f.flat && vis(f.x, f.y, f.w, f.h)) A.fixture(c, f, t);
-    const ents = [], solids = [];
+    const ents = [], solids = [], overs = [];
     for (const r of M.rooms) if (r.floor === fl) for (const it of G.itemsIn(r.id)) {
       const d = G.ITEMS[it.t]; if (!d) continue;
       const q = G.itemRect(it); if (!vis(q[0], q[1], q[2] - q[0], q[3] - q[1])) continue;
-      if (d.flat) drawItem(c, it, t); else solids.push(it);
+      if (d.flat) drawItem(c, it, t); else if (d.over) overs.push(it); else solids.push(it);
     }
     A.sunbeams(c, fl, t);
     A.walls(c, fl);
@@ -337,14 +351,15 @@
     for (const it of solids) drawItem(c, it, t);
     for (const p of W.props) if (p.floor === fl) ents.push([p.y, () => drawProp(c, p, t)]);
     for (const n of W.npcs) if (n.floor === fl) ents.push([n.y, () => { c.save(); c.translate(n.x, n.y); A.grownup(c, { who: n.who, t, mark: n.mark, wave: n.wave, apron: n.apron }); c.restore(); }]);
-    const kid = ch => ents.push([ch.y, () => { c.save(); c.translate(ch.x, ch.y); A.kid(c, { who: ch.who, costume: ch.costume, t: ch.t, moving: ch.moving, face: ch.face, bounce: ch.hop, hold: ch.hold }); c.restore(); }]);
+    const kid = ch => !ch.hidden && ents.push([ch.y, () => { c.save(); c.translate(ch.x, ch.y); A.kid(c, { who: ch.who, costume: ch.costume, t: ch.t, moving: ch.moving, face: ch.face, bounce: ch.hop, hold: ch.hold }); c.restore(); }]);
     const deco = W.mode === 'decor';
     if (W.sis.floor === fl && !deco) kid(W.sis);
     if (W.player.floor === fl && !deco) kid(W.player);
     if (W.pet && W.pet.floor === fl && !deco) ents.push([W.pet.y, () => { c.save(); c.translate(W.pet.x, W.pet.y); A.pet(c, W.pet); c.restore(); }]);
     ents.sort((a, b) => a[0] - b[0]);
     for (const e of ents) e[1]();
-    if (W.mode === 'decor') G.decor.draw(c, t);
+    for (const it of overs) drawItem(c, it, t);
+    if (W.mode === 'decor') G.decor.draw(c, t); else G.course.draw(c, t, null, false);
     // where you tapped, what you can touch, where to go
     if (W.tapMark) { c.globalAlpha = 1 - W.tapMark.age * 2; A.circ(c, W.tapMark.x, W.tapMark.y, 0.3 + W.tapMark.age * 1.2, null, '#fff'); c.globalAlpha = 1; }
     if (W.near && W.mode === 'play') { const n = W.near; A.emoji(c, '👆', n.x + n.w / 2 + 0.3, n.y + n.h + 0.5 + Math.sin(t * 6) * 0.14, 0.9); }
@@ -421,20 +436,24 @@
           <div class="pill" id="room-pill"></div>
           <div class="pill small" id="floor-pill">⬇️ Downstairs</div>
           <div class="spacer"></div>
+          <div class="pill course hidden" id="course-pill"></div>
+          <button class="round-btn hidden" id="btn-stop" title="Stop">✖</button>
           <div class="pill quest hidden" id="quest-pill"></div>
           <button class="round-btn hidden" id="btn-photo" title="Real photo">📷</button>
           <button class="round-btn wide" id="btn-pass" title="Passport">📖 <span id="stamp-count"></span></button>
           <div class="pill">⭐ <span class="star-count">0</span></div>
         </div>
         <div class="hud side">
+          <button class="big-btn go hidden" id="btn-go" title="Run the obstacle course">🏁</button>
           <button class="big-btn hidden" id="btn-decor" title="Decorate">🎨</button>
           <button class="big-btn hidden" id="btn-act" title="Touch">👆</button>
         </div>
         <div id="polaroid" class="polaroid hidden"></div>
         <div id="arrow" class="guide-arrow hidden">➤</div>
+        <div id="count" class="countdown hidden"></div>
         <div id="fade"></div><div id="decor-ui"></div>`;
       cv = G.$('#cv', root); ctx = cv.getContext('2d'); fadeEl = G.$('#fade', root);
-      Object.assign(hud, { room: G.$('#room-pill', root), floor: G.$('#floor-pill', root), quest: G.$('#quest-pill', root), photo: G.$('#btn-photo', root), stamps: G.$('#stamp-count', root), decor: G.$('#btn-decor', root), act: G.$('#btn-act', root), pol: G.$('#polaroid', root), arrow: G.$('#arrow', root) });
+      Object.assign(hud, { room: G.$('#room-pill', root), floor: G.$('#floor-pill', root), quest: G.$('#quest-pill', root), photo: G.$('#btn-photo', root), stamps: G.$('#stamp-count', root), decor: G.$('#btn-decor', root), go: G.$('#btn-go', root), act: G.$('#btn-act', root), pol: G.$('#polaroid', root), arrow: G.$('#arrow', root) });
       resize();
       M.buildGrid(1); M.buildGrid(2);
       const kid = G.kid(), P = G.P();
@@ -455,13 +474,15 @@
       hud.photo.onclick = () => { G.sfx.tap(); const rm = W.roomId && M.room(W.roomId); if (rm) W.photoModal(rm); };
       hud.decor.onclick = () => { G.sfx.tap(); if (W.mode === 'decor') G.decor.close(); else if (W.roomId) G.decor.open(W.roomId); };
       hud.act.onclick = () => { if (W.mode === 'play') W.act(); };
+      hud.go.onclick = () => { G.sfx.tap(); if (W.roomId) G.course.start(W.roomId); };
+      G.$('#btn-stop', root).onclick = () => G.course.stop();
       G.onBeepTap = () => G.Q.hint();
       G.showBeep(true); G.music(true);
       last = performance.now(); raf = requestAnimationFrame(loop);
       G.Q.begin();
     },
     leave() {
-      cancelAnimationFrame(raf); G.music(false); G.onBeepTap = null;
+      cancelAnimationFrame(raf); G.music(false); G.onBeepTap = null; G.course.stop(true);
       window.removeEventListener('pointerup', onUp); window.removeEventListener('pointercancel', onUp); window.removeEventListener('resize', resize);
       for (const k in keys) keys[k] = false;
       if (W.mode === 'decor') G.decor.close(true);
