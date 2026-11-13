@@ -40,6 +40,12 @@ that has opened Dad's link for that game shows them here too (the camera button,
 passport, and a snapshot the first time you enter a room). Without the key the game
 plays the same, minus the photos. The key can also be pasted under Grown-ups.
 
+## Changing the game
+
+After changing any file in `js/` or `style.css`, raise the `?v=` number on the script and
+stylesheet lines in `index.html`, so browsers that have the old files saved fetch the new
+ones together.
+
 ## Rebuilding
 
     node tools/build-voice.mjs && python tools/render_voice.py   # after changing js/lines.js
