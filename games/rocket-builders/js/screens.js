@@ -196,7 +196,6 @@ G.grownups = () => {
     <h3>Birthdays</h3><p>Beep throws a party the week of each birthday. Saved on this device only.</p>
     ${kids.map(k => `<div class="row"><b style="width:70px">${k.name}</b> <input type="text" placeholder="MM-DD" maxlength="5" style="width:90px" data-bday="${k.id}" value="${(s.birthdays || {})[k.id] || ''}"></div>`).join('')}
     <h3>Progress</h3>
-    <p>Progress is backed up online and shared between computers (photos and birthdays stay on this device). Backup: <b>${window.CLOUD ? CLOUD.status : 'off'}</b>.</p>
     ${kids.map(k => `<div class="row"><b style="width:70px">${k.name}</b>
       <button class="big-btn small blue" data-unlock="${k.id}">Unlock all parts</button>
       <button class="big-btn small" data-photo="${k.id}">Remove photo</button>
@@ -212,7 +211,7 @@ G.grownups = () => {
   m.querySelectorAll('[data-unlock]').forEach(b => b.onclick = () => { const pr = ensure(b.dataset.unlock); pr.parts = G.DATA.parts.map(x => x.id); pr.stars = Math.max(pr.stars, 150); G.persist(); b.textContent = '✔ Unlocked'; });
   m.querySelectorAll('[data-photo]').forEach(b => b.onclick = () => { const pr = G.save.profiles[b.dataset.photo]; if (pr) { pr.face = null; if (pr.rocket.crew === 'me') pr.rocket.crew = 'kid'; G.persist(); } b.textContent = '✔ Removed'; });
   m.querySelectorAll('[data-reset]').forEach(b => b.onclick = () => {
-    if (b.dataset.sure) { delete G.save.profiles[b.dataset.reset]; G.save.resets = G.save.resets || {}; G.save.resets[b.dataset.reset] = Date.now(); G.persist(); b.textContent = '✔ Reset'; if (G.current === 'title') G.go('title'); return; }
+    if (b.dataset.sure) { delete G.save.profiles[b.dataset.reset]; G.persist(); b.textContent = '✔ Reset'; if (G.current === 'title') G.go('title'); return; }
     b.dataset.sure = 1; b.textContent = 'Tap again to erase';
   });
 };
