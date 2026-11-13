@@ -43,6 +43,13 @@ three.js in `vendor/`, MIT license).
 - Maia's school has an inside: tap its red door for her classroom (her own cubby, the teacher,
   the sink, an easel to paint, a fish tank to feed, nap mats, the circle rug, a block tower that
   falls over, and a book corner). Trying all nine earns a star.
+- More to do at every place, beyond the task that earns its star: the little park has a seesaw
+  with the sister on the other end, a bubble bottle (tap the bubbles to pop them), a sandbox to dig
+  treasures out of, and a squirrel; the big park has a kite, a duck pond, a soccer goal, a dog and
+  flowers to pick; the pool has a diving board (cannonball), an ice cream window and a lifeguard;
+  the K door at Mira's school opens into her kindergarten classroom (the same nine things as
+  Maia's, with a calendar that says the real day of the week instead of nap mats); the library
+  has a puppet theater and a checkout desk for books you have finished.
 - The books at the library (eight) and in the classroom's book corner (two) are real picture
   books: each opens full screen and Beep reads every page aloud. The words live in `js/lines.js`
   (`books`) so they get recorded with the rest of Beep's voice; the pictures are in `js/town.js`.

@@ -140,7 +140,10 @@
     const svg = frame('pool', 'pool', `${sky()}${cloud(300, 110)}${cloud(1250, 80, 0.8)}
       <rect y="300" width="1600" height="600" fill="#e8d5b5"/>
       ${palm(120, 330, 1)}${palm(1480, 320, 1.1)}${palm(1320, 330, 0.8)}
-      <g><rect x="980" y="170" width="430" height="170" fill="#e9d6b0"/><path d="M955 175 L1195 95 L1435 175Z" fill="#a8603e"/><rect x="1150" y="230" width="90" height="110" fill="#6a7c8c"/><rect x="1020" y="220" width="90" height="70" fill="#bfe6ff"/><rect x="1280" y="220" width="90" height="70" fill="#bfe6ff"/></g>
+      <g><rect x="980" y="170" width="430" height="170" fill="#e9d6b0"/><path d="M955 175 L1195 95 L1435 175Z" fill="#a8603e"/><rect x="1150" y="230" width="90" height="110" fill="#6a7c8c"/><rect x="1280" y="220" width="90" height="70" fill="#bfe6ff"/></g>
+      <g class="snack" style="cursor:pointer"><rect x="1010" y="215" width="110" height="80" fill="#fff3c4" stroke="#a8603e" stroke-width="5"/>${[0, 1, 2, 3].map(i => `<path d="M${1005 + i * 30} 208 h30 l-4 18 h-22Z" fill="${i % 2 ? '#fff' : '#ff6fb1'}"/>`).join('')}${emo('🍦', 1065, 262, 44)}</g>
+      <g class="guard" style="cursor:pointer"><path d="M760 410 L780 300 M840 410 L820 300 M770 360 H830" stroke="#fff" stroke-width="10" fill="none"/><rect x="765" y="290" width="70" height="16" fill="#ff5252"/>${emo('🛟', 800, 392, 36)}${emo('🧑', 800, 255, 60, 'opacity="0"')}</g>
+      <g class="board" style="cursor:pointer"><rect x="1330" y="420" width="22" height="46" fill="#9aa3ab"/><rect x="1180" y="414" width="180" height="16" rx="6" fill="#4d8dff" stroke="#2a5fb8" stroke-width="3"/></g>
       <path d="M0 300 H1600" stroke="#2e2e36" stroke-width="6"/>${Array.from({ length: 40 }, (_, i) => `<line x1="${i * 40 + 10}" y1="250" x2="${i * 40 + 10}" y2="300" stroke="#2e2e36" stroke-width="4"/>`).join('')}<line x1="0" y1="255" x2="1600" y2="255" stroke="#2e2e36" stroke-width="5"/>
       <g class="spa-tap" style="cursor:pointer"><ellipse cx="220" cy="560" rx="150" ry="70" fill="#fff"/><ellipse cx="220" cy="560" rx="125" ry="55" fill="#5bc8f0"/>${[0, 1, 2, 3].map(i => `<rect x="${80 + i * 90}" y="380" width="22" height="140" fill="#fbfaf5"/>`).join('')}<rect x="60" y="370" width="320" height="22" fill="#fbfaf5"/>${[0, 1, 2, 3, 4, 5].map(i => `<rect x="${70 + i * 52}" y="356" width="14" height="14" fill="#fbfaf5"/>`).join('')}</g>
       <g class="water"><rect x="450" y="420" width="900" height="380" rx="20" fill="#fff"/><rect x="474" y="442" width="852" height="336" rx="12" fill="#4fc0ef"/>
@@ -155,6 +158,15 @@
       G.sfx.splash(); moveKid(x, y, 650, 60).then(() => { f.style.opacity = '0'; burstAt(e, '💦'); if (!--left) later(() => { win('pool'); G.beep(G.T('town.poolDone')); }, 400); });
     });
     tapOn(svg, '.spa-tap', () => { for (let i = 0; i < 5; i++) later(G.sfx.bubble, i * 120); });
+    let busy = false;
+    tapOn(svg, '.board', (b, e) => {
+      if (busy) return; busy = true; G.beep(G.T('town.dive'));
+      moveKid(1340, 420, 600).then(() => moveKid(1200, 412, 600)).then(() => { G.sfx.boing(); return moveKid(1200, 412, 450, 60); })
+        .then(() => { G.sfx.whoosh(); return moveKid(1010, 640, 800, 220); })
+        .then(() => { G.sfx.splash(); later(G.sfx.splash, 150); const r = svg.getBoundingClientRect(), sc = Math.max(r.width / 1600, r.height / 900); G.burst(r.left + r.width / 2 + (1010 - 800) * sc, r.top + r.height / 2 + (600 - 450) * sc, '💦', 12); busy = false; });
+    });
+    tapOn(svg, '.snack', (n, e) => { if (busy) return; busy = true; moveKid(1065, 400, 600).then(() => { busy = false; G.sfx.pop(); burstAt(e, '🍦', 5); G.beep(G.T('town.iceCream')); }); });
+    tapOn(svg, '.guard', g => { G.sfx.whistle(); const t = g.querySelectorAll('text')[1]; t.setAttribute('opacity', '1'); later(() => t.setAttribute('opacity', '0'), 3000); G.beep(G.T('town.lifeguard')); });
   }
 
   // ----- the little park by our house: a bowl of lawn, wood chips, a green shade over the play set -----
@@ -166,11 +178,54 @@
       <g><path d="M380 330 L760 240 L1140 330 L1100 360 L420 360Z" fill="#1f8f7f"/>${[430, 760, 1090].map(x => `<rect x="${x - 7}" y="300" width="14" height="440" fill="#4a4f63"/>`).join('')}</g>
       <g class="slide-set" style="cursor:pointer"><rect x="470" y="470" width="150" height="200" fill="#e9c27a" stroke="#6b4a2a" stroke-width="6"/><path d="M470 470 L545 420 L620 470Z" fill="#1f8f7f"/>${[0, 1, 2, 3].map(i => `<line x1="440" y1="${500 + i * 45}" x2="470" y2="${500 + i * 45}" stroke="#6b4a2a" stroke-width="6"/>`).join('')}<path d="M620 520 Q720 560 760 720 L810 720 Q770 540 650 490Z" fill="#3fb06a" stroke="#257a45" stroke-width="5"/></g>
       <g class="swing-set" style="cursor:pointer"><path d="M960 720 L1020 430 L1080 720 M1220 720 L1280 430 L1340 720 M1020 430 H1280" stroke="#4a4f63" stroke-width="14" fill="none"/><g class="rope"><line x1="1150" y1="432" x2="1150" y2="640" stroke="#8a5a3c" stroke-width="6"/><rect x="1110" y="636" width="80" height="16" rx="6" fill="#ff6f6f"/></g></g>
-      ${nm ? `<g transform="translate(1360,820)"><rect x="-170" y="-50" width="340" height="80" rx="16" fill="#8b7355"/><rect x="-158" y="-40" width="316" height="60" rx="10" fill="#a58b68"/>${label(nm.toUpperCase(), 0, 3, 30, '#fff')}</g>` : ''}`);
-    putKid(1060, 800);
+      ${nm ? `<g transform="translate(1360,820)"><rect x="-170" y="-50" width="340" height="80" rx="16" fill="#8b7355"/><rect x="-158" y="-40" width="316" height="60" rx="10" fill="#a58b68"/>${label(nm.toUpperCase(), 0, 3, 30, '#fff')}</g>` : ''}
+      <g class="sandbox" style="cursor:pointer"><rect x="890" y="790" width="270" height="95" rx="10" fill="#b5835a"/><rect x="904" y="802" width="242" height="72" rx="6" fill="#f1d9a0"/>${emo('🪣', 1120, 820, 40)}<g class="finds"></g></g>
+      <g class="seesaw-hit" style="cursor:pointer"><path d="M335 720 L355 690 L375 720Z" fill="#4a4f63"/><g class="seesaw"><rect x="245" y="682" width="220" height="14" rx="6" fill="#ff9f43" stroke="#c46a1c" stroke-width="3"/><rect x="258" y="664" width="8" height="20" fill="#4a4f63"/><rect x="444" y="664" width="8" height="20" fill="#4a4f63"/><image class="sis" width="120" height="120" x="390" y="572"/></g></g>
+      <g class="bottle" style="cursor:pointer">${emo('🫧', 880, 660, 58)}</g><g class="bubs"></g>
+      <g class="squirrel" style="cursor:pointer">${emo('🐿️', 1365, 470, 48)}</g>`);
+    putKid(700, 860);
+    const sis = G.kid().sis, sp = G.save.profiles[sis] || G.defaultProfile(sis);
+    G.$('.sis', svg).setAttribute('href', G.kidPicture(sis, sp.costume, 120).toDataURL());
     let n = 0, busy = false;
     const fun = () => { busy = false; if (++n === 3) { win('play'); G.beep(G.T('town.playDone')); } };
     tapOn(svg, '.slide-set', () => { if (busy) return; busy = true; G.sfx.step(2); moveKid(545, 470, 600).then(() => { G.sfx.whoosh(); return moveKid(790, 760, 700); }).then(() => { G.sfx.boing(); fun(); }); });
+    tapOn(svg, '.seesaw-hit', () => {
+      if (busy) return; busy = true; G.beep(G.T('town.seesaw'));
+      const ss = G.$('.seesaw', svg);
+      moveKid(262, 700, 600).then(async () => {
+        for (let i = 0; i < 4; i++) { ss.classList.toggle('up', i % 2 === 0); ss.classList.toggle('down', i % 2 === 1); G.sfx.boing(); await moveKid(262, i % 2 ? 723 : 677, 500); await G.wait(150); }
+        ss.classList.remove('up', 'down'); await moveKid(262, 700, 400); busy = false;
+      });
+    });
+    let found = 0;
+    const FINDS = [['🐚', 'shell'], ['🦴', 'bone'], ['🪙', 'coin'], ['💎', 'gem'], ['🚗', 'car'], ['🦆', 'duck'], ['🪏', 'shovel']];
+    let pile = G.shuffle(FINDS);
+    tapOn(svg, '.sandbox', (n, e) => {
+      if (busy) return;
+      const dig = () => {
+        G.sfx.dig(); burstAt(e, '🟫', 4);
+        if (Math.random() < 0.55) {
+          if (!pile.length) pile = G.shuffle(FINDS);
+          const [ch, k] = pile.pop(), f = G.$('.finds', svg);
+          if (f.children.length >= 5) f.innerHTML = '';
+          f.insertAdjacentHTML('beforeend', `<g class="find">${emo(ch, G.rand(930, 1090), G.rand(820, 855), 44)}</g>`);
+          later(() => { G.sfx.sparkle(); G.beep(G.T('town.sand.' + k)); }, 250);
+        }
+      };
+      if (found++) return dig();
+      busy = true; moveKid(1010, 795, 600).then(() => { busy = false; G.beep(G.T('town.sandDig')); dig(); });
+    });
+    tapOn(svg, '.bottle', () => {
+      G.sfx.whoosh(); if (!G.$('.bubs', svg).children.length) G.beep(G.T('town.bubbles'));
+      for (let i = 0; i < 7; i++) later(() => {
+        const b = G.$('.bubs', svg); if (!b) return;
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); g.setAttribute('class', 'bub'); g.style.setProperty('--dx', G.rand(-260, 260) + 'px'); g.style.setProperty('--t', G.rand(5, 8) + 's'); g.style.cursor = 'pointer';
+        const r = G.rand(22, 38); g.innerHTML = `<circle cx="${880 + G.rand(-20, 20)}" cy="620" r="${r}" fill="#dff6ff" fill-opacity=".35" stroke="#9fd8ff" stroke-width="3"/><circle cx="${872}" cy="${612}" r="${r / 4}" fill="#fff" opacity=".8"/>`;
+        g.addEventListener('click', ev => { ev.stopPropagation(); G.sfx.pop(); burstAt(ev, '✨', 4); g.remove(); });
+        g.addEventListener('animationend', () => g.remove()); b.appendChild(g);
+      }, i * 180);
+    });
+    tapOn(svg, '.squirrel', q => { if (q.classList.contains('run')) return; q.classList.add('run'); G.sfx.squeak(); G.beep(G.T('town.squirrel')); later(() => q.classList.remove('run'), 2600); });
     tapOn(svg, '.swing-set', () => {
       if (busy) return; busy = true;
       moveKid(1150, 660, 500).then(() => { const r = G.$('.rope', svg), k = G.$('#kid', svg); r.style.transformOrigin = '1150px 432px'; k.style.transformOrigin = '1150px 432px'; r.classList.add('swinging'); k.classList.add('swinging'); [0, 1, 2].forEach(i => later(G.sfx.whoosh, i * 800)); later(() => { r.classList.remove('swinging'); k.classList.remove('swinging'); moveKid(1150, 840, 400).then(fun); }, 2500); });
@@ -189,8 +244,32 @@
         <rect x="-120" y="70" width="190" height="110" fill="#d8b98a" stroke="#6b4a2a" stroke-width="5"/><path d="M-120 70 L-25 20 L70 70Z" fill="#a8603e"/>
         <g class="tube" style="cursor:pointer"><path d="M70 100 C170 100 180 180 120 200 C60 220 120 260 200 250" stroke="#ef7a2a" stroke-width="44" fill="none" stroke-linecap="round"/><path d="M70 100 C170 100 180 180 120 200 C60 220 120 260 200 250" stroke="#ff9f43" stroke-width="30" fill="none" stroke-linecap="round"/></g></g>
       <g transform="translate(330,570) scale(.8)"><ellipse cx="0" cy="40" rx="190" ry="26" fill="#6f6658" opacity=".3"/><path d="M-180 30 Q-180 -60 0 -70 Q180 -60 180 30Z" fill="#a8977f"/>${Array.from({ length: 12 }, (_, i) => `<ellipse cx="${-150 + (i % 6) * 60}" cy="${-30 + Math.floor(i / 6) * 40}" rx="28" ry="16" fill="${i % 3 ? '#b8a68c' : '#958470'}"/>`).join('')}${nm ? label(nm.toUpperCase(), 0, -8, 36, '#fdf6e8', 'stroke="#5a4a3a" stroke-width="1.5"') : ''}</g>
+      <g class="kite" style="cursor:pointer"><path d="M620 90 L680 170 L620 260 L560 170Z" fill="#ff6fb1" stroke="#c2185b" stroke-width="4"/><path d="M620 90 V260 M560 170 H680" stroke="#c2185b" stroke-width="3"/><path d="M620 260 q-20 30 0 60 q20 30 0 60" stroke="#4d8dff" stroke-width="4" fill="none"/>${[0, 1, 2].map(i => `<path d="M${612} ${290 + i * 32} l8 -8 l8 8 l-8 8Z" fill="${['#ffd93d', '#4cd97b', '#9b6bff'][i]}"/>`).join('')}</g>
+      <path d="M620 260 Q700 420 760 560" stroke="#fff" stroke-width="2" fill="none" opacity=".8"/>
+      <g class="pond" style="cursor:pointer"><ellipse cx="1190" cy="815" rx="190" ry="62" fill="#5fb7e6" stroke="#8a7a5a" stroke-width="6"/><ellipse cx="1150" cy="805" rx="70" ry="12" fill="#bfeeff" opacity=".6"/><g class="duck d0">${emo('🦆', 1090, 800, 58)}</g><g class="duck d1">${emo('🦆', 1290, 820, 50)}</g><g class="crumbs"></g></g>
+      <g class="goal"><path d="M220 610 H340 V700 M220 610 V700" stroke="#fff" stroke-width="8" fill="none"/>${Array.from({ length: 5 }, (_, i) => `<line x1="${236 + i * 22}" y1="612" x2="${236 + i * 22}" y2="700" stroke="#fff" stroke-width="2" opacity=".7"/>`).join('')}${Array.from({ length: 3 }, (_, i) => `<line x1="222" y1="${632 + i * 22}" x2="338" y2="${632 + i * 22}" stroke="#fff" stroke-width="2" opacity=".7"/>`).join('')}</g>
+      <g class="ball" style="cursor:pointer">${emo('⚽', 560, 690, 54)}</g>
+      <g class="dog" style="cursor:pointer">${emo('🐕', 440, 655, 80)}</g>
+      <g class="flowers">${[['🌷', 380, 470], ['🌼', 430, 485], ['🌸', 480, 468], ['🌷', 1460, 600], ['🌼', 1410, 615]].map(([c, x, y], i) => `<g class="flower" style="cursor:pointer">${emo(c, x, y, 40)}</g>`).join('')}</g>
       ${[0, 1, 2, 3, 4].map(i => `<g class="fly f${i}" style="cursor:pointer">${emo('🦋', [560, 720, 900, 620, 1000][i], [540, 660, 600, 700, 720][i], 74)}</g>`).join('')}`);
-    putKid(1000, 800);
+    putKid(1000, 760);
+    let pbusy = false;
+    tapOn(svg, '.kite', k => { if (k.classList.contains('soar')) return; k.classList.add('soar'); G.sfx.whoosh(); later(G.sfx.whoosh, 900); G.beep(G.T('town.kite')); later(() => k.classList.remove('soar'), 2500); });
+    tapOn(svg, '.pond', (p, e) => {
+      if (pbusy) return; pbusy = true;
+      moveKid(1000, 770, 500).then(() => {
+        const c = G.$('.crumbs', svg); c.innerHTML = Array.from({ length: 6 }, () => `<circle cx="${G.rand(1150, 1230)}" cy="${G.rand(800, 830)}" r="5" fill="#e0b070"/>`).join('');
+        G.$$('.duck', svg).forEach(d => d.classList.add('eat')); G.sfx.quack(); later(G.sfx.quack, 700); G.beep(G.T('town.ducks'));
+        later(() => { c.innerHTML = ''; G.$$('.duck', svg).forEach(d => d.classList.remove('eat')); pbusy = false; }, 2600);
+      });
+    });
+    tapOn(svg, '.ball', b => {
+      if (pbusy) return; pbusy = true;
+      moveKid(620, 720, 500).then(() => { G.sfx.thump(); b.classList.add('kick'); later(() => { G.sfx.great(); G.confetti(20); G.beep(G.T('town.goal')); }, 800); later(() => { b.classList.remove('kick'); pbusy = false; }, 2600); });
+    });
+    tapOn(svg, '.dog', (d, e) => { d.classList.remove('hop2'); void d.getBBox(); d.classList.add('hop2'); G.sfx.woof(); burstAt(e, '💛', 5); G.beep(G.T('town.dog')); });
+    let picked = 0;
+    tapOn(svg, '.flower', (f, e) => { if (f.dataset.gone) return; f.dataset.gone = 1; f.style.opacity = '0'; G.sfx.sparkle(); burstAt(e, '🌸', 4); if (++picked === 5) G.beep(G.T('town.flowers')); });
     let left = 5;
     tapOn(svg, '.fly', (f, e) => { if (f.dataset.gone) return; f.dataset.gone = 1; burstAt(e, '✨'); f.style.opacity = '0'; G.sfx.sparkle(); if (!--left) later(() => { win('park'); G.beep(G.T('town.parkDone')); }, 500); });
     tapOn(svg, '.tube', () => { G.sfx.step(3); moveKid(1260, 590, 600).then(() => { G.sfx.whoosh(); return moveKid(1400, 760, 900, -20); }).then(() => G.sfx.boing()); });
@@ -224,7 +303,7 @@
       moveKid(x, 600, 600).then(() => {
         G.sfx.open(); leaf.setAttribute('fill', '#3b3f4a');
         if (!d.dataset.peek) { d.dataset.peek = 1; d.insertAdjacentHTML('beforeend', emo(g === 'K' ? '🍎' : G.pick(['📐', '📏', '🌍', '🔬']), x, 480, 50) + emo(g === 'K' ? '🧸' : '✏️', x, 535, 40)); }
-        if (g === 'K') { if (!found) { found = true; G.beep(G.T('town.schoolK')); win('school'); } else G.beep(G.T('town.schoolK')); }
+        if (g === 'K') { if (!found) { found = true; win('school'); } G.beep(G.T('town.schoolK')); later(() => classroom('mira'), 2800); }
         else G.beep(G.T('town.grade' + g));
       });
     });
@@ -250,7 +329,7 @@
         ${emo('🪣', 210, 90, 56)}</g>`);
     putKid(920, 780);
     let step = 0, busy = false;
-    tapOn(svg, '.door-in', () => { if (busy) return; busy = true; G.sfx.open(); moveKid(565, 610, 600).then(() => classroom()); });
+    tapOn(svg, '.door-in', () => { if (busy) return; busy = true; G.sfx.open(); moveKid(565, 610, 600).then(() => classroom('maia')); });
     tapOn(svg, '.pack', p => {
       if (step !== 0 || busy) return; busy = true;
       moveKid(470, 620, 500).then(() => { const t = p.querySelector('text'); t.setAttribute('x', 565); t.setAttribute('y', 520); t.style.transition = 'opacity .6s'; G.sfx.open(); later(() => { t.style.opacity = '0'; G.sfx.close(); }, 500); step = 1; busy = false; later(() => G.beep(G.T('town.kinderPlay')), 700); });
@@ -284,9 +363,20 @@
         ${Array.from({ length: 2 }, (_, r) => Array.from({ length: 30 }, (_, i) => `<rect x="${160 + i * 43}" y="${40 + r * 220 + (i % 3) * 8}" width="36" height="${118 - (i % 3) * 8}" fill="${['#ff6f6f', '#ffb347', '#6fd97b', '#6fa8ff', '#b58cff', '#ff9cc7'][(i + r) % 6]}" stroke="#4a3f63" stroke-width="2"/>`).join('')).join('')}
         <rect x="60" y="590" width="1480" height="40" rx="8" fill="#c9a46a"/>
         ${books.map((id, i) => { const c = BOOK_ART[id].c, x = 212 + i * 148; return `<g class="book" data-id="${id}" style="cursor:pointer"><rect x="${x}" y="420" width="126" height="172" rx="10" fill="${c}" stroke="#4a3f63" stroke-width="5"/><rect x="${x}" y="420" width="18" height="172" fill="#000" opacity=".15"/>${emo(BOOK_ART[id].icon, x + 70, 500, 70)}${emo('⭐', x + 112, 428, 40, 'class="read-star" opacity="0"')}</g>`; }).join('')}
-        <rect x="660" y="720" width="280" height="120" rx="60" fill="#ffd93d" opacity=".8"/>`, 'town.libraryIn', () => library());
+        <rect x="660" y="720" width="280" height="120" rx="60" fill="#ffd93d" opacity=".8"/>
+        <g class="puppets" style="cursor:pointer"><rect x="410" y="636" width="190" height="70" fill="#3a2a4a"/><g class="pup p0">${emo('🐉', 470, 740, 60)}</g><g class="pup p1">${emo('👸', 540, 740, 60)}</g><rect x="410" y="700" width="190" height="80" fill="#c62828"/><rect x="400" y="620" width="210" height="22" fill="#c62828"/><rect x="400" y="620" width="16" height="160" fill="#8e1b1b"/><rect x="594" y="620" width="16" height="160" fill="#8e1b1b"/><path d="M416 642 q40 30 0 58 M594 642 q-40 30 0 58" fill="#e53935"/></g>
+        <g class="desk" style="cursor:pointer">${emo('👩‍💼', 1290, 640, 110)}<rect x="1170" y="660" width="240" height="90" rx="8" fill="#8a5a3c"/><rect x="1160" y="652" width="260" height="16" rx="6" fill="#a8744a"/>${emo('📇', 1220, 640, 34)}<rect x="1340" y="636" width="40" height="18" rx="4" fill="#333"/><circle cx="1360" cy="640" r="4" fill="#ff5252"/></g>`, 'town.libraryIn', () => library());
       putKid(1100, 820);
-      const read = new Set(); let done = false, busy = false;
+      const read = new Set(); let done = false, busy = false, out = 0;
+      tapOn(svg2, '.puppets', p => { if (p.classList.contains('show')) return; p.classList.add('show'); G.sfx.hoot(); later(G.sfx.boing, 900); G.beep(G.T('town.puppets')); later(() => p.classList.remove('show'), 4200); });
+      tapOn(svg2, '.desk', (d, e) => {
+        if (busy) return; busy = true;
+        moveKid(1180, 840, 600).then(() => {
+          busy = false;
+          if (read.size > out) { out++; G.sfx.boop(); later(G.sfx.stamp, 300); burstAt(e, '📚', 5); G.beep(G.T('town.checkout')); }
+          else G.beep(G.T('town.checkoutFirst'));
+        });
+      });
       tapOn(svg2, '.book', (b, e) => {
         if (busy) return; busy = true;
         G.sfx.sparkle(); burstAt(e, '⭐', 5);
@@ -414,8 +504,9 @@
   }
 
   // ----- inside Maia's school: cubbies, the teacher, a sink, an easel, the fish tank, nap mats, the circle rug, blocks and a book corner -----
-  function classroom() {
-    const k = G.kid(), others = ['🐶', '🐱', '🌟', '🍎', '🚗'];
+  function classroom(who) {
+    const mira = who === 'mira', k = G.KIDS[who], others = ['🐶', '🐱', '🌟', '🍎', '🚗'];
+    const sid = mira ? 'schoolIn' : 'kinderIn';
     const LET = 'ABCDEFGHIJKLMNOP', COL = ['#ff6f6f', '#ffb347', '#ffd93d', '#6fd97b', '#4d8dff', '#b58cff'];
     const svg = frame('kinderIn', 'kinder in', `<rect width="1600" height="620" fill="#fdf1d8"/><rect y="600" width="1600" height="300" fill="#e3c08a"/>${Array.from({ length: 9 }, (_, i) => `<line x1="0" y1="${630 + i * 32}" x2="1600" y2="${630 + i * 32}" stroke="#cfa972" stroke-width="3"/>`).join('')}<rect y="590" width="1600" height="16" fill="#c49a62"/>
       <path d="M30 40 Q800 110 1570 40" stroke="#8a6a52" stroke-width="4" fill="none"/>${Array.from(LET).map((c, i) => { const x = 70 + i * 97, y = 40 + Math.sin((i + 0.5) / 16 * Math.PI) * 50; return `<path d="M${x - 34} ${y} L${x + 34} ${y} L${x} ${y + 70}Z" fill="${COL[i % 6]}"/>${label(c, x, y + 32, 30, '#fff')}`; }).join('')}
@@ -423,8 +514,9 @@
       <g class="cubby" style="cursor:pointer"><rect x="205" y="250" width="240" height="330" fill="#d9a066" stroke="#8a5a3c" stroke-width="6"/>
         ${[0, 1].map(r => [0, 1, 2].map(c => { const x = 213 + c * 77, y = 262 + r * 158, i = r * 3 + c; return `<rect x="${x}" y="${y}" width="72" height="146" fill="#f6e2c2"/><circle cx="${x + 36}" cy="${y + 16}" r="6" fill="#8a8f9a"/><rect x="${x + 4}" y="${y + 112}" width="64" height="28" rx="6" fill="#fff"/>${i === 1 ? label(k.name, x + 36, y + 133, 19, '#c62828') : emo(others[i > 1 ? i - 1 : i], x + 36, y + 126, 22)}`; }).join('')).join('')}
         <g class="cubby-stuff" style="opacity:0;transition:opacity .4s">${emo('🎒', 326, 308, 48)}${emo('🧥', 326, 350, 34)}</g></g>
-      <g class="teacher" style="cursor:pointer">${emo('👩‍🏫', 515, 525, 150)}</g>
-      <g class="mats" style="cursor:pointer">${['#4d8dff', '#4cd97b', '#ff6f6f', '#ffd93d'].map((c, i) => `<rect x="640" y="${560 - i * 24}" width="180" height="22" rx="8" fill="${c}" stroke="#4a3f63" stroke-width="3"/>`).join('')}</g>
+      <g class="teacher" style="cursor:pointer">${emo(mira ? '👨‍🏫' : '👩‍🏫', 515, 525, 150)}</g>
+      ${mira ? `<g class="mats" style="cursor:pointer"><rect x="630" y="420" width="200" height="160" rx="8" fill="#fff" stroke="#4d8dff" stroke-width="6"/><rect x="630" y="420" width="200" height="34" fill="#4d8dff"/>${label('CALENDAR', 730, 446, 22, '#fff')}${Array.from({ length: 15 }, (_, i) => `<rect x="${640 + (i % 5) * 37}" y="${464 + Math.floor(i / 5) * 37}" width="32" height="32" fill="${i === 7 ? '#ffd93d' : '#eef4ff'}"/>`).join('')}</g>`
+        : `<g class="mats" style="cursor:pointer">${['#4d8dff', '#4cd97b', '#ff6f6f', '#ffd93d'].map((c, i) => `<rect x="640" y="${560 - i * 24}" width="180" height="22" rx="8" fill="${c}" stroke="#4a3f63" stroke-width="3"/>`).join('')}</g>`}
       <g class="sink" style="cursor:pointer"><rect x="950" y="440" width="110" height="160" fill="#7fc3e8" stroke="#3d7ea6" stroke-width="5"/><rect x="940" y="430" width="130" height="22" rx="6" fill="#e9eef2"/><ellipse cx="1005" cy="441" rx="38" ry="9" fill="#b9c4cc"/><path d="M1005 432 V398 H1030 V410" stroke="#9aa3ab" stroke-width="10" fill="none" stroke-linecap="round"/>${emo('🧼', 1050, 418, 30)}</g>
       <g class="easel" style="cursor:pointer"><path d="M1095 600 L1150 290 L1205 600 M1150 290 V600" stroke="#8a5a3c" stroke-width="10" fill="none"/><rect x="1085" y="310" width="130" height="190" fill="#fff" stroke="#c49a62" stroke-width="6"/><g class="paint"></g><rect x="1075" y="500" width="150" height="16" fill="#c49a62"/>${['#ff6f6f', '#ffd93d', '#4d8dff', '#4cd97b'].map((c, i) => `<circle cx="${1098 + i * 35}" cy="508" r="9" fill="${c}"/>`).join('')}</g>
       <g class="tank" style="cursor:pointer"><rect x="1235" y="470" width="165" height="130" fill="#b07a4a" stroke="#7a5030" stroke-width="5"/><rect x="1240" y="330" width="155" height="140" fill="#9fe3ff" stroke="#5aa9cf" stroke-width="6" opacity=".95"/><rect x="1240" y="330" width="155" height="16" fill="#5aa9cf"/><path d="M1245 470 q20 -30 40 0 q20 -24 40 0 q30 -40 60 0" fill="#7cc46a"/>
@@ -433,12 +525,12 @@
         <ellipse cx="1010" cy="845" rx="85" ry="50" fill="#ff8fb8"/><ellipse cx="1002" cy="822" rx="55" ry="30" fill="#ffa8c8"/></g>
       <g class="rug" style="cursor:pointer"><ellipse cx="700" cy="770" rx="210" ry="86" fill="#4d8dff"/><ellipse cx="700" cy="770" rx="186" ry="70" fill="#ffd93d"/>${Array.from({ length: 10 }, (_, i) => { const a = i / 10 * Math.PI * 2; return `<circle cx="${700 + Math.cos(a) * 150}" cy="${770 + Math.sin(a) * 52}" r="16" fill="${COL[i % 6]}"/>`; }).join('')}${label('ABC', 700, 784, 40, '#ff6f6f')}</g>
       <g class="blocks" style="cursor:pointer"><rect x="1270" y="800" width="125" height="74" rx="10" fill="#ff9f43" stroke="#c46a1c" stroke-width="5"/>${['#ff6f6f', '#4d8dff', '#4cd97b'].map((c, i) => `<rect x="${1280 + i * 38}" y="780" width="36" height="30" fill="${c}" stroke="#4a3f63" stroke-width="3"/>`).join('')}<g class="tower"></g></g>
-      <rect class="dim" width="1600" height="900" fill="#0b1024" opacity="0" pointer-events="none" style="transition:opacity .8s"/>`, 'town.kinderIn', () => kinder());
+      <rect class="dim" width="1600" height="900" fill="#0b1024" opacity="0" pointer-events="none" style="transition:opacity .8s"/>`, 'town.' + sid, () => (mira ? school : kinder)());
     putKid(1230, 890);
     const tried = new Set(); let busy = false, won = false, blocks = 0;
-    const did = what => { tried.add(what); if (tried.size === 9 && !won) { won = true; later(() => { win('kinderIn'); G.beep(G.T('town.kinderInDone')); }, 2600); } };
+    const did = what => { tried.add(what); if (tried.size === 9 && !won) { won = true; later(() => { win(sid); G.beep(G.T('town.' + sid + 'Done')); }, 2600); } };
     const go = (what, x, y, fn) => (n, e) => { if (busy) return; busy = true; moveKid(x, y, 550).then(() => { busy = false; fn(n, e); did(what); }); };
-    tapOn(svg, '.cubby', go('cubby', 330, 700, () => { G.sfx.open(); G.$('.cubby-stuff', svg).style.opacity = '1'; G.beep(G.T('town.kinderCubby')); }));
+    tapOn(svg, '.cubby', go('cubby', 330, 700, () => { G.sfx.open(); G.$('.cubby-stuff', svg).style.opacity = '1'; G.beep(G.T('town.cubby.' + who)); }));
     tapOn(svg, '.teacher', go('teacher', 630, 700, (n, e) => { G.sfx.chime(); burstAt(e, '💛', 5); G.beep(G.T('town.kinderTeacher')); }));
     tapOn(svg, '.sink', go('sink', 1005, 700, (n, e) => { G.sfx.water(); burstAt(e, '🫧', 8); G.beep(G.T('town.kinderSink')); }));
     let painted = 0;
@@ -454,6 +546,7 @@
       for (let i = 0; i < 4; i++) later(G.sfx.bubble, i * 200); G.beep(G.T('town.kinderTank'));
     }));
     tapOn(svg, '.mats', go('nap', 730, 640, () => {
+      if (mira) { G.sfx.chime(); G.beep(G.T('town.today.d' + new Date().getDay())); return; }
       busy = true; const d = G.$('.dim', svg); d.setAttribute('opacity', '.55'); G.beep(G.T('town.kinderNap'));
       for (let i = 0; i < 3; i++) later(() => { const r = svg.getBoundingClientRect(); G.burst(r.left + r.width * 0.46, r.top + r.height * 0.6, '💤', 3); }, 600 + i * 800);
       later(() => { d.setAttribute('opacity', '0'); G.sfx.chime(); G.beep(G.T('town.kinderWake')); busy = false; }, 3600);

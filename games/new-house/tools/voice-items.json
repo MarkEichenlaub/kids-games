@@ -1165,6 +1165,11 @@
   "say": "Tap the slide or the swing."
  },
  {
+  "hash": "g300ix",
+  "text": "There is a sandbox and a seesaw too.",
+  "say": "There is a sandbox and a seesaw too."
+ },
+ {
   "hash": "abjpk7",
   "text": "Wheee!",
   "say": "Wheee!"
@@ -1218,6 +1223,76 @@
   "hash": "141kylo",
   "text": "This is where Mira will learn and play.",
   "say": "This is where Meera will learn and play."
+ },
+ {
+  "hash": "1nb61gy",
+  "text": "Let's go inside!",
+  "say": "Let's go inside!"
+ },
+ {
+  "hash": "k0xwlb",
+  "text": "This is Mira's kindergarten classroom!",
+  "say": "This is Meera's kindergarten classroom!"
+ },
+ {
+  "hash": "ppiwby",
+  "text": "Tap things to play.",
+  "say": "Tap things to play."
+ },
+ {
+  "hash": "7se1e4",
+  "text": "Can you try everything?",
+  "say": "Can you try everything?"
+ },
+ {
+  "hash": "aizfaw",
+  "text": "You tried everything in the classroom!",
+  "say": "You tried everything in the classroom!"
+ },
+ {
+  "hash": "swtom9",
+  "text": "Mira is going to love kindergarten.",
+  "say": "Meera is going to love kindergarten."
+ },
+ {
+  "hash": "1yt4p9o",
+  "text": "Calendar time!",
+  "say": "Calendar time!"
+ },
+ {
+  "hash": "6v0lra",
+  "text": "Today is Sunday.",
+  "say": "Today is Sunday."
+ },
+ {
+  "hash": "869vp6",
+  "text": "Today is Monday.",
+  "say": "Today is Monday."
+ },
+ {
+  "hash": "16md7tl",
+  "text": "Today is Tuesday.",
+  "say": "Today is Tuesday."
+ },
+ {
+  "hash": "19mcn1y",
+  "text": "Today is Wednesday.",
+  "say": "Today is Wednesday."
+ },
+ {
+  "hash": "1vqkl90",
+  "text": "Today is Thursday.",
+  "say": "Today is Thursday."
+ },
+ {
+  "hash": "1csjd9l",
+  "text": "Today is Friday.",
+  "say": "Today is Friday."
+ },
+ {
+  "hash": "1blkhk1",
+  "text": "Today is Saturday.",
+  "say": "Today is Saturday."
  },
  {
   "hash": "8zxcap",
@@ -1280,24 +1355,19 @@
   "say": "This is Maia's classroom!"
  },
  {
-  "hash": "ppiwby",
-  "text": "Tap things to play.",
-  "say": "Tap things to play."
+  "hash": "1foweos",
+  "text": "This is Maia's cubby.",
+  "say": "This is Maia's cubby."
  },
  {
-  "hash": "7se1e4",
-  "text": "Can you try everything?",
-  "say": "Can you try everything?"
+  "hash": "rpv9ak",
+  "text": "Her backpack and her coat go in here.",
+  "say": "Her backpack and her coat go in here."
  },
  {
-  "hash": "16r3q1l",
-  "text": "This is your cubby.",
-  "say": "This is your cubby."
- },
- {
-  "hash": "13bpk5k",
-  "text": "Your backpack and your coat go in here.",
-  "say": "Your backpack and your coat go in here."
+  "hash": "1pp63ez",
+  "text": "This is Mira's cubby.",
+  "say": "This is Meera's cubby."
  },
  {
   "hash": "1h0tzrb",
@@ -1405,14 +1475,179 @@
   "say": "Time to wake up!"
  },
  {
-  "hash": "aizfaw",
-  "text": "You tried everything in the classroom!",
-  "say": "You tried everything in the classroom!"
- },
- {
   "hash": "1sufcen",
   "text": "Maia is going to love it here.",
   "say": "Maia is going to love it here."
+ },
+ {
+  "hash": "1qqnaai",
+  "text": "Dig in the sandbox!",
+  "say": "Dig in the sandbox!"
+ },
+ {
+  "hash": "1gngnbh",
+  "text": "What can you find?",
+  "say": "What can you find?"
+ },
+ {
+  "hash": "e78fbr",
+  "text": "A seashell!",
+  "say": "A seashell!"
+ },
+ {
+  "hash": "1ps0ton",
+  "text": "A dinosaur bone!",
+  "say": "A dinosaur bone!"
+ },
+ {
+  "hash": "4z031w",
+  "text": "A shiny coin!",
+  "say": "A shiny coin!"
+ },
+ {
+  "hash": "15r7ac5",
+  "text": "A sparkly jewel!",
+  "say": "A sparkly jewel!"
+ },
+ {
+  "hash": "855sly",
+  "text": "A little toy car!",
+  "say": "A little toy car!"
+ },
+ {
+  "hash": "di3e0b",
+  "text": "A rubber duck!",
+  "say": "A rubber duck!"
+ },
+ {
+  "hash": "1okz9ty",
+  "text": "Somebody's lost shovel!",
+  "say": "Somebody's lost shovel!"
+ },
+ {
+  "hash": "yjrk7o",
+  "text": "Bubbles!",
+  "say": "Bubbles!"
+ },
+ {
+  "hash": "e2l2oc",
+  "text": "Tap them to pop them.",
+  "say": "Tap them to pop them."
+ },
+ {
+  "hash": "q4lm6h",
+  "text": "Up and down on the seesaw with Maia!",
+  "say": "Up and down on the seesaw with Maia!"
+ },
+ {
+  "hash": "1gfmhre",
+  "text": "Up and down on the seesaw with Mira!",
+  "say": "Up and down on the seesaw with Meera!"
+ },
+ {
+  "hash": "4f9n8z",
+  "text": "A squirrel!",
+  "say": "A squirrel!"
+ },
+ {
+  "hash": "1pglpuo",
+  "text": "It is looking for acorns.",
+  "say": "It is looking for acorns."
+ },
+ {
+  "hash": "1kerh3m",
+  "text": "Up, up, up goes the kite!",
+  "say": "Up, up, up goes the kite!"
+ },
+ {
+  "hash": "1jclm2z",
+  "text": "Quack, quack!",
+  "say": "Quack, quack!"
+ },
+ {
+  "hash": "ibtiwp",
+  "text": "The ducks are hungry.",
+  "say": "The ducks are hungry."
+ },
+ {
+  "hash": "1iyv1gf",
+  "text": "Kick!",
+  "say": "Kick!"
+ },
+ {
+  "hash": "683k3a",
+  "text": "Goal!",
+  "say": "Goal!"
+ },
+ {
+  "hash": "1dpv1s5",
+  "text": "A friendly dog!",
+  "say": "A friendly dog!"
+ },
+ {
+  "hash": "fu4809",
+  "text": "Woof, woof!",
+  "say": "Woof, woof!"
+ },
+ {
+  "hash": "1uqprdb",
+  "text": "What a pretty bunch of flowers!",
+  "say": "What a pretty bunch of flowers!"
+ },
+ {
+  "hash": "4ujjiv",
+  "text": "One, two, three, cannonball!",
+  "say": "One, two, three, cannonball!"
+ },
+ {
+  "hash": "jghxfu",
+  "text": "A cold ice cream on a hot day.",
+  "say": "A cold ice cream on a hot day."
+ },
+ {
+  "hash": "1y1a4kp",
+  "text": "The lifeguard keeps everyone safe in the pool.",
+  "say": "The lifeguard keeps everyone safe in the pool."
+ },
+ {
+  "hash": "19lpuhp",
+  "text": "Beep!",
+  "say": "Beep!"
+ },
+ {
+  "hash": "1i411sf",
+  "text": "You checked out a book.",
+  "say": "You checked out a book."
+ },
+ {
+  "hash": "1njigar",
+  "text": "Bring it back in three weeks.",
+  "say": "Bring it back in three weeks."
+ },
+ {
+  "hash": "ng1631",
+  "text": "Read a book first.",
+  "say": "Read a book first."
+ },
+ {
+  "hash": "19ll9ml",
+  "text": "Then bring it here to check it out.",
+  "say": "Then bring it here to check it out."
+ },
+ {
+  "hash": "cs2lw4",
+  "text": "Puppet show!",
+  "say": "Puppet show!"
+ },
+ {
+  "hash": "1yrju4b",
+  "text": "Roar, says the dragon.",
+  "say": "Roar, says the dragon."
+ },
+ {
+  "hash": "rlz4kx",
+  "text": "Hello, says the princess.",
+  "say": "Hello, says the princess."
  },
  {
   "hash": "y1zc7z",
@@ -2378,11 +2613,6 @@
   "hash": "56pkmt",
   "text": "It goes in the courtyard.",
   "say": "It goes in the courtyard."
- },
- {
-  "hash": "di3e0b",
-  "text": "A rubber duck!",
-  "say": "A rubber duck!"
  },
  {
   "hash": "1c5d49y",
