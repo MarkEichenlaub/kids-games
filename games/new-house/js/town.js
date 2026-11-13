@@ -26,9 +26,9 @@
   };
   const data = () => {
     const d = G.townData; if (!d) return FAKE;
-    const pl = d.places; // the real data calls the parks by name
-    return { w: d.w, h: d.h, roads: d.roads, areas: d.areas, names: Object.assign({}, FAKE.names, { pool: d.names.pool, play: d.names.homestead, park: d.names.heritage, school: d.names.school, kinder: d.names.kinder, library: d.names.library }),
-      places: { home: pl.home, pool: pl.pool, play: pl.homestead, park: pl.heritage, school: pl.school, library: pl.library, kinder: pl.kinder } };
+    const pl = d.places;
+    return { w: d.w, h: d.h, roads: d.roads, areas: d.areas, names: Object.assign({}, FAKE.names, { pool: d.names.pool, play: d.names.play, park: d.names.park, school: d.names.school, kinder: d.names.kinder, library: d.names.library }),
+      places: { home: pl.home, pool: pl.pool, play: pl.play, park: pl.park, school: pl.school, library: pl.library, kinder: pl.kinder } };
   };
   const name = id => data().names[id] || '';
   function mapSvg(d) {
@@ -39,7 +39,7 @@
     for (const k of ['shops', 'school', 'library', 'park', 'field']) for (const a of d.areas) if (a.k === k) s += `<polygon points="${pts(a.p)}" fill="${AC[k]}"/>`;
     const RW = { major: 13, mid: 10, street: 5.5, alley: 4 }, RC = { major: '#a7acb4', mid: '#b6bac1', street: '#e7e2d8', alley: '#ddd5c6' };
     for (const k of ['alley', 'street', 'mid', 'major']) for (const r of d.roads) if (r.k === k) s += `<polyline points="${pts(r.p)}" fill="none" stroke="${RC[k]}" stroke-width="${RW[k]}" stroke-linecap="round" stroke-linejoin="round"/>`;
-    // trees along the big roads, the way 4S Ranch looks
+    // trees along the big roads
     let n = 0;
     for (const r of d.roads) if (r.k === 'major') for (let i = 1; i < r.p.length; i++) {
       const [x1, y1] = r.p[i - 1], [x2, y2] = r.p[i], L = Math.hypot(x2 - x1, y2 - y1);
