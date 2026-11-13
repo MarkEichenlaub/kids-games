@@ -157,6 +157,7 @@
   G.start = () => {
     G.load(); G.initBeep();
     G.photosReady();
+    window.addEventListener('hashchange', () => G.photosReady()); // Dad's key link, opened while the game is already up
     G.facesReady().then(() => G.go('title'));
     document.addEventListener('pointerdown', () => G.audio(), true);
     document.addEventListener('contextmenu', e => e.preventDefault());
