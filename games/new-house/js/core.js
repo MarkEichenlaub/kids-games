@@ -24,12 +24,15 @@ window.G = (function () {
   // ---------- saved state ----------
   // One house shared by both kids; each kid keeps her own costume, stamps and stars.
   G.defaultProfile = id => ({ id, costume: id === 'mira' ? 'owl' : 'unicorn', stamps: {}, stars: 0, glims: {}, done: {}, intro: false });
-  G.defaultHouse = () => ({ items: {}, paint: {}, unlocked: [], flowers: {}, roomNames: { bedA: 'star', bedB: 'moon' }, pet: null, garageOpen: false, nextPkg: 0 });
+  G.defaultHouse = () => ({ items: {}, paint: {}, unlocked: [], flowers: {}, roomNames: { bedA: 'star', bedB: 'moon' }, pet: null, garageOpen: false, nextPkg: 0, layout: 2 });
   G.save = { profiles: {}, current: null, house: G.defaultHouse(), settings: { sound: true, voice: true, music: true } };
   G.load = () => {
     try {
       const s = JSON.parse(localStorage.getItem(SAVE_KEY));
-      if (s && s.profiles) { G.save = Object.assign(G.save, s); G.save.house = Object.assign(G.defaultHouse(), s.house || {}); }
+      if (s && s.profiles) {
+        G.save = Object.assign(G.save, s); G.save.house = Object.assign(G.defaultHouse(), s.house || {}, { layout: (s.house && s.house.layout) || 1 });
+        if (G.save.house.layout < 2) { for (const r of ['living', 'den', 'primary']) delete G.save.house.items[r]; G.save.house.layout = 2; } // play corner moved downstairs
+      }
     } catch (e) { }
     G.save.settings = Object.assign({ sound: true, voice: true, music: true }, G.save.settings || {});
   };

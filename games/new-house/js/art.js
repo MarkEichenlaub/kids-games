@@ -243,7 +243,7 @@
   };
   X.builtin = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); marble(c, f.x + 0.5, f.y + 0.15, f.w - 0.6, f.h - 0.3, 0.08); circ(c, f.x + 0.42, f.y + f.h / 2, 0.36, '#dfeaf2', '#555'); emoji(c, '🪴', f.x + f.w * 0.62, f.y + 0.8, 0.6); emoji(c, '🏺', f.x + f.w * 0.62, f.y + f.h - 0.8, 0.6); };
   X.lowshelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); const n = Math.floor(f.h / 1.1); for (let i = 0; i < n; i++) { line(c, [f.x, f.y + i * (f.h / n), f.x + f.w, f.y + i * (f.h / n)], '#cfcbc2', 0.04); emoji(c, ['📚', '🧺', '🧸', '📚', '🪴', '🎲', '📚', '🧩', '🪀', '📚'][i % 10], f.x + f.w / 2, f.y + (i + 0.5) * (f.h / n), 0.7); } };
-  X.nook = (c, f) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x + f.w - 0.5, f.y, 0.5, f.h, CAB, 0.06); emoji(c, '💡', f.x + 0.9, f.y + 0.8, 0.7); emoji(c, '📚', f.x + 0.9, f.y + f.h / 2, 0.7); emoji(c, '🖍️', f.x + 0.9, f.y + f.h - 0.8, 0.6); circ(c, f.x - 0.9, f.y + f.h * 0.42, 0.55, '#d9a66c'); };
+  X.nook = (c, f) => { marble(c, f.x, f.y, f.w, f.h); box(c, f.x + f.w - 0.5, f.y, 0.5, f.h, CAB, 0.06); emoji(c, '💡', f.x + 0.9, f.y + 0.75, 0.65); emoji(c, '💻', f.x + 0.85, f.y + f.h * 0.45, 0.95, -Math.PI / 2); emoji(c, '☕', f.x + 0.9, f.y + f.h - 0.75, 0.55); circ(c, f.x - 0.9, f.y + f.h * 0.45, 0.55, '#8a8f9a'); circ(c, f.x - 0.9, f.y + f.h * 0.45, 0.33, '#a9aeb8', null); };
   X.toilet = (c, f, t) => local(c, f, (w, h) => {
     box(c, -w / 2 + 0.15, -h / 2, w - 0.3, h * 0.3, '#fff', 0.12);
     oval(c, 0, h * 0.12, w * 0.4, h * 0.36, '#fff'); oval(c, 0, h * 0.12, w * 0.27, h * 0.24, f.on ? '#7cc4ff' : '#dff1ff', '#b9c6d6');

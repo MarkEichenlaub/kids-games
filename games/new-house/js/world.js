@@ -473,8 +473,7 @@
       unstick(W.player); unstick(W.sis);
       W.floor = W.player.floor; hud.floor.textContent = W.floor === 2 ? '⬆️ Upstairs' : '⬇️ Downstairs';
       W.setPet(G.save.house.pet);
-      W.npcs.push({ id: 'mama', who: 'mama', floor: 1, x: M.floors[1].spots.mama[0], y: M.floors[1].spots.mama[1], onTap: n => G.Q.talk(n) });
-      W.npcs.push({ id: 'baba', who: 'baba', floor: 1, x: M.floors[1].spots.baba[0], y: M.floors[1].spots.baba[1], apron: 1, onTap: n => G.Q.talk(n) });
+      for (const who of ['mama', 'baba']) { const [fl, x, y] = M.people[who]; W.npcs.push({ id: who, who, floor: fl, x, y, onTap: n => G.Q.talk(n) }); }
       aimCamera(0, true); updateHud();
       cv.addEventListener('pointerdown', onDown); cv.addEventListener('pointermove', onMove);
       // the 3D view: its own canvas over the map, and a button that steps map -> dollhouse -> walking inside

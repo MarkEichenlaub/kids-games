@@ -9,7 +9,8 @@
     introMove: 'Tap where you want to go.',
     intro2: 'Ding dong! Come on in!',
     intro3: 'Mama says: Welcome home, {name}!',
-    intro4: 'Every room has a stamp. Can you find all the rooms? Mama and Baba have jobs for you, too.',
+    intro4: 'Every room has a stamp. Can you find all the rooms? Mama and Baba are working upstairs. Go ask them for a job!',
+    askJob: 'Ask Mama or Baba for a job! Mama works at the desk at the top of the stairs. Baba works in his office.',
     realPhoto: 'This is what it really looks like!',
     praise: ['Great job!', 'You did it!', 'Awesome!', 'Wow, nice!', 'Super!', 'Beep boop, hooray!'],
     followStar: 'Follow the star!',
@@ -55,7 +56,7 @@
       oven: 'Mmm, cookies!', car: 'Beep beep!', volvo: 'This is our silver Volvo. Beep beep!', ioniq: 'This is our blue Ioniq. It runs on electricity, so it is very quiet!', rocket: 'Look! Your rocket from Rocket Builders is parked in the garage!', opener: 'This button opens the big garage door.',
       closet: 'Time to dress up!', closetBig: 'So many clothes!', truck: 'That is the moving truck. It carried all our things to the new house!', heater: 'This tank keeps our water warm. It has its own little nook.',
       panel: 'This box has the switches for all the lights.', ac: 'The air conditioner hides in this white box. It keeps the house cool.', tub: 'Bubble bath!', washer: 'The washer makes our clothes clean.',
-      dryer: 'The dryer makes our clothes warm and dry.', stones: 'Hop, hop, hop along the stepping stones!', linen: 'Towels and sheets live in this cabinet.', desk: 'A desk for drawing!', nook: 'A desk for drawing!', shower: 'The shower makes rain!',
+      dryer: 'The dryer makes our clothes warm and dry.', stones: 'Hop, hop, hop along the stepping stones!', linen: 'Towels and sheets live in this cabinet.', desk: 'A desk for drawing!', nook: 'This is where Mama works!', shower: 'The shower makes rain!',
       bins: 'Trash goes in the black bin. Recycling goes in the blue bin.', bike: 'Ring ring! Bikes and scooters live in the garage.', pantry: 'A snack!', island: 'Crunch! An apple.',
       books: 'So many books to read!', sit: 'A nice place to sit outside.', town: 'Let\'s go explore the neighborhood!',
       seed: 'You planted a seed! Now give it water.', bloom: 'Splash! Look, a flower!', gardenAll: 'All the flowers are blooming! The butterflies love them.',
@@ -93,7 +94,7 @@
   const ROOMS = {
     yard: 'This is the front yard. Our house is the yellow one with the blue door. The path goes along the trees.',
     porch: 'This is the front porch. You can sit here and watch the street.',
-    living: 'This is the living room. It has a fireplace, shelves beside it, and a fan on the ceiling.',
+    living: 'This is the living room. The play corner is right by the fireplace!',
     dining: 'This is the dining room. We eat dinner together here.',
     kitchen: 'This is the kitchen. Look at the big island with three stools!',
     pantry: 'This is the pantry. Snacks live in here!',
@@ -101,19 +102,19 @@
     garage: 'This is the garage. Our two cars sleep in here, and the big door opens to the alley.',
     courtyard: 'This is the courtyard. It goes all along the side of the house. You can play outside here!',
     alley: 'This is the alley behind the house. The car drives in this way, and the moving truck is here!',
-    landing: 'You are upstairs! There is a little desk at the top of the stairs.',
+    landing: 'You are upstairs! Mama works at the little desk at the top of the stairs.',
     kidsbath: 'This is the kids\' bathroom. Brush your teeth here!',
     laundry: 'This is the laundry room. The washer and dryer are upstairs!',
     bigcloset: 'This is Mama and Baba\'s big closet.',
     bigbath: 'This is the big bathroom. It has a bathtub!',
     sunhall: 'This is the sunny hall. Look at all the shelves under the windows.',
     primary: 'This is Mama and Baba\'s room.',
-    den: 'This is the den. It is a cozy nook next to Mama and Baba\'s room.',
+    den: 'This is Baba\'s office. Baba works here.',
   };
   const ROOM_SAY = { star: 'This is the Star Bedroom.', moon: 'This is the Moon Bedroom.', mira: 'This is Mira\'s room.', maia: 'This is Maia\'s room.', both: 'This is Mira and Maia\'s room.', play: 'This is the playroom.', guest: 'This is the guest room.' };
   const BED_MORE = { bedA: 'It has a closet with sliding doors. You can decorate it!', bedB: 'It has a little closet you can walk into. You can decorate it!' };
   // short room names for "It goes in the ..."
-  const ROOM_SHORT = { kitchen: 'kitchen', pantry: 'pantry', dining: 'dining room', living: 'living room', garage: 'garage', courtyard: 'courtyard', kidsbath: 'kids\' bathroom', laundry: 'laundry room', bigcloset: 'big closet', bigbath: 'big bathroom', primary: 'big bedroom', den: 'den', bedA: 'bedroom', bedB: 'bedroom', powder: 'little bathroom' };
+  const ROOM_SHORT = { kitchen: 'kitchen', pantry: 'pantry', dining: 'dining room', living: 'living room', garage: 'garage', courtyard: 'courtyard', kidsbath: 'kids\' bathroom', laundry: 'laundry room', bigcloset: 'big closet', bigbath: 'big bathroom', primary: 'big bedroom', den: 'office', bedA: 'bedroom', bedB: 'bedroom', powder: 'little bathroom' };
   // tiny friends hiding in things around the house
   G.FRIENDS = [
     { id: 'dot', fx: 'flowerpot', icon: '🐞', name: 'Dot the ladybug' }, { id: 'pip', fx: 'tree', icon: '🐦', name: 'Pip the bird' }, { id: 'shelly', fx: 'stones', icon: '🐌', name: 'Shelly the snail' },

@@ -9,7 +9,9 @@ laundry, fireplace and shelves, closets, the desk at the top of the stairs, the 
 and porch) is placed from the listing photos. The furniture on day one is our own, drawn
 from photos of the old house (the rainbow rug, the blue rug, the black and white sofas,
 the piano, the dinner table, the white shelves, the dollhouse, the beds); where each piece
-really goes is a first guess, and the kids can move all of it.
+really goes is a first guess, and the kids can move all of it. The play corner is in the
+living room by the fireplace; the den off the big bedroom is Baba's office, and Mama works
+at the built-in desk at the top of the stairs, which is where the kids find them for jobs.
 
 Three views, on the button at the top: the flat map, a 3D dollhouse you can turn and zoom,
 and walking inside in 3D. Everything works in all three, including decorating and obstacle

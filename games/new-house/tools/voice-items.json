@@ -75,9 +75,29 @@
   "say": "Can you find all the rooms?"
  },
  {
-  "hash": "83dcps",
-  "text": "Mama and Baba have jobs for you, too.",
-  "say": "Mama and Baba have jobs for you, too."
+  "hash": "teohrg",
+  "text": "Mama and Baba are working upstairs.",
+  "say": "Mama and Baba are working upstairs."
+ },
+ {
+  "hash": "wk8wor",
+  "text": "Go ask them for a job!",
+  "say": "Go ask them for a job!"
+ },
+ {
+  "hash": "1u1mah2",
+  "text": "Ask Mama or Baba for a job!",
+  "say": "Ask Mama or Baba for a job!"
+ },
+ {
+  "hash": "bafgwl",
+  "text": "Mama works at the desk at the top of the stairs.",
+  "say": "Mama works at the desk at the top of the stairs."
+ },
+ {
+  "hash": "15kc7r2",
+  "text": "Baba works in his office.",
+  "say": "Baba works in his office."
  },
  {
   "hash": "1wrxihm",
@@ -588,6 +608,11 @@
   "hash": "ycv1vs",
   "text": "A desk for drawing!",
   "say": "A desk for drawing!"
+ },
+ {
+  "hash": "tj7gvq",
+  "text": "This is where Mama works!",
+  "say": "This is where Mama works!"
  },
  {
   "hash": "10gcwf5",
@@ -1215,9 +1240,9 @@
   "say": "This is the living room."
  },
  {
-  "hash": "19ijrad",
-  "text": "It has a fireplace, shelves beside it, and a fan on the ceiling.",
-  "say": "It has a fireplace, shelves beside it, and a fan on the ceiling."
+  "hash": "isbt00",
+  "text": "The play corner is right by the fireplace!",
+  "say": "The play corner is right by the fireplace!"
  },
  {
   "hash": "1xxpjv0",
@@ -1300,9 +1325,9 @@
   "say": "You are upstairs!"
  },
  {
-  "hash": "9xkk6u",
-  "text": "There is a little desk at the top of the stairs.",
-  "say": "There is a little desk at the top of the stairs."
+  "hash": "1r36273",
+  "text": "Mama works at the little desk at the top of the stairs.",
+  "say": "Mama works at the little desk at the top of the stairs."
  },
  {
   "hash": "o3fmtw",
@@ -1355,14 +1380,14 @@
   "say": "This is Mama and Baba's room."
  },
  {
-  "hash": "zv4x0z",
-  "text": "This is the den.",
-  "say": "This is the den."
+  "hash": "5v6ehx",
+  "text": "This is Baba's office.",
+  "say": "This is Baba's office."
  },
  {
-  "hash": "1bc01sv",
-  "text": "It is a cozy nook next to Mama and Baba's room.",
-  "say": "It is a cozy nook next to Mama and Baba's room."
+  "hash": "oae88r",
+  "text": "Baba works here.",
+  "say": "Baba works here."
  },
  {
   "hash": "r2mdk4",
@@ -1620,9 +1645,9 @@
   "say": "A stack of books!"
  },
  {
-  "hash": "qyos9h",
-  "text": "It goes in the den.",
-  "say": "It goes in the den."
+  "hash": "hzezs6",
+  "text": "It goes in the office.",
+  "say": "It goes in the office."
  },
  {
   "hash": "3sq4ux",

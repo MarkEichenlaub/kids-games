@@ -47,7 +47,7 @@
     { id: 'bigbath', floor: 2, icon: '🛁', name: 'Big Bathroom', rects: [B.rect([801.5, 567.5, 968, 753])] },
     { id: 'sunhall', floor: 2, icon: '☀️', name: 'Sunny Hall', rects: [B.rect([710.5, 543, 801.5, 753])] },
     { id: 'primary', floor: 2, icon: '💜', name: 'Mama and Baba\'s Room', deco: true, rects: [B.rect([567, 753, 797, 952])] },
-    { id: 'den', floor: 2, icon: '📚', name: 'Den', deco: true, rects: [B.rect([797, 753, 968, 974.5])] },
+    { id: 'den', floor: 2, icon: '💼', name: 'Baba\'s Office', deco: true, rects: [B.rect([797, 753, 968, 974.5])] },
     { id: 'landing', floor: 2, icon: '🪜', name: 'Upstairs Hall', rects: [B.rect([700.5, 221.5, 968, 472]), B.rect([737, 472, 801.5, 543])] },
   ];
   M.room = id => M.rooms.find(r => r.id === id);
@@ -173,7 +173,7 @@
       { t: 'plaque', x: 3.95, y: -1.05, w: 1.9, h: 0.75, flat: 1 },
       { t: 'truck', id: 'truck', x: -4.5, y: -11.2, w: 13, h: 5.4, solid: 1, act: 'truck' },
     ],
-    spots: { mama: [A.X(772), A.Y(800)], baba: [A.X(918), A.Y(612)], start: [12.65, 70.5], pkg: [12.65, 60.6], bell: [11.6, 59], inside: [A.X(700), A.Y(900)] },
+    spots: { start: [12.65, 70.5], pkg: [12.65, 60.6], bell: [11.6, 59], inside: [A.X(700), A.Y(900)] },
   };
 
   // ---------- upstairs ----------
@@ -239,6 +239,9 @@
   M.floors = { 1: F1, 2: F2 };
   for (const n of [1, 2]) M.floors[n].fixtures.forEach(f => { f.floor = n; });
 
+  // where Mama and Baba work: Mama at the built-in desk at the top of the stairs, Baba at his desk in the den
+  M.people = { mama: [2, 15.4, 14.4], baba: [2, 20.3, 50.9] };
+
   // places the jobs use: [floor, x, y]
   M.spots = {
     boxes: [A.pt(690, 772, 1), A.pt(772, 640, 1), A.pt(765, 400, 1), A.pt(800, 185, 1), A.pt(915, 760, 1), [1, 1, 34], [1, 19.5, 59.6],
@@ -251,13 +254,16 @@
   // piece will really go is not decided yet, so this is a first guess the kids can rearrange:
   // [type, x, y, quarter-turns]
   M.defaults = {
-    living: [A.item('ourRugNavy', 700, 852, 1), A.item('ourSofaBlack', 676, 938, 2), A.item('ourCouchWhite', 636, 760), A.item('ourChairWhite', 806, 852, 1), A.item('ourPiano', 728, 750), A.item('ourStarLamp', 606, 955)],
+    // the play corner is by the fireplace; the black sofa faces it, the piano stands by the kitchen opening
+    living: [['ourRugRainbow', 5.0, 49.5, 0], ['ourShelfWhite', 3.1, 42.2, 0], ['ourPiano', 8.6, 43.4, 0], ['ourCoffee', 5.2, 49.6, 0], ['ourBasket', 8.2, 46.4, 0],
+      ['ourSofaBlack', 10.4, 50.4, 1], ['ourDollhouse', 3.6, 56.3, 2], ['ourPlayKitchen', 0.85, 55.0, 3], ['ourLoveseat', 7.7, 55.9, 2], ['ourStarLamp', 1.0, 52.5, 0]],
     dining: [A.item('ourRugTrellis', 913, 824), A.item('ourDining', 913, 824)],
     courtyard: [['ball', 2, 34, 0]],
     bedA: [B.item('ourBedIron', 664, 100), B.item('ourNightYellow', 722, 60), B.item('ourRugStar', 730, 170), B.item('box', 765, 120)],
     bedB: [B.item('ourBedTent', 934, 99), B.item('ourDresser', 812, 128, 3), B.item('box', 860, 190)],
-    primary: [B.item('ourBedBig', 630, 850, 3), B.item('ourDesk', 760, 925, 2), B.item('box', 730, 790)],
-    den: [B.item('ourRugRainbow', 880, 862), B.item('ourShelfWhite', 950, 860, 1), B.item('ourShelfTall', 836, 962, 2), B.item('ourDollhouse', 830, 775), B.item('ourLoveseat', 818, 868, 3), B.item('ourCoffee', 884, 868, 1), B.item('ourPlayKitchen', 930, 958, 2), B.item('ourBasket', 936, 780)],
+    primary: [B.item('ourBedBig', 630, 850, 3), B.item('box', 730, 790)],
+    // Baba's office: the desk under the windows, a bookshelf, a reading chair
+    den: [['ourRugNavy', 18.0, 50.2, 0], ['ourDesk', 22.4, 50.2, 1], ['ourShelfTall', 19.2, 44.0, 0], ['ourChairWhite', 15.6, 45.4, 0], ['box', 16.0, 54.6, 0]],
   };
 
   // ---------- walking grid ----------

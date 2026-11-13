@@ -25,7 +25,7 @@
     stones: f => { [0, 1, 2].forEach(i => setTimeout(() => G.sfx.step(i * 2), i * 160)); W.player.hopV = 6; },
     linen: f => { G.sfx.open(); puff(f, G.pick(['🧺', '🧻', '🛏️']), 2); },
     desk: f => { G.sfx.brush(); puff(f, G.pick(['✏️', '🖍️', '🌈', '⭐']), 3); },
-    nook: f => { G.sfx.brush(); puff(f, G.pick(['✏️', '🖍️', '🌈', '🦄']), 3); },
+    nook: f => { G.sfx.click(); puff(f, G.pick(['💻', '📎', '☕', '📝']), 3); },
     books: f => { G.sfx.tap(); puff(f, G.pick(['📖', '📕', '📗', '📘']), 2); },
     pantry: f => { G.sfx.pop(); puff(f, G.pick(SNACKS), 2); },
     shelf: f => { G.sfx.thump(); puff(f, '📦', 2); },

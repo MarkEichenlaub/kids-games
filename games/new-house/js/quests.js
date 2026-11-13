@@ -212,6 +212,7 @@
     if (!P().intro) intro(); else { marks(); spawnPkg(); }
   };
   Q.talk = npc => {
+    if (W.target && W.target.x === npc.x && W.target.y === npc.y) W.setTarget(null);
     npc.wave = true; setTimeout(() => { npc.wave = false; }, 2500);
     if (Q.active) { if (Q.active.id === 'intro') return; G.beep(G.T('busy')); return; }
     if (!P().intro) return;
@@ -253,6 +254,10 @@
     const a = Q.active;
     if (!a) {
       if (W.prop('pkg')) { W.setTarget({ floor: 1, x: PKG[0], y: PKG[1], tall: -1.5 }); G.beep(G.T('pkgCome')); return true; }
+      if (P().intro) { // point at the nearest grown-up
+        const p = W.player, n = W.npcs.slice().sort((a, b) => (a.floor !== p.floor) - (b.floor !== p.floor) || G.dist(a.x, a.y, p.x, p.y) - G.dist(b.x, b.y, p.x, p.y))[0];
+        if (n) W.setTarget({ floor: n.floor, x: n.x, y: n.y, tall: 1.4 }); G.beep(G.T('askJob')); return true;
+      }
       return false;
     }
     if (a.id === 'intro') { if (a.step === 0) { say(G.T('intro1')); aim(1, ...M.floors[1].spots.bell); } return true; }
