@@ -27,13 +27,21 @@ window.G = (function () {
   G.load = () => {
     try { const s = JSON.parse(localStorage.getItem(SAVE_KEY)); if (s && s.profiles) G.save = Object.assign(G.save, s); } catch (e) { }
     G.save.settings = Object.assign({ sound: true, music: true, voice: true, rate: 0.95 }, G.save.settings || {});
+    // Ask the browser not to clear this site's storage when the disk gets full.
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { }
   };
-  G.persist = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.save)); } catch (e) { } };
+  G.persistLocal = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.save)); } catch (e) { } };
+  // Every save also goes to the cloud a few seconds later (js/cloud.js).
+  G.persist = () => {
+    const p = G.P(); if (p) p.touched = Date.now();
+    G.persistLocal();
+    if (window.CLOUD) CLOUD.later();
+  };
   G.P = () => G.save.profiles[G.save.current];
   G.isLittle = () => (G.P() && G.P().little) || false;
   G.kidName = () => (G.P() && G.P().name) || 'Astronaut';
   G.usePro = (id, name, little) => {
-    if (!G.save.profiles[id]) G.save.profiles[id] = G.defaultProfile(id);
+    if (!G.save.profiles[id]) { G.save.profiles[id] = G.defaultProfile(id); G.save.profiles[id].born = Date.now(); }
     const p = G.save.profiles[id];
     const d = G.defaultProfile(id);
     for (const k in d) if (p[k] === undefined) p[k] = d[k];
@@ -323,6 +331,11 @@ window.G = (function () {
     document.addEventListener('pointerdown', () => G.audio(), { once: true });
     document.addEventListener('visibilitychange', () => { if (document.hidden) G.hush(); });
     G.go('title');
+    // Pull in progress saved on other computers; redraw the title screen if it changed.
+    if (window.CLOUD) {
+      CLOUD.sync(() => { if (G.current === 'title') G.go('title'); else G.$$('.star-count').forEach(e => { if (G.P()) e.textContent = G.P().stars; }); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - CLOUD.lastSync > 60000) CLOUD.sync(); });
+    }
   };
   return G;
 })();
