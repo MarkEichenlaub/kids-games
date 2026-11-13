@@ -308,16 +308,42 @@
     c.globalAlpha = open ? 0.25 : 1; box(c, f.x, f.y, f.w, f.h, '#fff', 0.05);
     for (let i = 1; i < 8; i++) line(c, [f.x + f.w * i / 8, f.y, f.x + f.w * i / 8, f.y + f.h], '#c5c9d0', 0.04); c.globalAlpha = 1;
   };
-  X.car = (c, f, t) => {
-    const x = f.x, y = f.y, w = f.w, h = f.h, col = '#4f8fe0';
-    for (const [u, v] of [[-0.02, 0.18], [1.02, 0.18], [-0.02, 0.8], [1.02, 0.8]]) box(c, x + w * u - 0.3, y + h * v - 1, 0.6, 2, '#2b2b33', 0.2);
-    box(c, x, y, w, h, col, 1.3);
-    box(c, x + 0.6, y + h * 0.2, w - 1.2, h * 0.5, '#3d79c7', 0.8, null);
-    box(c, x + 0.8, y + h * 0.16, w - 1.6, h * 0.13, '#bfe6ff', 0.4); box(c, x + 0.9, y + h * 0.66, w - 1.8, h * 0.1, '#bfe6ff', 0.4);
-    const lit = f.on && Math.sin(t * 14) > 0;
-    circ(c, x + 1, y + 0.5, 0.36, lit ? '#fff7a8' : '#f4f4e0'); circ(c, x + w - 1, y + 0.5, 0.36, lit ? '#fff7a8' : '#f4f4e0');
-    box(c, x + 0.7, y + h - 0.6, 1.2, 0.36, '#ff5d5d', 0.1); box(c, x + w - 1.9, y + h - 0.6, 1.2, 0.36, '#ff5d5d', 0.1);
+  // seen from above, nose at the bottom (toward the house)
+  A.CARS = {
+    volvo: { body: '#dfe2e6', shade: '#c7ccd3', roof: '#d2d6dc' },
+    ioniq: { body: '#2f4669', shade: '#243753', roof: '#1b2638' },
   };
+  X.car = (c, f, t) => {
+    const x = f.x, y = f.y, w = f.w, h = f.h, K = A.CARS[f.model] || A.CARS.volvo, lit = f.on && Math.sin(t * 14) > 0;
+    for (const v of [0.2, 0.78]) for (const s of [-1, 1]) box(c, x + (s < 0 ? -0.18 : w - 0.42), y + h * v - 1.05, 0.6, 2.1, '#26262b', 0.25, null);
+    box(c, x, y, w, h, K.body, f.model === 'ioniq' ? 0.7 : 1.1);
+    // side mirrors
+    for (const s of [-1, 1]) box(c, x + (s < 0 ? -0.45 : w - 0.15), y + h * 0.63, 0.6, 0.4, K.shade, 0.15);
+    // glass: rear window, roof, windshield
+    box(c, x + 0.75, y + h * 0.1, w - 1.5, h * 0.09, '#9fc6de', 0.35);
+    box(c, x + 0.55, y + h * 0.2, w - 1.1, h * 0.4, K.roof, 0.5, 'rgba(0,0,0,.25)');
+    box(c, x + 0.65, y + h * 0.6, w - 1.3, h * 0.13, '#9fc6de', 0.45);
+    if (f.model === 'ioniq') {
+      // panoramic glass roof, the clamshell hood line, and the square "pixel" lights
+      box(c, x + 0.95, y + h * 0.24, w - 1.9, h * 0.32, '#3a5478', 0.3, null);
+      line(c, [x + 0.35, y + h * 0.77, x + w / 2, y + h * 0.8, x + w - 0.35, y + h * 0.77], 'rgba(255,255,255,.25)', 0.07);
+      for (const s of [0, 1]) for (let i = 0; i < 4; i++) for (let k = 0; k < 2; k++) {
+        c.fillStyle = lit ? '#fff7a8' : '#e9eef5'; c.fillRect(x + 0.45 + s * (w - 1.75) + i * 0.22, y + h - 0.62 + k * 0.22, 0.17, 0.17);
+      }
+      for (let i = 0; i < 18; i++) { c.fillStyle = '#ff5d5d'; c.fillRect(x + 0.4 + i * (w - 0.8) / 18, y + 0.22, (w - 0.8) / 18 - 0.05, 0.22); }
+    } else {
+      // Volvo: hood lines, "Thor's hammer" T-shaped headlights, and tall red tail lights
+      for (const s of [-1, 1]) line(c, [x + w / 2 + s * 1.1, y + h * 0.75, x + w / 2 + s * 1.3, y + h - 0.5], 'rgba(0,0,0,.12)', 0.06);
+      for (const s of [0, 1]) {
+        const hx = x + 0.45 + s * (w - 1.75);
+        box(c, hx, y + h - 0.6, 1.3, 0.38, lit ? '#fff7a8' : '#f2f4f7', 0.12, '#8d939c');
+        line(c, [hx + 0.2, y + h - 0.41, hx + 1.1, y + h - 0.41], '#9aa2ad', 0.05); line(c, [hx + 0.65, y + h - 0.41, hx + 0.65, y + h - 0.25], '#9aa2ad', 0.05);
+        box(c, x + 0.25 + s * (w - 0.75), y + 0.3, 0.25, 1.1, '#e0333f', 0.08, null);
+      }
+      box(c, x + w / 2 - 0.7, y + h - 0.32, 1.4, 0.22, '#3a3d46', 0.06, null); // grille
+    }
+  };
+
   X.shelf = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#eef0f3', 0.06, '#aab'); const n = Math.floor(f.h / 1.3); for (let i = 0; i < n; i++) emoji(c, ['📦', '🧰', '🪣', '🏀', '📦', '🧴', '📦'][i % 7], f.x + f.w / 2, f.y + 0.7 + i * 1.3, 0.8); };
   X.panel = (c, f, t) => { box(c, f.x, f.y, f.w, f.h, '#9aa3b2', 0.06); for (let i = 0; i < 4; i++) box(c, f.x + 0.12, f.y + 0.2 + i * 0.44, 0.26, 0.28, f.on ? '#ffd93d' : '#3c4150', 0.04, null); if (f.alert) emoji(c, '⚡', f.x + 1, f.y + 1 + Math.sin(t * 6) * 0.15, 0.9); };
   X.heater = (c, f) => { circ(c, f.x + f.w / 2, f.y + f.h / 2, f.w * 0.46, '#dfe3e8'); circ(c, f.x + f.w / 2, f.y + f.h / 2, f.w * 0.3, '#eef1f4', '#aab'); circ(c, f.x + f.w * 0.3, f.y + f.h * 0.3, 0.13, '#c0392b', null); circ(c, f.x + f.w * 0.7, f.y + f.h * 0.3, 0.13, '#2e86de', null); };

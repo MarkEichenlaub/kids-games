@@ -33,6 +33,8 @@
     ac: f => { G.sfx.whoosh(); puff(f, '💨', 4); },
     bins: f => { G.sfx.thump(); },
     car: f => { pulse(f, 1); G.sfx.honk(); },
+    volvo: f => { pulse(f, 1); G.sfx.honk(); },
+    ioniq: f => { pulse(f, 1); G.sfx.chime(); },
     bike: f => { G.sfx.chime(); puff(f, '🔔', 1); },
     rocket: f => { pulse(f, 2.2); G.sfx.whoosh(); puff(f, '⭐', 5); },
     doorbell: f => { pulse(f, 0.6); G.sfx.doorbell(); },

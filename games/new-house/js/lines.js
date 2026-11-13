@@ -52,7 +52,7 @@
     // things in the house, said the first time you touch them
     act: {
       toilet: 'Flush!', fridge: 'The fridge keeps our food cold.', fire: 'A cozy fire!', stove: 'The stove is hot. Only grown-ups cook here.',
-      oven: 'Mmm, cookies!', car: 'Beep beep!', rocket: 'Look! Your rocket from Rocket Builders is parked in the garage!', opener: 'This button opens the big garage door.',
+      oven: 'Mmm, cookies!', car: 'Beep beep!', volvo: 'This is our silver Volvo. Beep beep!', ioniq: 'This is our blue Ioniq. It runs on electricity, so it is very quiet!', rocket: 'Look! Your rocket from Rocket Builders is parked in the garage!', opener: 'This button opens the big garage door.',
       closet: 'Time to dress up!', closetBig: 'So many clothes!', truck: 'That is the moving truck. It carried all our things to the new house!', heater: 'This tank keeps our water warm. It has its own little nook.',
       panel: 'This box has the switches for all the lights.', ac: 'The air conditioner hides in this white box. It keeps the house cool.', tub: 'Bubble bath!', washer: 'The washer makes our clothes clean.',
       dryer: 'The dryer makes our clothes warm and dry.', stones: 'Hop, hop, hop along the stepping stones!', linen: 'Towels and sheets live in this cabinet.', desk: 'A desk for drawing!', nook: 'A desk for drawing!', shower: 'The shower makes rain!',
@@ -98,7 +98,7 @@
     kitchen: 'This is the kitchen. Look at the big island with three stools!',
     pantry: 'This is the pantry. Snacks live in here!',
     powder: 'This is the little bathroom downstairs. It is next to the garage door.',
-    garage: 'This is the garage. The car sleeps in here, and the big door opens to the alley.',
+    garage: 'This is the garage. Our two cars sleep in here, and the big door opens to the alley.',
     courtyard: 'This is the courtyard. It goes all along the side of the house. You can play outside here!',
     alley: 'This is the alley behind the house. The car drives in this way, and the moving truck is here!',
     landing: 'You are upstairs! There is a little desk at the top of the stairs.',

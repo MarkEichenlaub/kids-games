@@ -485,6 +485,21 @@
   "say": "Beep beep!"
  },
  {
+  "hash": "hr3buw",
+  "text": "This is our silver Volvo.",
+  "say": "This is our silver Volvo."
+ },
+ {
+  "hash": "1q4amnz",
+  "text": "This is our blue Ioniq.",
+  "say": "This is our blue Ioniq."
+ },
+ {
+  "hash": "17wbxgh",
+  "text": "It runs on electricity, so it is very quiet!",
+  "say": "It runs on electricity, so it is very quiet!"
+ },
+ {
   "hash": "1s2qsuu",
   "text": "Look!",
   "say": "Look!"
@@ -1250,9 +1265,9 @@
   "say": "This is the garage."
  },
  {
-  "hash": "115v4fl",
-  "text": "The car sleeps in here, and the big door opens to the alley.",
-  "say": "The car sleeps in here, and the big door opens to the alley."
+  "hash": "z2k9m2",
+  "text": "Our two cars sleep in here, and the big door opens to the alley.",
+  "say": "Our two cars sleep in here, and the big door opens to the alley."
  },
  {
   "hash": "1h3gjav",

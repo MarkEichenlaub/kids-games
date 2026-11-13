@@ -114,13 +114,15 @@
     fixtures: [
       // garage
       A.fix('garagedoor', 690, 33, 948, 43, { id: 'gdoor' }),
-      A.fix('car', 846, 78, 950, 300, { solid: 1, act: 'car' }),
+      // our two cars, real size, parked nose-in: the Volvo XC40 (14.6 x 6.1 ft) and the Ioniq 5 (15.2 x 6.2 ft)
+      { t: 'car', model: 'volvo', id: 'volvo', x: 4.9, y: 1.3, w: 6.1, h: 14.6, solid: 1, act: 'volvo' },
+      { t: 'car', model: 'ioniq', id: 'ioniq', x: 15.0, y: 1.0, w: 6.2, h: 15.2, solid: 1, act: 'ioniq' },
       A.fix('shelf', 966, 190, 981, 340, { act: 'shelf' }),
       A.fix('panel', 641.5, 152, 650, 190, { id: 'panel', act: 'panel' }),
       A.fix('heater', 646, 358, 681, 390, { solid: 1, act: 'heater' }),
       A.fix('opener', 795, 342, 806, 352, { act: 'opener' }),
-      A.fix('bikes', 652, 56, 712, 126, { act: 'bike' }),
-      A.fix('rocket', 722, 52, 772, 112, { solid: 1, act: 'rocket' }),
+      { t: 'bikes', x: 18.4, y: 16.6, w: 3.8, h: 2.6, act: 'bike' },
+      { t: 'rocket', x: 6.4, y: 16.4, w: 2.6, h: 2.8, solid: 1, act: 'rocket' },
       // little bathroom
       A.fix('toilet', 694, 361, 725, 397, { r: 0, solid: 1, act: 'toilet' }),
       A.fix('vanity', 641.5, 402, 674, 446, { r: 3, solid: 1, act: 'sink' }),
@@ -239,7 +241,7 @@
 
   // places the jobs use: [floor, x, y]
   M.spots = {
-    boxes: [A.pt(690, 772, 1), A.pt(772, 640, 1), A.pt(765, 400, 1), A.pt(740, 200, 1), A.pt(915, 760, 1), [1, 1, 34], [1, 19.5, 59.6],
+    boxes: [A.pt(690, 772, 1), A.pt(772, 640, 1), A.pt(765, 400, 1), A.pt(800, 185, 1), A.pt(915, 760, 1), [1, 1, 34], [1, 19.5, 59.6],
       B.pt(770, 300, 2), B.pt(760, 650, 2), B.pt(720, 185, 2), B.pt(860, 185, 2), B.pt(885, 900, 2), B.pt(650, 915, 2), B.pt(765, 430, 2)],
     hides: [A.pt(828, 732, 1), A.pt(970, 916, 1), A.pt(745, 700, 1), A.pt(968, 58, 1), [1, -4.5, 50], A.pt(652, 494, 1), A.pt(916, 484, 1), [1, 23.2, 59.8], [1, -7.4, 3],
       B.pt(632, 60, 2), B.pt(955, 60, 2), B.pt(955, 958, 2), B.pt(582, 936, 2), B.pt(935, 550, 2), B.pt(696, 530, 2), B.pt(784, 736, 2), B.pt(752, 455, 2)],
