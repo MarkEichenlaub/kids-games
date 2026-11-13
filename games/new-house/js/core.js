@@ -330,6 +330,10 @@ window.G = (function () {
       cryptoKey = await crypto.subtle.importKey('raw', b64u(k), 'AES-GCM', false, ['decrypt']);
       if (!photoIndex) photoIndex = await fetch('data/index.json').then(r => r.json());
       const probe = await G.photo(photoIndex.probe);
+      if (probe) try { // the house number for the plaques
+        const buf = await fetch('data/info.bin').then(r => r.arrayBuffer());
+        G.houseInfo = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, cryptoKey, buf.slice(12))));
+      } catch (e) { }
       return !!probe;
     } catch (e) { cryptoKey = null; return false; }
   };

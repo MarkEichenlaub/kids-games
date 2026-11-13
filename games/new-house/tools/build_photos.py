@@ -4,7 +4,9 @@ The photos never go into this public repo in the clear. The originals live in Go
 Drive (SRC below) as photos/NN.jpg, numbered as in the listing. This script resizes
 each one, strips its metadata, and encrypts it with AES-GCM into data/p/, using the
 same family key as What's Hiding? (so a device unlocked for that game shows these too).
-data/index.json only says which encrypted files belong to which room.
+data/index.json only says which encrypted files belong to which room. The house
+number shown on the plaques comes from info.json in the same Drive folder, sealed the
+same way into data/info.bin.
 
 Usage:  python tools/build_photos.py        (prints the unlock link at the end)
 """
@@ -45,6 +47,8 @@ def main():
             if pid in made:
                 continue
             made.add(pid)
+            if os.path.exists(os.path.join(OUT, 'p', pid + '.bin')):  # delete data/p to rebuild everything
+                continue
             im = ImageOps.exif_transpose(Image.open(os.path.join(SRC, f'{n:02d}.jpg'))).convert('RGB')
             s = min(1, LONG_SIDE / max(im.size))
             if s < 1:
@@ -60,6 +64,11 @@ def main():
         if f[:-4] not in made:
             os.remove(os.path.join(OUT, 'p', f))
     json.dump({'probe': index['living'][0], 'rooms': index}, open(os.path.join(OUT, 'index.json'), 'w'))
+    # the house number for the plaques by the front door and the garage, sealed like the photos
+    info = open(os.path.join(PRIVATE, 'new-house', 'info.json'), 'rb').read()
+    iv = secrets.token_bytes(12)
+    with open(os.path.join(OUT, 'info.bin'), 'wb') as f:
+        f.write(iv + aes.encrypt(iv, info, None))
     print(f'{len(made)} photos, {total / 1e6:.1f} MB encrypted')
     print('Unlock link (keep private):', URL + '#k=' + k)
 

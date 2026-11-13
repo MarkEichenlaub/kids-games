@@ -372,5 +372,6 @@
   X.stones = (c, f) => { const n = Math.floor(f.h / 1.7); for (let i = 0; i < n; i++) box(c, f.x + (i % 2 ? 0.25 : 0), f.y + 0.2 + i * (f.h / n), f.w - 0.25, f.h / n - 0.45, i % 2 ? '#b9b3a8' : '#c8c2b6', 0.25, '#8f897d'); };
   X.linen = (c, f) => { box(c, f.x, f.y, f.w, f.h, CAB, 0.08); line(c, [f.x + f.w, f.y + f.h / 2, f.x + f.w - 0.5, f.y + f.h / 2], '#cfcbc2', 0.04); circ(c, f.x + f.w - 0.2, f.y + f.h * 0.4, 0.07, GOLD, null); circ(c, f.x + f.w - 0.2, f.y + f.h * 0.6, 0.07, GOLD, null); emoji(c, '🧺', f.x + f.w * 0.42, f.y + f.h * 0.3, 0.7); emoji(c, '🧻', f.x + f.w * 0.42, f.y + f.h * 0.72, 0.6); };
   X.sliders = (c, f) => { box(c, f.x, f.y + f.h * 0.1, f.w * 0.55, f.h * 0.4, '#fff', 0.03); box(c, f.x + f.w * 0.45, f.y + f.h * 0.5, f.w * 0.55, f.h * 0.4, '#fff', 0.03); };
+  X.plaque = (c, f) => { box(c, f.x, f.y, f.w, f.h, '#fff', 0.1); const n = G.houseInfo && G.houseInfo.number; if (n) A.text(c, String(n), f.x + f.w / 2, f.y + f.h / 2 + 0.03, 0.52, '#2b2b33', 700); else for (let i = 0; i < 3; i++) circ(c, f.x + f.w / 2 + (i - 1) * 0.35, f.y + f.h / 2, 0.07, '#b9bccb', null); };
   A.fixture = (c, f, t) => { const fn = X[f.t]; if (fn) fn(c, f, t); };
 })();

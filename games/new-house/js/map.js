@@ -144,6 +144,7 @@
       // porch
       { t: 'mat', x: 10.95, y: 57.75, w: 2.7, h: 1.4, flat: 1 },
       { t: 'doorbell', id: 'doorbell', x: 9.95, y: 57.5, w: 0.6, h: 0.6, act: 'doorbell' },
+      { t: 'plaque', x: 7.75, y: 57.55, w: 1.9, h: 0.75, flat: 1 },
       { t: 'flowerpot', x: 9.1, y: 58.3, w: 1.2, h: 1.2, solid: 1, act: 'flower' }, { t: 'flowerpot', x: 14.25, y: 57.7, w: 1.2, h: 1.2, solid: 1, act: 'flower' },
       { t: 'column', x: -0.25, y: 62.3, w: 0.85, h: 0.85, solid: 1 }, { t: 'column', x: 9.5, y: 62.3, w: 0.85, h: 0.85, solid: 1 },
       { t: 'column', x: 14.95, y: 62.3, w: 0.85, h: 0.85, solid: 1 }, { t: 'column', x: 23.8, y: 62.3, w: 0.85, h: 0.85, solid: 1 },
@@ -167,6 +168,7 @@
       { t: 'bush', x: -8.4, y: -2.3, w: 4, h: 2.4, solid: 1 }, { t: 'bush', x: -4, y: -2.3, w: 3.6, h: 2.4, solid: 1 },
       { t: 'tree', x: -8.6, y: -5, w: 3, h: 3, solid: 1, act: 'tree' },
       { t: 'bins', x: 22.6, y: -3, w: 2.8, h: 2.6, solid: 1, act: 'bins' },
+      { t: 'plaque', x: 3.95, y: -1.05, w: 1.9, h: 0.75, flat: 1 },
       { t: 'truck', id: 'truck', x: -4.5, y: -11.2, w: 13, h: 5.4, solid: 1, act: 'truck' },
     ],
     spots: { mama: [A.X(772), A.Y(800)], baba: [A.X(918), A.Y(612)], start: [12.65, 70.5], pkg: [12.65, 60.6], bell: [11.6, 59], inside: [A.X(700), A.Y(900)] },

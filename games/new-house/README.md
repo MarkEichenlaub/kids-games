@@ -32,7 +32,9 @@ Progress is saved in the browser, per kid; the furniture and paint are shared.
 
 ## Privacy
 
-This repo is public, so nothing here says where the house is. The real photos of the
+This repo is public, so nothing here says where the house is. The house number on the
+plaques by the front door and the garage is sealed in `data/info.bin` and shows only
+with the family key; without it the plaques are blank. The real photos of the
 rooms are AES-encrypted in `data/` with the same family key as What's Hiding?; a device
 that has opened Dad's link for that game shows them here too (the camera button, the
 passport, and a snapshot the first time you enter a room). Without the key the game
