@@ -40,3 +40,9 @@ three.js in `vendor/`, MIT license).
   is a made-up little town with the same places. Each place is a scene drawn to look like
   the real one, with something to do (swim to the pool toys, slide and swing, catch
   butterflies, find the kindergarten door, hang up a backpack and slide, read three books).
+- Maia's school has an inside: tap its red door for her classroom (her own cubby, the teacher,
+  the sink, an easel to paint, a fish tank to feed, nap mats, the circle rug, a block tower that
+  falls over, and a book corner). Trying all nine earns a star.
+- The books at the library (eight) and in the classroom's book corner (two) are real picture
+  books: each opens full screen and Beep reads every page aloud. The words live in `js/lines.js`
+  (`books`) so they get recorded with the rest of Beep's voice; the pictures are in `js/town.js`.

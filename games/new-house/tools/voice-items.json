@@ -1250,6 +1250,11 @@
   "say": "First, tap the backpack to hang it up."
  },
  {
+  "hash": "mioq9y",
+  "text": "Or tap the red door to go inside.",
+  "say": "Or tap the red door to go inside."
+ },
+ {
   "hash": "1twi5ri",
   "text": "Now let's play!",
   "say": "Now let's play!"
@@ -1263,6 +1268,151 @@
   "hash": "ko4mxi",
   "text": "Maia's new school has a great playground.",
   "say": "Maia's new school has a great playground."
+ },
+ {
+  "hash": "mwkgl0",
+  "text": "Tap the red door to see inside!",
+  "say": "Tap the red door to see inside!"
+ },
+ {
+  "hash": "1vmo828",
+  "text": "This is Maia's classroom!",
+  "say": "This is Maia's classroom!"
+ },
+ {
+  "hash": "ppiwby",
+  "text": "Tap things to play.",
+  "say": "Tap things to play."
+ },
+ {
+  "hash": "7se1e4",
+  "text": "Can you try everything?",
+  "say": "Can you try everything?"
+ },
+ {
+  "hash": "16r3q1l",
+  "text": "This is your cubby.",
+  "say": "This is your cubby."
+ },
+ {
+  "hash": "13bpk5k",
+  "text": "Your backpack and your coat go in here.",
+  "say": "Your backpack and your coat go in here."
+ },
+ {
+  "hash": "1h0tzrb",
+  "text": "I am so happy you are here.",
+  "say": "I am so happy you are here."
+ },
+ {
+  "hash": "1hn96t6",
+  "text": "Hi friend!",
+  "say": "Hi friend!"
+ },
+ {
+  "hash": "m0kl9",
+  "text": "Do you want to paint a picture?",
+  "say": "Do you want to paint a picture?"
+ },
+ {
+  "hash": "x1iwac",
+  "text": "Remember to wash your hands before snack!",
+  "say": "Remember to wash your hands before snack!"
+ },
+ {
+  "hash": "1rg118q",
+  "text": "Paint a picture!",
+  "say": "Paint a picture!"
+ },
+ {
+  "hash": "4b44h",
+  "text": "Every tap adds a new color.",
+  "say": "Every tap adds a new color."
+ },
+ {
+  "hash": "oj64x3",
+  "text": "Sprinkle some food for the fish.",
+  "say": "Sprinkle some food for the fish."
+ },
+ {
+  "hash": "pz18tp",
+  "text": "Look, they swim up to eat it!",
+  "say": "Look, they swim up to eat it!"
+ },
+ {
+  "hash": "narhk2",
+  "text": "Circle time!",
+  "say": "Circle time!"
+ },
+ {
+  "hash": "gqo09p",
+  "text": "Let's sit on the rug and sing the good morning song.",
+  "say": "Let's sit on the rug and sing the good morning song."
+ },
+ {
+  "hash": "10b2085",
+  "text": "Build a tower!",
+  "say": "Build a tower!"
+ },
+ {
+  "hash": "1jci69y",
+  "text": "Tap to add a block.",
+  "say": "Tap to add a block."
+ },
+ {
+  "hash": "1ydlz3b",
+  "text": "How tall can it go?",
+  "say": "How tall can it go?"
+ },
+ {
+  "hash": "7aq2mw",
+  "text": "Crash!",
+  "say": "Crash!"
+ },
+ {
+  "hash": "nh9a1",
+  "text": "Let's build it again.",
+  "say": "Let's build it again."
+ },
+ {
+  "hash": "1jteqi6",
+  "text": "Wash your hands with soap and water.",
+  "say": "Wash your hands with soap and water."
+ },
+ {
+  "hash": "1e1hw1w",
+  "text": "Scrub, scrub, scrub!",
+  "say": "Scrub, scrub, scrub!"
+ },
+ {
+  "hash": "1fn5t04",
+  "text": "Rest time.",
+  "say": "Rest time."
+ },
+ {
+  "hash": "1rb7yma",
+  "text": "Shh!",
+  "say": "Shh!"
+ },
+ {
+  "hash": "wz8njs",
+  "text": "Close your eyes.",
+  "say": "Close your eyes."
+ },
+ {
+  "hash": "m7gpmg",
+  "text": "Time to wake up!",
+  "say": "Time to wake up!"
+ },
+ {
+  "hash": "aizfaw",
+  "text": "You tried everything in the classroom!",
+  "say": "You tried everything in the classroom!"
+ },
+ {
+  "hash": "1sufcen",
+  "text": "Maia is going to love it here.",
+  "say": "Maia is going to love it here."
  },
  {
   "hash": "y1zc7z",
@@ -1280,14 +1430,14 @@
   "say": "Tap the doors to go inside!"
  },
  {
-  "hash": "820n8k",
-  "text": "Pick a book!",
-  "say": "Pick a book!"
+  "hash": "bj20vn",
+  "text": "Pick a book, and I will read it to you!",
+  "say": "Pick a book, and I will read it to you!"
  },
  {
-  "hash": "1xgextj",
-  "text": "Tap three books to read them.",
-  "say": "Tap three books to read them."
+  "hash": "1vozeau",
+  "text": "Tap the arrow to turn the page.",
+  "say": "Tap the arrow to turn the page."
  },
  {
   "hash": "j2cot8",
@@ -1298,6 +1448,466 @@
   "hash": "1xfcfkz",
   "text": "You can borrow books here with a library card.",
   "say": "You can borrow books here with a library card."
+ },
+ {
+  "hash": "g0k1u1",
+  "text": "The end!",
+  "say": "The end!"
+ },
+ {
+  "hash": "1rt967a",
+  "text": "Little Owl Stays Up",
+  "say": "Little Owl Stays Up"
+ },
+ {
+  "hash": "1pkjyjl",
+  "text": "Little Owl lives in a big oak tree.",
+  "say": "Little Owl lives in a big oak tree."
+ },
+ {
+  "hash": "f4fi2r",
+  "text": "When the sun comes up, everyone wakes up.",
+  "say": "When the sun comes up, everyone wakes up."
+ },
+ {
+  "hash": "yve13y",
+  "text": "But Little Owl yawns a big yawn.",
+  "say": "But Little Owl yawns a big yawn."
+ },
+ {
+  "hash": "2zojk8",
+  "text": "When the moon comes up, everyone goes to sleep.",
+  "say": "When the moon comes up, everyone goes to sleep."
+ },
+ {
+  "hash": "1be3bqk",
+  "text": "But Little Owl opens her big round eyes.",
+  "say": "But Little Owl opens her big round eyes."
+ },
+ {
+  "hash": "nsn6u7",
+  "text": "Hoot, hoot!",
+  "say": "Hoot, hoot!"
+ },
+ {
+  "hash": "okceut",
+  "text": "She flies over the dark houses and counts the stars.",
+  "say": "She flies over the dark houses and counts the stars."
+ },
+ {
+  "hash": "fmj9xt",
+  "text": "One, two, three!",
+  "say": "One, two, three!"
+ },
+ {
+  "hash": "14suuf4",
+  "text": "In the morning, she tucks her head under her wing.",
+  "say": "In the morning, she tucks her head under her wing."
+ },
+ {
+  "hash": "cv805g",
+  "text": "Good night, Little Owl!",
+  "say": "Good night, Little Owl!"
+ },
+ {
+  "hash": "iu6lsm",
+  "text": "Rocket to the Moon",
+  "say": "Rocket to the Moon"
+ },
+ {
+  "hash": "1tglk69",
+  "text": "Five, four, three, two, one.",
+  "say": "Five, four, three, two, one."
+ },
+ {
+  "hash": "x0a2d4",
+  "text": "Blast off!",
+  "say": "Blast off!"
+ },
+ {
+  "hash": "jztcaw",
+  "text": "The rocket zooms up past the birds and the clouds.",
+  "say": "The rocket zooms up past the birds and the clouds."
+ },
+ {
+  "hash": "ciewrl",
+  "text": "Up, up, up into the dark sky, where the stars twinkle.",
+  "say": "Up, up, up into the dark sky, where the stars twinkle."
+ },
+ {
+  "hash": "j2qv81",
+  "text": "The rocket lands on the moon.",
+  "say": "The rocket lands on the moon."
+ },
+ {
+  "hash": "x4lnyq",
+  "text": "Boing!",
+  "say": "Boing!"
+ },
+ {
+  "hash": "1r36vnh",
+  "text": "Everything is bouncy up here.",
+  "say": "Everything is bouncy up here."
+ },
+ {
+  "hash": "1udj0dp",
+  "text": "There is our home, far away on the big blue Earth.",
+  "say": "There is our home, far away on the big blue Earth."
+ },
+ {
+  "hash": "46hcl8",
+  "text": "Time to fly back for dinner.",
+  "say": "Time to fly back for dinner."
+ },
+ {
+  "hash": "15pgor5",
+  "text": "Sparkle's Rainbow",
+  "say": "Sparkle's Rainbow"
+ },
+ {
+  "hash": "171nrr1",
+  "text": "Sparkle the unicorn had a rainbow mane.",
+  "say": "Sparkle the unicorn had a rainbow mane."
+ },
+ {
+  "hash": "1b6pzqy",
+  "text": "One day it rained and rained, and all her colors washed away.",
+  "say": "One day it rained and rained, and all her colors washed away."
+ },
+ {
+  "hash": "1mbsd9n",
+  "text": "A red strawberry, an orange fox, and the yellow sun each gave her a color.",
+  "say": "A red strawberry, an orange fox, and the yellow sun each gave her a color."
+ },
+ {
+  "hash": "1lol4t4",
+  "text": "A green frog, a blue bird, and some purple grapes gave her a color too.",
+  "say": "A green frog, a blue bird, and some purple grapes gave her a color too."
+ },
+ {
+  "hash": "gcboer",
+  "text": "Now Sparkle has a rainbow mane again.",
+  "say": "Now Sparkle has a rainbow mane again."
+ },
+ {
+  "hash": "muumsp",
+  "text": "Thank you, friends!",
+  "say": "Thank you, friends!"
+ },
+ {
+  "hash": "1i395yt",
+  "text": "Panda Moves House",
+  "say": "Panda Moves House"
+ },
+ {
+  "hash": "1c8dn8z",
+  "text": "Panda is moving to a new house.",
+  "say": "Panda is moving to a new house."
+ },
+ {
+  "hash": "1oi9ppo",
+  "text": "She puts her toys and her blanket into a big box.",
+  "say": "She puts her toys and her blanket into a big box."
+ },
+ {
+  "hash": "1otisi1",
+  "text": "The moving truck drives down the long road.",
+  "say": "The moving truck drives down the long road."
+ },
+ {
+  "hash": "1fp4cgm",
+  "text": "The new house is very quiet.",
+  "say": "The new house is very quiet."
+ },
+ {
+  "hash": "1iefsjy",
+  "text": "Panda feels a little bit shy.",
+  "say": "Panda feels a little bit shy."
+ },
+ {
+  "hash": "1ctigl1",
+  "text": "Then she finds a sunny window, a soft bed, and a new friend next door.",
+  "say": "Then she finds a sunny window, a soft bed, and a new friend next door."
+ },
+ {
+  "hash": "1am3r9t",
+  "text": "Now the new house feels like home.",
+  "say": "Now the new house feels like home."
+ },
+ {
+  "hash": "d0imub",
+  "text": "Dino Brushes His Teeth",
+  "say": "Dino Brushes His Teeth"
+ },
+ {
+  "hash": "jwspbf",
+  "text": "Little Dino has lots and lots of teeth.",
+  "say": "Little Dino has lots and lots of teeth."
+ },
+ {
+  "hash": "lpm1s5",
+  "text": "After dinner, Dino says, I do not want to brush my teeth!",
+  "say": "After dinner, Dino says, I do not want to brush my teeth!"
+ },
+ {
+  "hash": "1s04xio",
+  "text": "Mama Dino says, Let's count them while we brush.",
+  "say": "Mama Dino says, Let's count them while we brush."
+ },
+ {
+  "hash": "elagr7",
+  "text": "Brush, brush, brush.",
+  "say": "Brush, brush, brush."
+ },
+ {
+  "hash": "120859n",
+  "text": "One tooth, two teeth, three teeth, all the way to fifty!",
+  "say": "One tooth, two teeth, three teeth, all the way to fifty!"
+ },
+ {
+  "hash": "tzssao",
+  "text": "Now Dino's teeth are shiny and white.",
+  "say": "Now Dino's teeth are shiny and white."
+ },
+ {
+  "hash": "1aw3e4o",
+  "text": "He gives a big dinosaur smile.",
+  "say": "He gives a big dinosaur smile."
+ },
+ {
+  "hash": "139sshl",
+  "text": "Rawr!",
+  "say": "Rawr!"
+ },
+ {
+  "hash": "6win4r",
+  "text": "Where Did the Moon Go?",
+  "say": "Where Did the Moon Go?"
+ },
+ {
+  "hash": "16g0jln",
+  "text": "Every night, the moon peeks in my window.",
+  "say": "Every night, the moon peeks in my window."
+ },
+ {
+  "hash": "1mhh8s5",
+  "text": "Some nights it is big and round, like a ball.",
+  "say": "Some nights it is big and round, like a ball."
+ },
+ {
+  "hash": "4w379",
+  "text": "Some nights it is thin and curvy, like a banana.",
+  "say": "Some nights it is thin and curvy, like a banana."
+ },
+ {
+  "hash": "vrp4rs",
+  "text": "Some nights I cannot find it at all.",
+  "say": "Some nights I cannot find it at all."
+ },
+ {
+  "hash": "1j4acg5",
+  "text": "Where did you go, moon?",
+  "say": "Where did you go, moon?"
+ },
+ {
+  "hash": "hp1jkn",
+  "text": "The moon is still there.",
+  "say": "The moon is still there."
+ },
+ {
+  "hash": "15je62d",
+  "text": "It is just hiding in the dark.",
+  "say": "It is just hiding in the dark."
+ },
+ {
+  "hash": "vv8d6f",
+  "text": "Good night, moon.",
+  "say": "Good night, moon."
+ },
+ {
+  "hash": "6uu16u",
+  "text": "See you soon!",
+  "say": "See you soon!"
+ },
+ {
+  "hash": "yk46or",
+  "text": "Caterpillar's Big Nap",
+  "say": "Caterpillar's Big Nap"
+ },
+ {
+  "hash": "1fap102",
+  "text": "A tiny caterpillar hatched from a tiny egg on a leaf.",
+  "say": "A tiny caterpillar hatched from a tiny egg on a leaf."
+ },
+ {
+  "hash": "t2v89z",
+  "text": "She munched leaves all day long and grew bigger and bigger.",
+  "say": "She munched leaves all day long and grew bigger and bigger."
+ },
+ {
+  "hash": "ydtyhv",
+  "text": "Then she felt very sleepy.",
+  "say": "Then she felt very sleepy."
+ },
+ {
+  "hash": "vllgfl",
+  "text": "She wrapped herself up in a cozy case called a chrysalis.",
+  "say": "She wrapped herself up in a cozy case called a chrysalis."
+ },
+ {
+  "hash": "1ukrq6r",
+  "text": "She slept and slept for two whole weeks.",
+  "say": "She slept and slept for two whole weeks."
+ },
+ {
+  "hash": "18k91v",
+  "text": "When she woke up, she had wings!",
+  "say": "When she woke up, she had wings!"
+ },
+ {
+  "hash": "c7jign",
+  "text": "Now she is a butterfly.",
+  "say": "Now she is a butterfly."
+ },
+ {
+  "hash": "1lh3g44",
+  "text": "The Princess Who Made Pancakes",
+  "say": "The Princess Who Made Pancakes"
+ },
+ {
+  "hash": "15pu80r",
+  "text": "Princess Poppy lived in a castle with a very big kitchen.",
+  "say": "Princess Poppy lived in a castle with a very big kitchen."
+ },
+ {
+  "hash": "1eol4xh",
+  "text": "One morning, the cook was sick.",
+  "say": "One morning, the cook was sick."
+ },
+ {
+  "hash": "1w49xkw",
+  "text": "Who will make breakfast?",
+  "say": "Who will make breakfast?"
+ },
+ {
+  "hash": "1pc8x9s",
+  "text": "I will!",
+  "say": "I will!"
+ },
+ {
+  "hash": "1vfyrew",
+  "text": "said Poppy.",
+  "say": "said Poppy."
+ },
+ {
+  "hash": "8cjnlm",
+  "text": "She cracked the eggs, poured the milk, and stirred and stirred.",
+  "say": "She cracked the eggs, poured the milk, and stirred and stirred."
+ },
+ {
+  "hash": "1fuamw6",
+  "text": "Flip!",
+  "say": "Flip!"
+ },
+ {
+  "hash": "1ub68d1",
+  "text": "The pancake flew up so high that it stuck to the ceiling!",
+  "say": "The pancake flew up so high that it stuck to the ceiling!"
+ },
+ {
+  "hash": "uxz2ew",
+  "text": "Everyone laughed.",
+  "say": "Everyone laughed."
+ },
+ {
+  "hash": "1tfx0tx",
+  "text": "Then Poppy made a tall stack of pancakes for the whole castle.",
+  "say": "Then Poppy made a tall stack of pancakes for the whole castle."
+ },
+ {
+  "hash": "1ygz6dd",
+  "text": "A Day at School",
+  "say": "A Day at School"
+ },
+ {
+  "hash": "102br9q",
+  "text": "In the morning, we hang our backpacks in our cubbies.",
+  "say": "In the morning, we hang our backpacks in our cubbies."
+ },
+ {
+  "hash": "thqidd",
+  "text": "We sit on the rug for circle time and sing a song.",
+  "say": "We sit on the rug for circle time and sing a song."
+ },
+ {
+  "hash": "1iquxps",
+  "text": "We paint pictures, build towers, and play outside.",
+  "say": "We paint pictures, build towers, and play outside."
+ },
+ {
+  "hash": "2bp59x",
+  "text": "After lunch, we rest on our mats.",
+  "say": "After lunch, we rest on our mats."
+ },
+ {
+  "hash": "11sfaev",
+  "text": "Then Mama or Baba comes to pick us up.",
+  "say": "Then Mama or Baba comes to pick us up."
+ },
+ {
+  "hash": "15jxi1e",
+  "text": "See you tomorrow, school!",
+  "say": "See you tomorrow, school!"
+ },
+ {
+  "hash": "28cifh",
+  "text": "Bear Says Hello",
+  "say": "Bear Says Hello"
+ },
+ {
+  "hash": "zibc3s",
+  "text": "Bear is new at school.",
+  "say": "Bear is new at school."
+ },
+ {
+  "hash": "1spl60v",
+  "text": "He holds his blanket tight.",
+  "say": "He holds his blanket tight."
+ },
+ {
+  "hash": "tm3i6d",
+  "text": "Bunny is building a tower.",
+  "say": "Bunny is building a tower."
+ },
+ {
+  "hash": "1zacxa",
+  "text": "Bear wants to play, but he feels shy.",
+  "say": "Bear wants to play, but he feels shy."
+ },
+ {
+  "hash": "1ulgyrr",
+  "text": "Bear takes a big breath and says, Hello!",
+  "say": "Bear takes a big breath and says, Hello!"
+ },
+ {
+  "hash": "1b4qkkq",
+  "text": "Can I play too?",
+  "say": "Can I play too?"
+ },
+ {
+  "hash": "14opx8d",
+  "text": "says Bunny.",
+  "say": "says Bunny."
+ },
+ {
+  "hash": "odfgo",
+  "text": "Together they build the tallest tower ever.",
+  "say": "Together they build the tallest tower ever."
+ },
+ {
+  "hash": "1c62y73",
+  "text": "Now Bear has a friend at school.",
+  "say": "Now Bear has a friend at school."
  },
  {
   "hash": "p6z04l",

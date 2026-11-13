@@ -98,10 +98,10 @@
   const palm = (x, y, s = 1) => `<g transform="translate(${x},${y}) scale(${s})"><path d="M-6 0 Q-14 -120 6 -230 L14 -230 Q0 -120 8 0Z" fill="#9b7a52"/>${[-150, -110, -60, -20, 30, 70].map(a => `<path d="M10 -230 q${Math.cos(a * Math.PI / 180) * 70} ${Math.sin(a * Math.PI / 180) * 50 - 10} ${Math.cos(a * Math.PI / 180) * 120} ${Math.sin(a * Math.PI / 180) * 90 + 40}" stroke="#4f9a48" stroke-width="16" fill="none" stroke-linecap="round"/>`).join('')}</g>`;
   const emo = (ch, x, y, size, extra = '') => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle" dominant-baseline="central" style="font-family:${EMO}" ${extra}>${ch}</text>`;
   const label = (txt, x, y, size, col = '#fff', extra = '') => `<text x="${x}" y="${y}" font-size="${size}" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" fill="${col}" ${extra}>${esc(txt)}</text>`;
-  function frame(id, cls, svg, intro) {
+  function frame(id, cls, svg, intro, back) {
     clear(); el.className = 'town scene ' + cls;
     el.innerHTML = `<button class="round-btn town-back" title="Back">⬅️</button><svg class="scene-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">${svg}<image id="kid" width="170" height="170" x="0" y="0"/></svg><div class="town-pol hidden"></div>`;
-    G.$('.town-back', el).onclick = () => { G.sfx.tap(); map(); };
+    G.$('.town-back', el).onclick = () => { G.sfx.tap(); G.hush(); (back || map)(); };
     el.onclick = null;
     const k = G.$('#kid', el); k.setAttribute('href', kidPic(170).toDataURL()); k.style.pointerEvents = 'none';
     const ids = G.photosFor(id);
@@ -239,7 +239,7 @@
       <g><rect x="160" y="350" width="800" height="250" fill="#d6d9dc"/><rect x="160" y="350" width="800" height="250" fill="none" stroke="#fbfbfb" stroke-width="10"/>
         <path d="M120 360 L200 270 H920 L1000 360Z" fill="#b8452f"/>${Array.from({ length: 4 }, (_, r) => Array.from({ length: 26 }, (_, i) => `<path d="M${150 + i * 32 + r * 12} ${290 + r * 18} q16 14 32 0" stroke="#8f3020" stroke-width="4" fill="none"/>`).join('')).join('')}
         ${[230, 360, 720, 850].map(x => `<rect x="${x}" y="420" width="90" height="90" fill="#bfe6ff" stroke="#fff" stroke-width="8"/><line x1="${x + 45}" y1="420" x2="${x + 45}" y2="510" stroke="#fff" stroke-width="5"/>`).join('')}
-        <g class="door"><rect x="520" y="430" width="90" height="170" fill="#c62828"/><path d="M535 500 V470 Q565 440 595 470 V500Z" fill="#bfe6ff"/><circle cx="596" cy="530" r="6" fill="#d9a441"/></g>
+        <g class="door door-in" style="cursor:pointer"><rect x="520" y="430" width="90" height="170" fill="#c62828"/><path d="M535 500 V470 Q565 440 595 470 V500Z" fill="#bfe6ff"/><circle cx="596" cy="530" r="6" fill="#d9a441"/></g>
         ${nm ? label(nm, 565, 395, 30, '#c62828') : ''}
         <g transform="translate(660,560)"><path d="M0 0 L50 0 L60 -60 L10 -60Z" fill="#d32f2f"/><rect x="-6" y="-10" width="70" height="14" fill="#d32f2f"/><rect x="0" y="0" width="10" height="40" fill="#b71c1c"/><rect x="48" y="0" width="10" height="40" fill="#b71c1c"/></g>
         <g class="pack" style="cursor:pointer">${emo('🎒', 440, 560, 70)}</g></g>
@@ -250,6 +250,7 @@
         ${emo('🪣', 210, 90, 56)}</g>`);
     putKid(920, 780);
     let step = 0, busy = false;
+    tapOn(svg, '.door-in', () => { if (busy) return; busy = true; G.sfx.open(); moveKid(565, 610, 600).then(() => classroom()); });
     tapOn(svg, '.pack', p => {
       if (step !== 0 || busy) return; busy = true;
       moveKid(470, 620, 500).then(() => { const t = p.querySelector('text'); t.setAttribute('x', 565); t.setAttribute('y', 520); t.style.transition = 'opacity .6s'; G.sfx.open(); later(() => { t.style.opacity = '0'; G.sfx.close(); }, 500); step = 1; busy = false; later(() => G.beep(G.T('town.kinderPlay')), 700); });
@@ -277,19 +278,201 @@
     putKid(1000, 770);
     tapOn(svg, '.doors', () => { G.sfx.open(); moveKid(570, 620, 600).then(() => inside()); });
     function inside() {
-      const books = G.shuffle([['🦉', '#9b6bff'], ['🚀', '#4d8dff'], ['🦄', '#ff6fb1'], ['🐼', '#4cd97b'], ['🦖', '#ff9f43'], ['🌙', '#2a3f8f'], ['🐛', '#37c9d6'], ['👑', '#ffd93d']]);
+      const books = G.shuffle(LIB_BOOKS.slice());
       const svg2 = frame('library', 'library in', `<rect width="1600" height="900" fill="#f4ead6"/><rect y="640" width="1600" height="260" fill="#3a6fb0"/>${Array.from({ length: 20 }, (_, i) => `<rect x="${i * 80}" y="640" width="80" height="260" fill="${['#ff8fb8', '#ffd93d', '#4cd97b', '#4d8dff', '#9b6bff'][i % 5]}" opacity=".25"/>`).join('')}
         ${[0, 1].map(r => `<rect x="120" y="${160 + r * 220}" width="1360" height="24" fill="#c9a46a"/>`).join('')}<rect x="120" y="140" width="24" height="460" fill="#c9a46a"/><rect x="1456" y="140" width="24" height="460" fill="#c9a46a"/>
         ${Array.from({ length: 2 }, (_, r) => Array.from({ length: 30 }, (_, i) => `<rect x="${160 + i * 43}" y="${40 + r * 220 + (i % 3) * 8}" width="36" height="${118 - (i % 3) * 8}" fill="${['#ff6f6f', '#ffb347', '#6fd97b', '#6fa8ff', '#b58cff', '#ff9cc7'][(i + r) % 6]}" stroke="#4a3f63" stroke-width="2"/>`).join('')).join('')}
-        ${books.slice(0, 6).map((b, i) => `<g class="book" data-i="${i}" style="cursor:pointer"><rect x="${170 + i * 215}" y="430" width="150" height="190" rx="10" fill="${b[1]}" stroke="#4a3f63" stroke-width="5"/><rect x="${170 + i * 215}" y="430" width="22" height="190" fill="#000" opacity=".15"/>${emo(b[0], 245 + i * 215, 525, 84)}</g>`).join('')}
-        <rect x="660" y="720" width="280" height="120" rx="60" fill="#ffd93d" opacity=".8"/>`, 'town.libraryIn');
+        <rect x="60" y="590" width="1480" height="40" rx="8" fill="#c9a46a"/>
+        ${books.map((id, i) => { const c = BOOK_ART[id].c, x = 212 + i * 148; return `<g class="book" data-id="${id}" style="cursor:pointer"><rect x="${x}" y="420" width="126" height="172" rx="10" fill="${c}" stroke="#4a3f63" stroke-width="5"/><rect x="${x}" y="420" width="18" height="172" fill="#000" opacity=".15"/>${emo(BOOK_ART[id].icon, x + 70, 500, 70)}${emo('⭐', x + 112, 428, 40, 'class="read-star" opacity="0"')}</g>`; }).join('')}
+        <rect x="660" y="720" width="280" height="120" rx="60" fill="#ffd93d" opacity=".8"/>`, 'town.libraryIn', () => library());
       putKid(1100, 820);
-      let n = 0;
+      const read = new Set(); let done = false, busy = false;
       tapOn(svg2, '.book', (b, e) => {
-        if (b.dataset.read) return; b.dataset.read = 1; G.sfx.sparkle(); burstAt(e, '⭐', 5); b.style.transform = 'translateY(-30px)'; b.style.transition = 'transform .3s';
-        const r = b.querySelector('rect'); moveKid(+r.getAttribute('x') + 75, 820, 500);
-        if (++n === 3) later(() => { win('library'); G.beep(G.T('town.libraryDone')); }, 500);
+        if (busy) return; busy = true;
+        G.sfx.sparkle(); burstAt(e, '⭐', 5);
+        const r = b.querySelector('rect'); moveKid(+r.getAttribute('x') + 63, 820, 500).then(() => {
+          openBook(b.dataset.id, finished => {
+            busy = false;
+            if (!finished) return;
+            read.add(b.dataset.id); b.querySelector('.read-star').setAttribute('opacity', '1');
+            if (read.size >= 3 && !done) { done = true; later(() => { win('library'); G.beep(G.T('town.libraryDone')); }, 300); }
+          });
+        });
       });
     }
+  }
+
+  // ---------- picture books ----------
+  // the words are in lines.js (G.book) so Beep's voice has them recorded; the pictures are here.
+  // A picture is emoji placed on an 800 x 500 page: "emoji x,y,size" separated by spaces.
+  const BOOK_ART = {
+    owl: { icon: '🦉', c: '#9b6bff', pics: [
+      ['#bfe6ff', '🌳400,300,380 🦉440,210,110'],
+      ['#ffe9a8', '☀️130,110,130 🌳420,300,360 🦉450,210,100 🥱560,150,70'],
+      ['#1d2a5a', '🌙660,100,110 🌳400,300,360 🦉440,210,110 ⭐170,90,40 ⭐290,60,30'],
+      ['#1d2a5a', '⭐200,80,60 ⭐360,50,60 ⭐520,90,60 🦉400,230,130 🏠170,420,100 🏠400,430,100 🏠630,420,100'],
+      ['#ffe0b8', '🌅650,100,120 🌳400,310,360 🦉440,220,100 💤540,150,60'],
+    ] },
+    rocket: { icon: '🚀', c: '#4d8dff', pics: [
+      ['#bfe6ff', '🚀400,250,200 💨320,420,90 💨480,420,90'],
+      ['#8fd3ff', '☁️190,320,150 ☁️610,140,150 🐦150,110,70 🐦650,360,60 🚀400,230,160'],
+      ['#101836', '⭐120,100,40 ⭐300,60,30 ⭐620,110,40 ⭐700,390,30 ✨180,380,50 🚀400,250,160'],
+      ['#101836', '🌕400,600,620 🚀400,170,140 ⭐140,80,40 ⭐660,70,40'],
+      ['#101836', '🌍590,180,190 🚀220,330,130 ⭐110,80,30 ⭐430,60,30 🍽️690,420,70'],
+    ] },
+    unicorn: { icon: '🦄', c: '#ff6fb1', pics: [
+      ['#ffe3f1', '🌈400,110,200 🦄400,300,220'],
+      ['#9fb4c8', '🌧️190,90,130 🌧️590,90,130 🦄400,310,200 💧280,230,40 💧520,250,40'],
+      ['#fff1c9', '☀️640,110,120 🍓160,340,110 🦊400,330,140'],
+      ['#d8f5d0', '🐸160,340,120 🐦400,150,110 🍇640,340,120'],
+      ['#ffe3f1', '🌈400,130,260 🦄400,330,200 ✨170,210,60 ✨630,230,60'],
+    ] },
+    panda: { icon: '🐼', c: '#4cd97b', pics: [
+      ['#e8f5e9', '🐼330,290,220 🏠630,260,170'],
+      ['#fff4e0', '📦380,330,220 🧸330,180,90 🐼620,300,140'],
+      ['#bfe6ff', '🌳110,290,120 🚚400,320,220 🌳690,290,120'],
+      ['#e9e4f5', '🏠400,220,260 🐼400,410,110'],
+      ['#fff1c9', '🪟150,170,130 🛏️370,360,160 🐼560,320,120 🐰700,350,90'],
+      ['#ffe3f1', '🏡400,240,250 🐼400,410,110 💗580,130,70'],
+    ] },
+    dino: { icon: '🦖', c: '#ff9f43', pics: [
+      ['#d8f5d0', '🦖400,270,280'],
+      ['#ffe9a8', '🦖290,290,230 🪥620,300,120'],
+      ['#ffe9a8', '🦕220,300,210 🦖560,320,180 🪥410,190,90'],
+      ['#bfe6ff', '🦖400,290,230 🪥570,220,100 🫧210,140,60 🫧650,110,50 🫧190,380,50'],
+      ['#bfe6ff', '🦖400,290,250 ✨580,150,70 ✨220,160,60'],
+    ] },
+    moon: { icon: '🌙', c: '#2a3f8f', pics: [
+      ['#1d2a5a', '🪟400,260,330 🌙420,190,90'],
+      ['#1d2a5a', '🌕400,240,240 ⭐140,90,40 ⭐660,390,40'],
+      ['#1d2a5a', '🌙400,240,230 🍌630,400,90 ⭐140,90,40'],
+      ['#0b1024', '❓400,240,170 ⭐140,90,30 ⭐660,120,30'],
+      ['#1d2a5a', '🛏️400,340,220 🌙620,110,100 ⭐190,100,40 💤300,220,60'],
+    ] },
+    bug: { icon: '🐛', c: '#37c9d6', pics: [
+      ['#d8f5d0', '🍃400,270,280 🥚430,240,60'],
+      ['#d8f5d0', '🍃250,300,180 🍃560,320,170 🐛420,340,130'],
+      ['#e9f2d8', '🌿400,260,280 🫛440,330,90 💤570,170,60'],
+      ['#1d2a5a', '🌙630,100,100 🌿380,280,250 🫛420,340,90 💤540,200,60'],
+      ['#d8f5d0', '🦋400,230,230 🌸140,390,90 🌼660,390,90'],
+    ] },
+    crown: { icon: '👑', c: '#ffd93d', pics: [
+      ['#f3e9ff', '🏰380,250,290 👸600,380,110'],
+      ['#fff4e0', '🤒260,280,150 ❓530,250,150'],
+      ['#fff4e0', '👸240,300,180 🥚500,190,70 🥛620,310,80 🥣480,390,100'],
+      ['#fff4e0', '🥞400,60,100 👸280,330,180 🍳520,360,100 💨400,190,50'],
+      ['#f3e9ff', '🥞400,300,210 👸170,330,140 🤴630,330,130 😂400,100,70'],
+    ] },
+    school: { icon: '🎒', c: '#ff6fb1', pics: [
+      ['#fff4e0', '🎒300,270,190 🧥530,270,170'],
+      ['#fff4e0', '🎵400,110,80 🧒230,330,130 👧400,330,130 🧒570,330,130'],
+      ['#d8f5d0', '🎨180,260,140 🧱400,310,140 🛝630,280,160'],
+      ['#d9d4f0', '😴400,290,200 🧸580,340,90 💤600,150,60'],
+      ['#fff1c9', '🏫400,230,250 👋600,390,100'],
+    ] },
+    bear: { icon: '🐻', c: '#9b6bff', pics: [
+      ['#fff4e0', '🐻400,260,250'],
+      ['#fff4e0', '🐻170,300,130 🧱400,380,100 🧱400,290,100 🐰590,300,150'],
+      ['#fff4e0', '🐻310,300,190 💬540,140,150 👋480,330,90'],
+      ['#fff4e0', '🐻200,330,150 🐰600,330,150 🧱400,420,80 🧱400,345,80 🧱400,270,80 🧱400,195,80 🧱400,120,80'],
+      ['#ffe3f1', '🐻290,300,180 🐰520,300,170 💗405,120,80'],
+    ] },
+  };
+  const LIB_BOOKS = ['owl', 'rocket', 'unicorn', 'panda', 'dino', 'moon', 'bug', 'crown'];
+  const pic = spec => spec.split(' ').map(t => { const m = t.match(/^(.+?)(-?\d+),(-?\d+),(\d+)$/u); return m ? emo(m[1], +m[2], +m[3], +m[4]) : ''; }).join('');
+  // opens a book over the scene; done(true) when it was read to the end
+  function openBook(id, done) {
+    const art = BOOK_ART[id], b = G.book(id);
+    const pages = [{ cover: true, text: b.title }, ...b.pages.map((t, i) => ({ text: t, pic: art.pics[i] })), { end: true, text: G.T('theEnd') }];
+    let at = 0, reached = false;
+    G.beepQuiet();
+    const v = G.html(`<div class="book-view"><div class="book-card" style="border-color:${art.c}"><div class="book-pic"></div><div class="book-text"></div></div>
+      <button class="round-btn book-x" title="Close">✖</button><button class="round-btn book-prev" title="Back a page">◀</button><button class="round-btn book-next" title="Next page">▶</button><button class="round-btn book-say" title="Read it again">🔊</button></div>`);
+    el.appendChild(v);
+    const card = G.$('.book-card', v);
+    const show = () => {
+      const pg = pages[at];
+      let svg;
+      if (pg.cover) svg = `<rect width="800" height="500" fill="${art.c}"/><rect x="40" y="30" width="720" height="440" rx="24" fill="#fff" opacity=".22"/>${emo(art.icon, 400, 250, 250)}`;
+      else if (pg.end) svg = `<rect width="800" height="500" fill="#fff8e1"/>${emo(art.icon, 400, 250, 190)}${[[120, 110], [680, 100], [150, 400], [660, 410], [400, 60]].map(([x, y]) => emo('⭐', x, y, 60)).join('')}`;
+      else svg = `<rect width="800" height="500" fill="${pg.pic[0]}"/>${pic(pg.pic[1])}`;
+      G.$('.book-pic', v).innerHTML = `<svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">${svg}</svg>`;
+      const tx = G.$('.book-text', v); tx.textContent = pg.text; tx.classList.toggle('title', !!pg.cover);
+      G.$('.book-prev', v).style.visibility = at ? 'visible' : 'hidden';
+      G.$('.book-next', v).textContent = pg.end ? '✔' : '▶';
+      card.classList.remove('turn'); void card.offsetWidth; card.classList.add('turn');
+      if (pg.end) { reached = true; G.sfx.great(); }
+      G.say(pg.text);
+    };
+    const close = () => { G.hush(); v.remove(); done(reached); };
+    G.$('.book-next', v).onclick = e => { e.stopPropagation(); G.sfx.tap(); if (at === pages.length - 1) return close(); at++; show(); };
+    G.$('.book-prev', v).onclick = e => { e.stopPropagation(); G.sfx.tap(); if (at) { at--; show(); } };
+    G.$('.book-x', v).onclick = e => { e.stopPropagation(); G.sfx.tap(); close(); };
+    G.$('.book-say', v).onclick = e => { e.stopPropagation(); G.say(pages[at].text); };
+    G.$('.book-pic', v).onclick = e => { e.stopPropagation(); G.$('.book-next', v).click(); };
+    show();
+  }
+
+  // ----- inside Maia's school: cubbies, the teacher, a sink, an easel, the fish tank, nap mats, the circle rug, blocks and a book corner -----
+  function classroom() {
+    const k = G.kid(), others = ['🐶', '🐱', '🌟', '🍎', '🚗'];
+    const LET = 'ABCDEFGHIJKLMNOP', COL = ['#ff6f6f', '#ffb347', '#ffd93d', '#6fd97b', '#4d8dff', '#b58cff'];
+    const svg = frame('kinderIn', 'kinder in', `<rect width="1600" height="620" fill="#fdf1d8"/><rect y="600" width="1600" height="300" fill="#e3c08a"/>${Array.from({ length: 9 }, (_, i) => `<line x1="0" y1="${630 + i * 32}" x2="1600" y2="${630 + i * 32}" stroke="#cfa972" stroke-width="3"/>`).join('')}<rect y="590" width="1600" height="16" fill="#c49a62"/>
+      <path d="M30 40 Q800 110 1570 40" stroke="#8a6a52" stroke-width="4" fill="none"/>${Array.from(LET).map((c, i) => { const x = 70 + i * 97, y = 40 + Math.sin((i + 0.5) / 16 * Math.PI) * 50; return `<path d="M${x - 34} ${y} L${x + 34} ${y} L${x} ${y + 70}Z" fill="${COL[i % 6]}"/>${label(c, x, y + 32, 30, '#fff')}`; }).join('')}
+      <g><rect x="590" y="150" width="330" height="210" fill="#bfe6ff" stroke="#fff" stroke-width="14"/><line x1="755" y1="150" x2="755" y2="360" stroke="#fff" stroke-width="10"/>${tree(670, 330, 0.6)}${tree(855, 335, 0.5, '#4f9a48')}${cloud(800, 200, 0.45)}<rect x="575" y="355" width="360" height="18" fill="#e7d3b0"/></g>
+      <g class="cubby" style="cursor:pointer"><rect x="205" y="250" width="240" height="330" fill="#d9a066" stroke="#8a5a3c" stroke-width="6"/>
+        ${[0, 1].map(r => [0, 1, 2].map(c => { const x = 213 + c * 77, y = 262 + r * 158, i = r * 3 + c; return `<rect x="${x}" y="${y}" width="72" height="146" fill="#f6e2c2"/><circle cx="${x + 36}" cy="${y + 16}" r="6" fill="#8a8f9a"/><rect x="${x + 4}" y="${y + 112}" width="64" height="28" rx="6" fill="#fff"/>${i === 1 ? label(k.name, x + 36, y + 133, 19, '#c62828') : emo(others[i > 1 ? i - 1 : i], x + 36, y + 126, 22)}`; }).join('')).join('')}
+        <g class="cubby-stuff" style="opacity:0;transition:opacity .4s">${emo('🎒', 326, 308, 48)}${emo('🧥', 326, 350, 34)}</g></g>
+      <g class="teacher" style="cursor:pointer">${emo('👩‍🏫', 515, 525, 150)}</g>
+      <g class="mats" style="cursor:pointer">${['#4d8dff', '#4cd97b', '#ff6f6f', '#ffd93d'].map((c, i) => `<rect x="640" y="${560 - i * 24}" width="180" height="22" rx="8" fill="${c}" stroke="#4a3f63" stroke-width="3"/>`).join('')}</g>
+      <g class="sink" style="cursor:pointer"><rect x="950" y="440" width="110" height="160" fill="#7fc3e8" stroke="#3d7ea6" stroke-width="5"/><rect x="940" y="430" width="130" height="22" rx="6" fill="#e9eef2"/><ellipse cx="1005" cy="441" rx="38" ry="9" fill="#b9c4cc"/><path d="M1005 432 V398 H1030 V410" stroke="#9aa3ab" stroke-width="10" fill="none" stroke-linecap="round"/>${emo('🧼', 1050, 418, 30)}</g>
+      <g class="easel" style="cursor:pointer"><path d="M1095 600 L1150 290 L1205 600 M1150 290 V600" stroke="#8a5a3c" stroke-width="10" fill="none"/><rect x="1085" y="310" width="130" height="190" fill="#fff" stroke="#c49a62" stroke-width="6"/><g class="paint"></g><rect x="1075" y="500" width="150" height="16" fill="#c49a62"/>${['#ff6f6f', '#ffd93d', '#4d8dff', '#4cd97b'].map((c, i) => `<circle cx="${1098 + i * 35}" cy="508" r="9" fill="${c}"/>`).join('')}</g>
+      <g class="tank" style="cursor:pointer"><rect x="1235" y="470" width="165" height="130" fill="#b07a4a" stroke="#7a5030" stroke-width="5"/><rect x="1240" y="330" width="155" height="140" fill="#9fe3ff" stroke="#5aa9cf" stroke-width="6" opacity=".95"/><rect x="1240" y="330" width="155" height="16" fill="#5aa9cf"/><path d="M1245 470 q20 -30 40 0 q20 -24 40 0 q30 -40 60 0" fill="#7cc46a"/>
+        <g class="fishes"><g class="fish f0">${emo('🐠', 1290, 410, 44)}</g><g class="fish f1">${emo('🐟', 1355, 440, 38)}</g><g class="fish f2">${emo('🐡', 1320, 378, 32)}</g></g><g class="food"></g></g>
+      <g class="books" style="cursor:pointer"><rect x="940" y="640" width="140" height="160" fill="#4d8dff" stroke="#2a5fb8" stroke-width="5"/>${['school', 'bear'].map((id, i) => `<rect x="${953 + i * 62}" y="660" width="54" height="74" fill="${BOOK_ART[id].c}" stroke="#4a3f63" stroke-width="3"/>${emo(BOOK_ART[id].icon, 980 + i * 62, 697, 32)}`).join('')}<rect x="940" y="740" width="140" height="10" fill="#2a5fb8"/>
+        <ellipse cx="1010" cy="845" rx="85" ry="50" fill="#ff8fb8"/><ellipse cx="1002" cy="822" rx="55" ry="30" fill="#ffa8c8"/></g>
+      <g class="rug" style="cursor:pointer"><ellipse cx="700" cy="770" rx="210" ry="86" fill="#4d8dff"/><ellipse cx="700" cy="770" rx="186" ry="70" fill="#ffd93d"/>${Array.from({ length: 10 }, (_, i) => { const a = i / 10 * Math.PI * 2; return `<circle cx="${700 + Math.cos(a) * 150}" cy="${770 + Math.sin(a) * 52}" r="16" fill="${COL[i % 6]}"/>`; }).join('')}${label('ABC', 700, 784, 40, '#ff6f6f')}</g>
+      <g class="blocks" style="cursor:pointer"><rect x="1270" y="800" width="125" height="74" rx="10" fill="#ff9f43" stroke="#c46a1c" stroke-width="5"/>${['#ff6f6f', '#4d8dff', '#4cd97b'].map((c, i) => `<rect x="${1280 + i * 38}" y="780" width="36" height="30" fill="${c}" stroke="#4a3f63" stroke-width="3"/>`).join('')}<g class="tower"></g></g>
+      <rect class="dim" width="1600" height="900" fill="#0b1024" opacity="0" pointer-events="none" style="transition:opacity .8s"/>`, 'town.kinderIn', () => kinder());
+    putKid(1230, 890);
+    const tried = new Set(); let busy = false, won = false, blocks = 0;
+    const did = what => { tried.add(what); if (tried.size === 9 && !won) { won = true; later(() => { win('kinderIn'); G.beep(G.T('town.kinderInDone')); }, 2600); } };
+    const go = (what, x, y, fn) => (n, e) => { if (busy) return; busy = true; moveKid(x, y, 550).then(() => { busy = false; fn(n, e); did(what); }); };
+    tapOn(svg, '.cubby', go('cubby', 330, 700, () => { G.sfx.open(); G.$('.cubby-stuff', svg).style.opacity = '1'; G.beep(G.T('town.kinderCubby')); }));
+    tapOn(svg, '.teacher', go('teacher', 630, 700, (n, e) => { G.sfx.chime(); burstAt(e, '💛', 5); G.beep(G.T('town.kinderTeacher')); }));
+    tapOn(svg, '.sink', go('sink', 1005, 700, (n, e) => { G.sfx.water(); burstAt(e, '🫧', 8); G.beep(G.T('town.kinderSink')); }));
+    let painted = 0;
+    tapOn(svg, '.easel', (n, e) => {
+      const add = () => { const g = G.$('.paint', svg); if (painted++ > 40) g.innerHTML = ''; g.insertAdjacentHTML('beforeend', `<circle cx="${G.rand(1105, 1195)}" cy="${G.rand(330, 480)}" r="${G.rand(12, 30)}" fill="${G.pick(COL)}" opacity=".9"/>`); G.sfx.pop(); };
+      if (tried.has('easel')) return add();
+      go('easel', 1150, 700, () => { add(); G.beep(G.T('town.kinderEasel')); })(n, e);
+    });
+    tapOn(svg, '.tank', go('tank', 1318, 700, () => {
+      const f = G.$('.food', svg); f.innerHTML = Array.from({ length: 8 }, () => `<circle cx="${G.rand(1260, 1375)}" cy="350" r="5" fill="#c46a1c" class="flake"/>`).join('');
+      G.$$('.flake', f).forEach(c => { c.style.transition = `transform ${1.5 + Math.random()}s ease-in`; requestAnimationFrame(() => requestAnimationFrame(() => { c.style.transform = `translateY(${G.rand(40, 100)}px)`; })); });
+      G.$('.fishes', svg).classList.add('eat'); later(() => { f.innerHTML = ''; G.$('.fishes', svg) && G.$('.fishes', svg).classList.remove('eat'); }, 2600);
+      for (let i = 0; i < 4; i++) later(G.sfx.bubble, i * 200); G.beep(G.T('town.kinderTank'));
+    }));
+    tapOn(svg, '.mats', go('nap', 730, 640, () => {
+      busy = true; const d = G.$('.dim', svg); d.setAttribute('opacity', '.55'); G.beep(G.T('town.kinderNap'));
+      for (let i = 0; i < 3; i++) later(() => { const r = svg.getBoundingClientRect(); G.burst(r.left + r.width * 0.46, r.top + r.height * 0.6, '💤', 3); }, 600 + i * 800);
+      later(() => { d.setAttribute('opacity', '0'); G.sfx.chime(); G.beep(G.T('town.kinderWake')); busy = false; }, 3600);
+    }));
+    tapOn(svg, '.rug', go('rug', 700, 780, (n, e) => { G.beep(G.T('town.kinderRug')); [523, 587, 659, 523].forEach((f, i) => later(() => { G.sfx.chime(); burstAt(e, '🎵', 3); }, 500 + i * 450)); }));
+    const tower = () => G.$('.tower', svg);
+    tapOn(svg, '.blocks', (n, e) => {
+      const add = () => {
+        if (busy) return;
+        if (blocks >= 7) { // it falls over
+          busy = true; G.sfx.thump(); G.$$('rect', tower()).forEach((b, i) => { b.style.transition = 'transform .7s ease-in, opacity .7s'; b.style.transformBox = 'fill-box'; b.style.transformOrigin = 'center'; b.style.transform = `translate(${(i % 2 ? 1 : -1) * G.rand(60, 160)}px, ${(7 - i) * 52}px) rotate(${G.rand(-120, 120)}deg)`; b.style.opacity = '0'; });
+          later(() => { tower().innerHTML = ''; blocks = 0; busy = false; }, 800); G.beep(G.T('town.kinderCrash')); return;
+        }
+        tower().insertAdjacentHTML('beforeend', `<rect x="${1170 + G.rand(-6, 6)}" y="${812 - blocks * 52}" width="80" height="52" fill="${COL[blocks % 6]}" stroke="#4a3f63" stroke-width="4"/>`); blocks++; G.sfx.snap();
+      };
+      if (tried.has('blocks')) return add();
+      go('blocks', 1330, 770, () => { add(); G.beep(G.T('town.kinderBlocks')); })(n, e);
+    });
+    let nextBook = 0;
+    tapOn(svg, '.books', go('books', 1010, 870, () => { busy = true; openBook(['school', 'bear'][nextBook++ % 2], () => { busy = false; }); }));
   }
 })();

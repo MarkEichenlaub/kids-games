@@ -92,9 +92,94 @@
       school: 'This is Mira\'s new school! Mira starts kindergarten here in January. Find the door with the big K!',
       schoolK: 'This is the kindergarten room! This is where Mira will learn and play.',
       grade1: 'That is a first grade room. Try another door!', grade2: 'That is a second grade room. Try another door!', grade3: 'That is a third grade room. Try another door!',
-      kinder: 'This is Maia\'s new school! First, tap the backpack to hang it up.', kinderPlay: 'Now let\'s play! Tap the slide.', kinderDone: 'Wheee! Maia\'s new school has a great playground.',
+      kinder: 'This is Maia\'s new school! First, tap the backpack to hang it up. Or tap the red door to go inside.', kinderPlay: 'Now let\'s play! Tap the slide.', kinderDone: 'Wheee! Maia\'s new school has a great playground. Tap the red door to see inside!',
+      kinderIn: 'This is Maia\'s classroom! Tap things to play. Can you try everything?',
+      kinderCubby: 'This is your cubby. Your backpack and your coat go in here.',
+      kinderTeacher: ['Good morning! I am so happy you are here.', 'Hi friend! Do you want to paint a picture?', 'Remember to wash your hands before snack!'],
+      kinderEasel: 'Paint a picture! Every tap adds a new color.',
+      kinderTank: 'Sprinkle some food for the fish. Look, they swim up to eat it!',
+      kinderRug: 'Circle time! Let\'s sit on the rug and sing the good morning song.',
+      kinderBlocks: 'Build a tower! Tap to add a block. How tall can it go?', kinderCrash: 'Crash! Let\'s build it again.',
+      kinderSink: 'Wash your hands with soap and water. Scrub, scrub, scrub!',
+      kinderNap: 'Rest time. Shh! Close your eyes.', kinderWake: 'Time to wake up!',
+      kinderInDone: 'You tried everything in the classroom! Maia is going to love it here.',
       library: 'This is the library. It is a short walk from our house. Tap the doors to go inside!',
-      libraryIn: 'Pick a book! Tap three books to read them.', libraryDone: 'What great books! You can borrow books here with a library card.',
+      libraryIn: 'Pick a book, and I will read it to you! Tap the arrow to turn the page.', libraryDone: 'What great books! You can borrow books here with a library card.',
+    },
+    // picture books: the library shelf, and the book corner at Maia's school
+    theEnd: 'The end!',
+    books: {
+      owl: { title: 'Little Owl Stays Up', pages: [
+        'Little Owl lives in a big oak tree.',
+        'When the sun comes up, everyone wakes up. But Little Owl yawns a big yawn.',
+        'When the moon comes up, everyone goes to sleep. But Little Owl opens her big round eyes.',
+        'Hoot, hoot! She flies over the dark houses and counts the stars. One, two, three!',
+        'In the morning, she tucks her head under her wing. Good night, Little Owl!',
+      ] },
+      rocket: { title: 'Rocket to the Moon', pages: [
+        'Five, four, three, two, one. Blast off!',
+        'The rocket zooms up past the birds and the clouds.',
+        'Up, up, up into the dark sky, where the stars twinkle.',
+        'The rocket lands on the moon. Boing! Everything is bouncy up here.',
+        'Look! There is our home, far away on the big blue Earth. Time to fly back for dinner.',
+      ] },
+      unicorn: { title: 'Sparkle\'s Rainbow', pages: [
+        'Sparkle the unicorn had a rainbow mane.',
+        'One day it rained and rained, and all her colors washed away.',
+        'A red strawberry, an orange fox, and the yellow sun each gave her a color.',
+        'A green frog, a blue bird, and some purple grapes gave her a color too.',
+        'Now Sparkle has a rainbow mane again. Thank you, friends!',
+      ] },
+      panda: { title: 'Panda Moves House', pages: [
+        'Panda is moving to a new house.',
+        'She puts her toys and her blanket into a big box.',
+        'The moving truck drives down the long road. Beep beep!',
+        'The new house is very quiet. Panda feels a little bit shy.',
+        'Then she finds a sunny window, a soft bed, and a new friend next door.',
+        'Now the new house feels like home.',
+      ] },
+      dino: { title: 'Dino Brushes His Teeth', pages: [
+        'Little Dino has lots and lots of teeth.',
+        'After dinner, Dino says, I do not want to brush my teeth!',
+        'Mama Dino says, Let\'s count them while we brush.',
+        'Brush, brush, brush. One tooth, two teeth, three teeth, all the way to fifty!',
+        'Now Dino\'s teeth are shiny and white. He gives a big dinosaur smile. Rawr!',
+      ] },
+      moon: { title: 'Where Did the Moon Go?', pages: [
+        'Every night, the moon peeks in my window.',
+        'Some nights it is big and round, like a ball.',
+        'Some nights it is thin and curvy, like a banana.',
+        'Some nights I cannot find it at all. Where did you go, moon?',
+        'The moon is still there. It is just hiding in the dark. Good night, moon. See you soon!',
+      ] },
+      bug: { title: 'Caterpillar\'s Big Nap', pages: [
+        'A tiny caterpillar hatched from a tiny egg on a leaf.',
+        'She munched leaves all day long and grew bigger and bigger.',
+        'Then she felt very sleepy. She wrapped herself up in a cozy case called a chrysalis.',
+        'She slept and slept for two whole weeks.',
+        'When she woke up, she had wings! Now she is a butterfly.',
+      ] },
+      crown: { title: 'The Princess Who Made Pancakes', pages: [
+        'Princess Poppy lived in a castle with a very big kitchen.',
+        'One morning, the cook was sick. Who will make breakfast?',
+        'I will! said Poppy. She cracked the eggs, poured the milk, and stirred and stirred.',
+        'Flip! The pancake flew up so high that it stuck to the ceiling!',
+        'Everyone laughed. Then Poppy made a tall stack of pancakes for the whole castle.',
+      ] },
+      school: { title: 'A Day at School', pages: [
+        'In the morning, we hang our backpacks in our cubbies.',
+        'We sit on the rug for circle time and sing a song.',
+        'We paint pictures, build towers, and play outside.',
+        'After lunch, we rest on our mats. Shh!',
+        'Then Mama or Baba comes to pick us up. See you tomorrow, school!',
+      ] },
+      bear: { title: 'Bear Says Hello', pages: [
+        'Bear is new at school. He holds his blanket tight.',
+        'Bunny is building a tower. Bear wants to play, but he feels shy.',
+        'Bear takes a big breath and says, Hello! Can I play too?',
+        'Yes! says Bunny. Together they build the tallest tower ever.',
+        'Now Bear has a friend at school.',
+      ] },
     },
   };
   // first visit to each room
@@ -150,6 +235,7 @@
     return fill(v, G.kid());
   };
   G.hasLine = key => get(key) != null;
+  G.book = id => { const b = T.books[id], k = G.kid(); return { title: fill(b.title, k), pages: b.pages.map(p => fill(p, k)) }; };
   G.roomShort = id => ROOM_SHORT[id] || id;
   G.roomLine = r => r.kids ? (ROOM_SAY[G.save.house.roomNames[r.id]] || ROOM_SAY.star) + ' ' + BED_MORE[r.id] : (ROOMS[r.id] || '');
   G.friendLine = f => T.friendFound + ' It is ' + f.name + '.';

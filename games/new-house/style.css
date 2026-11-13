@@ -232,3 +232,19 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
   .tab { width: 44px; height: 44px; font-size: 22px; } .decor-tabs .btn.done { font-size: 17px; padding: 8px 14px; } .decor-tabs { gap: 5px; }
   .polaroid { top: 66px; width: 40vw; }
 }
+
+/* ---------- picture books (library, Maia's school) ---------- */
+.book-view { position: absolute; inset: 0; z-index: 8; background: rgba(40, 30, 60, .55); display: flex; align-items: center; justify-content: center; }
+.book-card { width: min(84vw, 122vh); height: min(88vh, 68vw); background: #fffdf6; border: 12px solid #9b6bff; border-radius: 26px; box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; }
+.book-card.turn { animation: bookturn .35s ease-out; } @keyframes bookturn { from { transform: perspective(1200px) rotateY(-14deg) scale(.97); opacity: .4; } }
+.book-pic { flex: 1 1 auto; min-height: 0; cursor: pointer; } .book-pic svg { width: 100%; height: 100%; display: block; }
+.book-text { flex: 0 0 auto; padding: 12px 28px 16px; text-align: center; font-family: Fredoka, sans-serif; font-weight: 600; font-size: clamp(18px, min(3.4vw, 5vh), 40px); line-height: 1.25; color: #3a2f55; min-height: 2.6em; display: flex; align-items: center; justify-content: center; }
+.book-text.title { font-size: clamp(24px, min(4.6vw, 7vh), 56px); font-weight: 700; }
+.book-x { position: absolute; right: 14px; top: 14px; } .book-say { position: absolute; left: 14px; top: 14px; }
+.book-prev, .book-next { position: absolute; top: 50%; transform: translateY(-50%); width: 72px; height: 72px; font-size: 34px; }
+.book-prev { left: 10px; } .book-next { right: 10px; background: var(--yellow, #ffd93d); }
+.book-prev:active, .book-next:active { transform: translateY(-50%) scale(.92); }
+.scene-svg .fish { animation: swimf 4s infinite ease-in-out; transform-box: view-box; } .scene-svg .fish.f1 { animation-duration: 5s; animation-direction: reverse; } .scene-svg .fish.f2 { animation-duration: 6s; }
+@keyframes swimf { 0%, 100% { transform: translateX(-40px); } 50% { transform: translateX(40px); } }
+.scene-svg .fishes { transition: transform .8s; } .scene-svg .fishes.eat { transform: translateY(-30px); }
+.scene-svg .cubby, .scene-svg .teacher, .scene-svg .sink, .scene-svg .easel, .scene-svg .tank, .scene-svg .mats, .scene-svg .rug, .scene-svg .blocks, .scene-svg .books { transition: filter .15s; }
