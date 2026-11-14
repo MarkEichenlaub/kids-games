@@ -34,6 +34,14 @@ three.js in `vendor/`, MIT license).
   against the clock, clearing the obstacles in order. Baba's first job is a course in the
   courtyard (Maia gets one built for her; Mira builds her own).
 - 17 tiny friends hide inside things around the house.
+- The dollhouse in the play corner is our KidKraft Shimmer Mansion, at its real size. Tap it to open it
+  full screen, drawn from the front (`js/dollhouse.js`): drag Moana, Maui, Simea, Pua, Heihei, Moni, Loto,
+  Kele and the kitty into any room, ride the elevator, open the garage's barn doors, light the fire and
+  the bedroom lamp, run the treadmill. Where everyone stands is saved with the house.
+- The cars in the garage are Snake (the Volvo) and Elly (the Ioniq).
+- Progress is backed up online (`js/cloud.js`, the same store as Rocket Builders) and shared between
+  computers: each kid's stamps, stars and jobs only grow when two copies meet; the house takes the newer
+  copy. The family photo key stays on each device.
 - The sign on the sidewalk opens the neighborhood. With the family key it is the real map
   (the streets around our house, sealed in `data/town.bin`): the pool, the little park, the
   big park, Mira's school, the library, and Maia's school a car ride away. Without the key it
