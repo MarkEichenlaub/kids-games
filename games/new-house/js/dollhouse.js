@@ -2,8 +2,9 @@
 // opens full screen, drawn from the front the way it really looks (pink, four levels, eight rooms:
 // garage with barn doors, bathroom and rooftop hot tub on the left; gym and office, kitchen and the
 // barbecue balcony, the living room with the fireplace and the stairs, and the loft bedroom up top;
-// a working elevator in between). The Moana 2 friends and the kitty can be dragged into any room;
-// where they stand is saved with the house. Their sayings are our own, not lines from the movie.
+// a working elevator in between). The Moana 2 figures the girls have (Moana, Maui, Simea, Loto, Moni
+// and Sina, from the Disney Store set) and the dollhouse's kitty can be dragged into any room; where
+// they stand is saved with the house. Their sayings are our own, not lines from the movie.
 (() => {
   const W = G.W;
   const D = G.dollhouse = {};
@@ -17,8 +18,8 @@
   // h is the height in scene pixels (one dollhouse room is about 210 tall)
   const FIGS = [
     { id: 'moana', name: 'Moana', h: 96 }, { id: 'maui', name: 'Maui', h: 124 }, { id: 'simea', name: 'Simea', h: 70 },
-    { id: 'pua', name: 'Pua', h: 44 }, { id: 'heihei', name: 'Heihei', h: 52 }, { id: 'moni', name: 'Moni', h: 98 },
-    { id: 'loto', name: 'Loto', h: 94 }, { id: 'kele', name: 'Kele', h: 92 }, { id: 'kitty', name: 'Kitty', h: 40 },
+    { id: 'loto', name: 'Loto', h: 96 }, { id: 'moni', name: 'Moni', h: 108 }, { id: 'sina', name: 'Sina', h: 100 },
+    { id: 'kitty', name: 'Kitty', h: 40 },
   ];
   // a person, drawn 100 tall with the feet at (0, 0)
   function person(o) {
@@ -27,7 +28,9 @@
     if (o.hairBack) s += o.hairBack;
     s += `<rect x="${-9 * w}" y="-33" width="${7 * w}" height="31" rx="3" fill="${o.legs || sk}"/><rect x="${2 * w}" y="-33" width="${7 * w}" height="31" rx="3" fill="${o.legs || sk}"/>
       <ellipse cx="${-6 * w}" cy="-1.5" rx="${5 * w}" ry="2.6" fill="${o.feet || '#6b4a32'}"/><ellipse cx="${6 * w}" cy="-1.5" rx="${5 * w}" ry="2.6" fill="${o.feet || '#6b4a32'}"/>`;
-    s += `<path d="M${-12 * w} -63 Q${-21 * w} -52 ${-19 * w} -38" stroke="${sk}" stroke-width="${5.5 * w}" fill="none" stroke-linecap="round"/><path d="M${12 * w} -63 Q${21 * w} -52 ${19 * w} -38" stroke="${sk}" stroke-width="${5.5 * w}" fill="none" stroke-linecap="round"/>`;
+    const armL = o.hip ? `M${-12 * w} -63 L${-22 * w} -52 L${-13 * w} -44` : `M${-12 * w} -63 Q${-21 * w} -52 ${-19 * w} -38`;
+    const armR = o.armUp ? `M${12 * w} -63 Q${20 * w} -70 ${20 * w} -84` : `M${12 * w} -63 Q${21 * w} -52 ${19 * w} -38`;
+    s += `<path d="${armL}" stroke="${sk}" stroke-width="${5.5 * w}" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${armR}" stroke="${sk}" stroke-width="${5.5 * w}" fill="none" stroke-linecap="round"/>`;
     s += `<rect x="${-12.5 * w}" y="-66" width="${25 * w}" height="${o.topH || 22}" rx="6" fill="${o.top}"/>`;
     if (o.topDeco) s += o.topDeco;
     s += `<path d="M${-13 * w} -46 L${13 * w} -46 L${16 * w} ${o.skirtTo || -26} L${-16 * w} ${o.skirtTo || -26} Z" fill="${o.bottom}"/>`;
@@ -41,50 +44,52 @@
   }
   const BROWN = '#a8693f', BROWN2 = '#93593a';
   const DRAW = {
+    // Moana 2: cream top, red patterned skirt, long curly hair, her oar
     moana: () => person({
-      skin: BROWN, top: '#d8452d', bottom: '#ead2a4', skirtTo: -20,
-      hairBack: '<path d="M-15 -86 Q-22 -60 -16 -38 Q-10 -44 -8 -38 Q-2 -46 0 -40 Q4 -46 8 -38 Q12 -44 16 -38 Q22 -60 15 -86 Z" fill="#20150f"/>',
+      skin: BROWN, top: '#f3e7cf', bottom: '#c8352b', skirtTo: -18,
+      hairBack: '<path d="M-15 -86 Q-23 -60 -17 -36 Q-11 -42 -8 -36 Q-2 -44 0 -38 Q4 -44 8 -36 Q12 -42 17 -36 Q23 -60 15 -86 Z" fill="#20150f"/>',
       hair: '<path d="M-14 -82 Q-12 -97 0 -96 Q13 -97 14 -82 Q6 -91 -2 -88 Q-8 -92 -14 -82Z" fill="#20150f"/>',
-      topDeco: '<path d="M-10 -60 h20 M-10 -55 h20" stroke="#f7d9a8" stroke-width="1.6"/><circle cx="0" cy="-64" r="2.4" fill="#2fb5b0"/>',
-      bottomDeco: '<path d="M-14 -36 h28 M-15 -29 h30" stroke="#b0412b" stroke-width="2"/>',
+      topDeco: '<path d="M-11 -58 h22" stroke="#c9a87a" stroke-width="1.6"/>',
+      bottomDeco: '<path d="M-14 -38 h28 M-15 -30 h30 M-16 -22 h32" stroke="#f3e7cf" stroke-width="1.8" stroke-dasharray="4 3"/>',
+      extra: '<path d="M22 -2 L22 -96" stroke="#b07a42" stroke-width="3.5" stroke-linecap="round"/><path d="M22 -96 q-7 -6 0 -18 q7 12 0 18Z" fill="#c98f52"/>',
     }),
+    // Maui: tattoos everywhere, leaf skirt, his big fishhook held up
     maui: () => person({
-      skin: BROWN2, wide: 1.35, top: BROWN2, topH: 20, bottom: '#4f9a45', skirtTo: -24,
-      topDeco: '<path d="M-12 -62 q5 6 0 12 M-4 -63 q4 8 -2 14 M7 -62 q-5 7 2 13 M13 -58 q-4 4 0 8" stroke="#1d2b4a" stroke-width="1.6" fill="none"/>',
+      skin: BROWN2, wide: 1.35, top: BROWN2, topH: 20, bottom: '#4f9a45', skirtTo: -24, armUp: 1,
+      topDeco: '<path d="M-12 -62 q5 6 0 12 M-4 -63 q4 8 -2 14 M7 -62 q-5 7 2 13 M13 -58 q-4 4 0 8" stroke="#1d2b4a" stroke-width="1.6" fill="none"/><path d="M-10 -66 q10 4 20 0" stroke="#f2ead8" stroke-width="2.4" fill="none"/>',
       bottomDeco: '<path d="M-20 -26 l5 -10 l5 10 l5 -10 l5 10 l5 -10 l5 10 l5 -10 l5 10" stroke="#3c7d34" stroke-width="2" fill="none"/>',
       hairBack: '<path d="M-17 -88 Q-30 -70 -20 -52 Q-14 -60 -10 -54 Q0 -62 10 -54 Q14 -60 20 -52 Q30 -70 17 -88Z" fill="#1d130e"/>',
       hair: '<path d="M-15 -82 Q-16 -100 0 -99 Q16 -100 15 -82 Q8 -93 0 -90 Q-8 -93 -15 -82Z" fill="#1d130e"/>',
-      extra: '<path d="M27 -40 L27 -84 Q27 -96 18 -96 Q10 -96 11 -88" stroke="#efe1c0" stroke-width="5" fill="none" stroke-linecap="round"/>',
+      extra: '<path d="M27 -84 L27 -116 Q27 -128 18 -128 Q10 -128 11 -120" stroke="#efe1c0" stroke-width="5" fill="none" stroke-linecap="round"/>',
     }),
+    // Simea: Moana's little sister, short bob, orange skirt
     simea: () => person({
-      skin: BROWN, top: '#f3a33a', bottom: '#f3a33a', skirtTo: -22,
-      hair: '<circle cx="-11" cy="-93" r="7" fill="#20150f"/><circle cx="11" cy="-93" r="7" fill="#20150f"/><path d="M-13 -82 Q-11 -94 0 -94 Q11 -94 13 -82 Q4 -89 -13 -82Z" fill="#20150f"/>',
-      bottomDeco: '<path d="M-15 -30 h30" stroke="#d9652a" stroke-width="2"/>',
+      skin: BROWN, top: '#f6dcae', bottom: '#ef8a2c', skirtTo: -22,
+      hairBack: '<path d="M-15 -84 Q-17 -70 -12 -66 L12 -66 Q17 -70 15 -84Z" fill="#20150f"/>',
+      hair: '<path d="M-15 -80 Q-15 -97 0 -96 Q15 -97 15 -80 Q8 -90 -15 -80Z" fill="#20150f"/>',
     }),
-    moni: () => person({
-      skin: BROWN2, top: '#4fb0c6', bottom: '#7a5236', skirtTo: -24,
-      hair: '<path d="M-14 -82 Q-14 -97 0 -96 Q14 -97 14 -82 Q6 -90 -14 -82Z" fill="#20150f"/><circle cx="0" cy="-100" r="6.5" fill="#20150f"/>',
-      topDeco: '<path d="M-12 -60 L12 -50" stroke="#f2e6c8" stroke-width="3"/>',
-    }),
+    // Loto: big curly hair, yellow top, holding up a little wooden boat she made
     loto: () => person({
-      skin: BROWN, top: '#f2b632', bottom: '#8a2f3b', skirtTo: -22,
-      hair: '<path d="M-14 -82 Q-13 -97 0 -96 Q13 -97 14 -82 Q5 -90 -14 -82Z" fill="#20150f"/><ellipse cx="0" cy="-99" rx="9" ry="6" fill="#20150f"/><path d="M-13 -88 Q0 -94 13 -88" stroke="#ffd84a" stroke-width="3" fill="none"/>',
-      extra: '<path d="M21 -40 l6 -12 m-3 -2 l6 3" stroke="#8b8f97" stroke-width="3.2" stroke-linecap="round"/>',
+      skin: BROWN, top: '#f2b632', bottom: '#d9562b', skirtTo: -20, armUp: 1,
+      hairBack: '<g fill="#20150f"><circle cx="-16" cy="-86" r="9"/><circle cx="16" cy="-86" r="9"/><circle cx="-12" cy="-98" r="9"/><circle cx="12" cy="-98" r="9"/><circle cx="0" cy="-102" r="10"/><circle cx="-18" cy="-74" r="7"/><circle cx="18" cy="-74" r="7"/></g>',
+      hair: '<path d="M-13 -84 Q0 -94 13 -84 Q6 -90 0 -89 Q-6 -90 -13 -84Z" fill="#20150f"/>',
+      extra: '<path d="M8 -96 h26 l-5 8 h-16Z" fill="#b07a42"/><path d="M20 -96 v-16 l9 12Z" fill="#f2ead8"/>',
     }),
-    kele: () => person({
-      skin: BROWN2, top: '#7a5a3a', bottom: '#5e4630', skirtTo: -18, grump: 1,
-      hair: '<path d="M-14 -84 Q-13 -96 0 -95 Q13 -96 14 -84 Q7 -90 -14 -84Z" fill="#bdbdbd"/><path d="M-10 -73 Q0 -58 10 -73 Q4 -70 0 -70 Q-4 -70 -10 -73Z" fill="#d9d9d9"/>',
-      topDeco: '<path d="M-14 -66 L14 -48 L14 -66 Z" fill="#5e4630" opacity=".7"/>',
+    // Moni: a big fellow with a shell necklace, holding his drawing of Maui
+    moni: () => person({
+      skin: BROWN2, wide: 1.3, top: BROWN2, topH: 20, bottom: '#c9a77a', skirtTo: -24,
+      topDeco: '<path d="M-10 -66 q10 6 20 0" stroke="#f7f3ea" stroke-width="3" fill="none" stroke-dasharray="2 2"/>',
+      hair: '<path d="M-14 -82 Q-14 -97 0 -96 Q14 -97 14 -82 Q6 -90 -14 -82Z" fill="#20150f"/><circle cx="0" cy="-99" r="6" fill="#20150f"/>',
+      extra: '<rect x="14" y="-62" width="22" height="26" rx="2" fill="#f4efe2" stroke="#8a7a5a"/><path d="M18 -56 q7 -4 14 0 M18 -50 h14 M20 -44 q5 4 10 0" stroke="#222" stroke-width="1.6" fill="none"/>',
     }),
-    pua: () => `<ellipse cx="0" cy="-48" rx="40" ry="30" fill="#f2b2b8"/><ellipse cx="-14" cy="-56" rx="10" ry="7" fill="#6b5a5c" opacity=".55"/><ellipse cx="16" cy="-40" rx="9" ry="6" fill="#6b5a5c" opacity=".5"/>
-      <rect x="-28" y="-26" width="9" height="24" rx="3" fill="#e79aa2"/><rect x="18" y="-26" width="9" height="24" rx="3" fill="#e79aa2"/>
-      <circle cx="-30" cy="-70" r="21" fill="#f2b2b8"/><path d="M-44 -86 l-6 -16 l14 8Z M-18 -88 l2 -16 l-12 10Z" fill="#e79aa2"/>
-      <ellipse cx="-44" cy="-64" rx="10" ry="8" fill="#e58f99"/><circle cx="-47" cy="-64" r="1.8" fill="#8a3d48"/><circle cx="-41" cy="-64" r="1.8" fill="#8a3d48"/>
-      <circle cx="-34" cy="-76" r="3" fill="#2b1d16"/><circle cx="-22" cy="-76" r="3" fill="#2b1d16"/><path d="M38 -54 q10 -4 6 6 q-4 6 4 6" stroke="#e79aa2" stroke-width="3" fill="none"/>`,
-    heihei: () => `<path d="M24 -60 Q46 -88 40 -40 Q34 -54 24 -44Z" fill="#26372d"/><ellipse cx="0" cy="-40" rx="26" ry="24" fill="#8a3b2a"/><path d="M-10 -40 q10 12 24 0" stroke="#6d2a1e" stroke-width="3" fill="none"/>
-      <path d="M-6 -18 v16 m-5 0 h10 M6 -18 v16 m-5 0 h10" stroke="#e8b33a" stroke-width="3" stroke-linecap="round"/>
-      <circle cx="-14" cy="-66" r="15" fill="#8a3b2a"/><path d="M-20 -80 q2 -12 6 -2 q3 -12 6 -1 q4 -10 5 3Z" fill="#d6332a"/><path d="M-28 -64 l-12 4 l12 4Z" fill="#f0b93c"/><ellipse cx="-20" cy="-56" rx="4" ry="6" fill="#d6332a"/>
-      <circle cx="-18" cy="-70" r="5.5" fill="#fff"/><circle cx="-8" cy="-69" r="5.5" fill="#fff"/><circle cx="-19.5" cy="-69" r="2.2" fill="#111"/><circle cx="-6" cy="-71" r="2.2" fill="#111"/>`,
+    // Sina: Moana's mom, dark red dress and wrap, a yellow flower in her bun, hand on her hip
+    sina: () => person({
+      skin: BROWN, top: '#7a1f2b', bottom: '#5e1621', skirtTo: -6, hip: 1,
+      topDeco: '<path d="M-13 -66 L13 -50" stroke="#a8344a" stroke-width="5"/>',
+      hairBack: '<circle cx="0" cy="-98" r="9" fill="#20150f"/>',
+      hair: '<path d="M-14 -80 Q-14 -96 0 -95 Q14 -96 14 -80 Q7 -90 -14 -80Z" fill="#20150f"/><circle cx="9" cy="-101" r="5" fill="#ffd23a"/><circle cx="9" cy="-101" r="2" fill="#f08a1c"/>',
+    }),
+    // the kitty that came with the dollhouse
     kitty: () => `<ellipse cx="4" cy="-28" rx="30" ry="20" fill="#9aa0a8"/><path d="M30 -34 q20 -10 14 -34" stroke="#9aa0a8" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="-22" cy="-52" r="17" fill="#9aa0a8"/>
       <path d="M-36 -62 l-2 -16 l12 9Z M-10 -64 l2 -16 l-12 9Z" fill="#9aa0a8"/><ellipse cx="-22" cy="-46" rx="9" ry="6" fill="#f2f2f2"/><circle cx="-28" cy="-55" r="2.6" fill="#2a2" /><circle cx="-16" cy="-55" r="2.6" fill="#2a2"/>
       <path d="M-22 -48 l-2 2 h4Z" fill="#ff8fb0"/><rect x="-14" y="-12" width="7" height="12" rx="3" fill="#8a9098"/><rect x="14" y="-12" width="7" height="12" rx="3" fill="#8a9098"/>`,
@@ -92,7 +97,7 @@
 
   // ---------- where things can stand (the house's own coordinates; y is the floor) ----------
   const SPOTS = [
-    { id: 'bed', x1: 338, x2: 532, y: 158 }, { id: 'loft', x1: 312, x2: 640, y: 195 },
+    { id: 'bed', x1: 338, x2: 532, y: 158 }, { id: 'chair', x1: 596, x2: 626, y: 152 }, { id: 'loft', x1: 312, x2: 640, y: 195 },
     { id: 'hottub', x1: 98, x2: 244, y: 412 }, { id: 'spa', x1: 86, x2: 308, y: 428 },
     { id: 'sofa', x1: 480, x2: 584, y: 372 }, { id: 'living', x1: 405, x2: 770, y: 418 },
     { id: 'tub', x1: 112, x2: 208, y: 612 }, { id: 'bath', x1: 86, x2: 314, y: 640 },
@@ -116,8 +121,8 @@
   }
   // where everyone starts: in a row on the toy shelf
   function home(i) {
-    const row = i < 5 ? 0 : 1, k = row ? i - 5 : i;
-    return { x: 1060 + k * (row ? 118 : 100), y: SHELF[row].y, s: SHELF[row].id };
+    const row = i < 4 ? 0 : 1, k = row ? i - 4 : i;
+    return { x: 1080 + k * 125, y: SHELF[row].y, s: SHELF[row].id };
   }
 
   // ---------- the house, drawn from the front ----------
@@ -136,41 +141,45 @@
     o += '<path d="M8 236 Q160 178 312 172 L312 196 Q172 202 88 264 L16 264 Z" fill="#f9c6da" stroke="#e7a6c2" stroke-width="2"/><path d="M88 264 Q172 202 312 196 L312 210 Q182 216 92 276 Z" fill="#3a3340"/>';
     o += '<rect x="262" y="372" width="30" height="40" rx="4" fill="#c9884f"/><g fill="#3e9a4a"><path d="M277 372 q-22 -26 -4 -46 q4 22 4 46Z"/><path d="M277 372 q20 -28 6 -50 q-6 24 -6 50Z"/><path d="M277 372 q-2 -34 0 -54 q4 26 0 54Z"/></g>';
     // bathroom
-    o += '<rect x="86" y="440" width="228" height="200" fill="#f58fbc"/><path d="M86 440 h228 v200 h-228Z" fill="url(#dhDots)"/>';
-    o += '<rect x="112" y="452" width="62" height="58" rx="6" fill="#fff8e6" stroke="#e5b84a" stroke-width="5"/><rect x="98" y="512" width="92" height="56" rx="4" fill="#242228"/><g fill="#ddd"><rect x="104" y="518" width="80" height="13" rx="2"/><rect x="104" y="536" width="80" height="13" rx="2"/><rect x="104" y="553" width="80" height="11" rx="2"/></g>';
+    o += '<rect x="86" y="440" width="228" height="200" fill="#f58fbc"/><path d="M86 440 h228 v200 h-228Z" fill="url(#dhDots)"/><ellipse cx="200" cy="632" rx="88" ry="9" fill="#b9659f"/>';
+    o += '<rect x="112" y="452" width="62" height="58" rx="6" fill="#fff8e6" stroke="#e5b84a" stroke-width="5"/><rect x="98" y="512" width="92" height="56" rx="4" fill="#fbfaf7" stroke="#ccc"/><g fill="#242228"><rect x="104" y="518" width="37" height="13" rx="2"/><rect x="147" y="518" width="37" height="13" rx="2"/><rect x="104" y="536" width="37" height="13" rx="2"/><rect x="147" y="536" width="37" height="13" rx="2"/></g><rect x="104" y="553" width="80" height="11" fill="#f2e6ee"/>';
     o += '<rect x="206" y="458" width="36" height="40" fill="#fff" stroke="#e5b84a" stroke-width="3"/><circle cx="224" cy="476" r="9" fill="#bbb"/><path d="M215 470 l3 -8 l4 6 M233 470 l-3 -8 l-4 6" fill="#bbb" stroke="#bbb"/>';
     o += '<rect x="246" y="470" width="4" height="70" fill="#e5b84a"/><rect x="232" y="490" width="34" height="44" fill="#fff"/><path d="M232 498 h34 M232 508 h34 M232 518 h34 M232 528 h34" stroke="#111" stroke-width="4"/>';
     o += '<g data-act="sink" class="dh-tap"><rect x="272" y="572" width="10" height="66" fill="#f0478f"/><ellipse cx="277" cy="570" rx="22" ry="8" fill="#fff" stroke="#ddd"/><path d="M277 548 v14 h8" stroke="#bbb" stroke-width="3" fill="none"/></g>';
     o += '<g data-act="toilet" class="dh-tap"><rect x="90" y="584" width="26" height="30" rx="4" fill="#fff" stroke="#ddd"/><ellipse cx="110" cy="618" rx="18" ry="8" fill="#ff9cc7" stroke="#e77aa9"/><rect x="104" y="618" width="12" height="20" fill="#fff" stroke="#ddd"/></g>';
     // the garage, behind its barn doors (the doors are drawn in front of the friends)
-    o += '<rect x="86" y="654" width="228" height="212" fill="#f9d2e2"/><rect x="86" y="654" width="228" height="20" fill="#f3b6cf"/>';
+    o += '<rect x="86" y="654" width="228" height="212" fill="#f9d2e2"/><rect x="86" y="654" width="228" height="20" fill="#f3b6cf"/><rect x="86" y="820" width="228" height="46" fill="#9a9ea6"/>';
+    o += '<g stroke="#4aa3c9" stroke-width="3" fill="none"><circle cx="226" cy="750" r="18"/><circle cx="276" cy="750" r="18"/><path d="M226 750 l18 -24 h22 l10 24 M244 726 l-6 -10"/></g><circle cx="186" cy="712" r="10" fill="#fff" stroke="#222" stroke-width="2"/>';
     // ---- the elevator shaft ----
-    o += '<rect x="314" y="436" width="92" height="400" fill="#e9468e"/><rect x="322" y="436" width="76" height="400" fill="#ffc6de"/><path d="M326 440 v392 M394 440 v392" stroke="#c92d72" stroke-width="3"/>';
+    o += '<rect x="314" y="436" width="92" height="400" fill="#f37bb0"/><rect x="322" y="436" width="76" height="400" fill="#ffd3e6"/><rect x="380" y="446" width="10" height="386" fill="#ff3f8f"/><rect x="352" y="440" width="44" height="12" fill="#22242b"/><ellipse cx="370" cy="830" rx="34" ry="7" fill="#22242b"/>';
     // ---- ground floor: gym and office ----
     o += '<rect x="406" y="640" width="156" height="192" fill="#f6a7c8"/><rect x="560" y="640" width="210" height="192" fill="#fbd0e1"/>';
-    o += '<rect x="420" y="662" width="104" height="58" fill="#fff" stroke="#fff" stroke-width="4"/><rect x="422" y="664" width="100" height="30" fill="#8ed4f3"/><rect x="422" y="694" width="100" height="24" fill="#f6dfa8"/><circle cx="452" cy="690" r="6" fill="#e2a37c"/><circle cx="486" cy="690" r="6" fill="#e2a37c"/><path d="M412 736 h140" stroke="#fff" stroke-width="5"/>';
+    o += '<rect x="420" y="662" width="104" height="58" fill="#fff" stroke="#fff" stroke-width="4"/><rect x="422" y="664" width="100" height="30" fill="#8ed4f3"/><rect x="422" y="694" width="100" height="24" fill="#f6dfa8"/><circle cx="452" cy="690" r="6" fill="#e2a37c"/><circle cx="486" cy="690" r="6" fill="#e2a37c"/><path d="M412 736 h140" stroke="#fff" stroke-width="5"/><rect x="420" y="742" width="30" height="18" rx="3" fill="#ff5fa2"/><circle cx="429" cy="751" r="5" fill="#fff"/><circle cx="442" cy="751" r="5" fill="#fff"/><path d="M500 830 l20 -40 h18 l-14 40Z" fill="#ff8fc0"/>';
     o += `<g data-act="mill" class="dh-tap"><path d="M546 736 L552 808" stroke="#9aa0a8" stroke-width="7"/><rect x="530" y="724" width="30" height="16" rx="4" fill="#e9ecef" stroke="#9aa0a8" stroke-width="2"/><rect x="472" y="806" width="84" height="16" rx="5" fill="#2a2a30"/><g id="dh-belt">${Array.from({ length: 9 }, (_, i) => `<rect x="${476 + i * 9}" y="809" width="4" height="10" fill="#555"/>`).join('')}</g><rect x="468" y="820" width="92" height="10" rx="3" fill="#cfd3d8"/></g>`;
     o += '<g data-act="pouf" class="dh-tap"><ellipse cx="436" cy="816" rx="24" ry="16" fill="#ff4fa0"/><ellipse cx="436" cy="809" rx="20" ry="6" fill="#ff86bf"/></g>';
     o += win(578, 660, 66, 76, '#7cc8d8') + '<g fill="#111"><rect x="566" y="654" width="12" height="96"/><rect x="644" y="654" width="12" height="96"/></g><g fill="#fff"><rect x="566" y="666" width="12" height="10"/><rect x="566" y="688" width="12" height="10"/><rect x="566" y="710" width="12" height="10"/><rect x="566" y="732" width="12" height="10"/><rect x="644" y="666" width="12" height="10"/><rect x="644" y="688" width="12" height="10"/><rect x="644" y="710" width="12" height="10"/><rect x="644" y="732" width="12" height="10"/></g>';
     o += '<rect x="690" y="652" width="66" height="98" fill="#fff" stroke="#111" stroke-width="3"/><path d="M690 670 h66 M690 690 h66 M690 710 h66 M690 730 h66" stroke="#111" stroke-width="7"/>';
-    o += '<g data-act="laptop" class="dh-tap"><rect x="676" y="772" width="84" height="12" fill="#e7c48f"/><rect x="682" y="784" width="8" height="48" fill="#d9ad6d"/><rect x="746" y="784" width="8" height="48" fill="#d9ad6d"/><path d="M700 772 l6 -22 h30 l-4 22Z" fill="#cfd3d8"/></g>';
+    o += '<ellipse cx="680" cy="828" rx="72" ry="7" fill="#fff"/><path d="M612 826 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0 q6 -4 12 0" stroke="#111" stroke-width="2.2" fill="none"/>';
+    o += '<g data-act="laptop" class="dh-tap"><rect x="676" y="772" width="84" height="12" rx="2" fill="#ff8fc0"/><rect x="682" y="784" width="8" height="44" fill="#f37bb0"/><rect x="746" y="784" width="8" height="44" fill="#f37bb0"/><path d="M700 772 l6 -22 h30 l-4 22Z" fill="#cfd3d8"/></g>';
     o += '<g fill="#ff8fc0"><rect x="612" y="786" width="44" height="10" rx="4"/><rect x="612" y="756" width="10" height="32" rx="4"/><rect x="630" y="796" width="6" height="34"/><rect x="618" y="826" width="30" height="5" rx="2"/></g>';
     // ---- kitchen and the barbecue balcony ----
     o += '<rect x="406" y="432" width="196" height="194" fill="#fbe3ee"/><path d="M406 500 h196" stroke="#f0bcd2" stroke-width="2"/>' + win(474, 446, 58, 50, '#7cc8d8');
     o += '<g data-act="stove" class="dh-tap"><path d="M418 440 h50 l-8 30 h-34 Z" fill="#cfd3d8" stroke="#9aa0a8" stroke-width="2"/><rect x="412" y="520" width="58" height="104" fill="#2a2a30"/><rect x="418" y="550" width="46" height="34" rx="3" fill="#555" stroke="#888"/><g fill="#888"><circle cx="425" cy="527" r="4"/><circle cx="441" cy="527" r="4"/><circle cx="457" cy="527" r="4"/></g><g id="dh-flame" opacity="0"><path d="M425 520 q-4 -8 0 -12 q4 4 0 12Z M441 520 q-4 -8 0 -12 q4 4 0 12Z" fill="#4da3ff"/></g></g>';
-    o += '<rect x="474" y="520" width="66" height="40" fill="#fff" stroke="#ddd"/><g data-act="ksink" class="dh-tap"><rect x="484" y="516" width="40" height="8" fill="#cfd3d8"/><path d="M504 516 v-14 h10" stroke="#9aa0a8" stroke-width="3" fill="none"/></g>';
-    o += '<g data-act="fridge" class="dh-tap"><rect x="546" y="478" width="52" height="146" rx="4" fill="#8e949c"/><rect id="dh-fdoor" x="546" y="478" width="52" height="146" rx="4" fill="#a8adb4" stroke="#7d838a" stroke-width="2"/><path d="M546 538 h52" stroke="#7d838a" stroke-width="2"/><rect x="552" y="500" width="4" height="26" fill="#ddd"/><rect x="552" y="548" width="4" height="30" fill="#ddd"/></g>';
-    o += '<rect x="432" y="574" width="96" height="10" rx="3" fill="#ff8fc0"/><rect x="446" y="584" width="7" height="40" fill="#f3c9a0"/><rect x="508" y="584" width="7" height="40" fill="#f3c9a0"/>';
-    o += '<g fill="#e7c48f"><rect x="416" y="582" width="20" height="8"/><rect x="416" y="560" width="5" height="64"/><rect x="430" y="590" width="5" height="34"/><rect x="524" y="582" width="20" height="8"/><rect x="539" y="560" width="5" height="64"/><rect x="525" y="590" width="5" height="34"/></g><g fill="#ff6fb1"><rect x="415" y="578" width="22" height="5" rx="2"/><rect x="523" y="578" width="22" height="5" rx="2"/></g>';
+    o += '<rect x="474" y="520" width="70" height="44" fill="#ff8fc0" stroke="#e5679f"/><path d="M509 524 v36" stroke="#e5679f" stroke-width="2"/><rect x="472" y="514" width="74" height="8" fill="#fff" stroke="#ddd"/><g data-act="ksink" class="dh-tap"><rect x="484" y="516" width="40" height="8" fill="#cfd3d8"/><path d="M504 516 v-14 h10" stroke="#9aa0a8" stroke-width="3" fill="none"/></g>';
+    o += '<g data-act="fridge" class="dh-tap"><rect x="546" y="452" width="54" height="172" fill="#ff8fc0"/><rect x="550" y="462" width="46" height="96" rx="3" fill="#22242b"/><rect id="dh-fdoor" x="555" y="468" width="36" height="34" rx="2" fill="#c9884f" opacity="0"/><rect x="555" y="468" width="36" height="34" rx="2" fill="none" stroke="#9aa0a8" stroke-width="3"/><rect x="555" y="514" width="36" height="34" rx="2" fill="none" stroke="#9aa0a8" stroke-width="3"/><path d="M558 474 h30 M558 520 h30" stroke="#cfd3d8" stroke-width="3"/></g>';
+    o += '<ellipse cx="478" cy="622" rx="72" ry="6" fill="#e8e3dc"/><rect x="432" y="574" width="86" height="10" rx="2" fill="#ff8fc0"/><rect x="438" y="584" width="7" height="38" fill="#e7c48f"/><rect x="506" y="584" width="7" height="38" fill="#e7c48f"/>';
+    o += '<g fill="#e7c48f"><rect x="520" y="584" width="22" height="7"/><rect x="537" y="556" width="5" height="66"/><rect x="521" y="591" width="5" height="31"/></g><path d="M534 556 l3 -8 l3 6 l3 -8 l2 10Z" fill="#ffd23a"/>';
     o += brick(602, 432, 168, 80) + win(640, 446, 58, 50);
     o += '<rect x="602" y="512" width="168" height="100" fill="#bfe9ef"/><rect x="602" y="506" width="168" height="10" fill="#f0478f"/><path d="M604 560 h164" stroke="#f0478f" stroke-width="5"/>';
-    o += '<g data-act="grill" class="dh-tap"><path d="M672 576 l-14 34 M688 576 l14 34 M680 576 v34" stroke="#55595f" stroke-width="3.5"/><path d="M656 566 a24 22 0 0 1 48 0Z" fill="#3a3d42"/><rect x="654" y="564" width="52" height="12" rx="4" fill="#9aa0a8"/></g>';
+    o += '<path d="M604 600 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8 l10 -8 l10 8" stroke="#ff7ab3" stroke-width="3" fill="none"/>';
+    o += '<g data-act="grill" class="dh-tap"><path d="M672 582 l-14 28 M688 582 l14 28 M680 582 v28" stroke="#9aa0a8" stroke-width="3"/><path d="M654 566 a26 18 0 0 0 52 0Z" fill="#1d1e22"/><path d="M656 562 a24 20 0 0 1 48 0Z" fill="#2a2b30"/><rect x="676" y="538" width="8" height="5" rx="2" fill="#9aa0a8"/></g>';
     // ---- living room, the stairs and the big window ----
     o += '<rect x="310" y="210" width="310" height="210" fill="#e5468f"/><g fill="#f26ba9"><rect x="322" y="222" width="54" height="120"/><rect x="560" y="222" width="54" height="120"/></g>';
-    o += '<rect x="398" y="226" width="68" height="54" rx="8" fill="#fff" stroke="#22242b" stroke-width="8"/>';
+    o += '<rect x="394" y="230" width="76" height="50" fill="#fff" stroke="#fff" stroke-width="5"/><rect x="396" y="232" width="72" height="22" fill="#9fd6f2"/><rect x="396" y="254" width="72" height="24" fill="#f2d7a6"/><circle cx="418" cy="252" r="6" fill="#a8693f"/><circle cx="446" cy="252" r="6" fill="#e2a37c"/>';
     o += `<g data-act="fire" class="dh-tap"><rect x="378" y="296" width="110" height="10" fill="#fff"/><rect x="384" y="306" width="98" height="96" fill="#f7f4ee"/><rect x="404" y="324" width="58" height="78" fill="#3a3340"/><path d="M404 340 h58 M404 356 h58 M404 372 h58 M404 388 h58" stroke="#f7f4ee" stroke-width="2"/><g id="dh-fire" opacity="${fireOn ? 1 : 0}"><path d="M416 400 q-6 -22 8 -30 q-2 12 6 16 q2 -14 10 -22 q8 18 -2 36Z" fill="#ff9a2f"/><path d="M426 400 q-2 -12 6 -16 q4 10 6 16Z" fill="#ffe14a"/></g><circle cx="470" cy="288" r="9" fill="#4da3ff"/><path d="M462 288 q8 -4 16 0" stroke="#5fd35f" stroke-width="3" fill="none"/></g>`;
     o += '<g data-act="sofa" class="dh-tap"><rect x="474" y="356" width="112" height="44" rx="12" fill="#ff8fc0"/><rect x="474" y="340" width="112" height="30" rx="10" fill="#ffa6cf"/><rect x="474" y="356" width="18" height="50" rx="7" fill="#ff7ab3"/><rect x="568" y="356" width="18" height="50" rx="7" fill="#ff7ab3"/><rect x="500" y="344" width="24" height="18" rx="4" fill="#fff"/><path d="M503 347 l6 12 M511 346 l6 14 M519 348 l3 8" stroke="#111" stroke-width="2.4"/><rect x="540" y="342" width="22" height="18" rx="4" fill="#e5004f"/></g>';
-    o += '<ellipse cx="490" cy="414" rx="56" ry="7" fill="#fff"/><path d="M444 412 q8 -4 12 0 q8 -4 12 0 q8 -4 12 0 q8 -4 12 0 q8 -4 12 0 q8 -4 12 0 q8 -4 12 0" stroke="#111" stroke-width="2.5" fill="none"/>';
+    o += '<ellipse cx="470" cy="414" rx="70" ry="7" fill="#ff8fc0"/><rect x="498" y="398" width="44" height="16" rx="3" fill="#fff"/><path d="M500 402 h40 M500 408 h40" stroke="#111" stroke-width="2" stroke-dasharray="4 4"/>';
+    o += '<ellipse cx="720" cy="404" rx="22" ry="13" fill="#ff7ab3"/>';
     o += '<rect x="330" y="356" width="34" height="8" fill="#e5b84a"/><path d="M334 364 l4 50 M360 364 l-4 50" stroke="#e5b84a" stroke-width="3"/><path d="M348 300 v56" stroke="#22242b" stroke-width="3"/><path d="M336 300 h24 l-4 -18 h-16Z" fill="#fff4cf"/>';
     o += '<rect x="620" y="26" width="150" height="394" fill="#f7b3cf"/><rect x="546" y="34" width="160" height="380" fill="#6fc1d6"/>';
     o += Array.from({ length: 5 }, (_, i) => `<path d="M${546 + i * 32} 34 v380" stroke="#2a4a55" stroke-width="3"/>`).join('') + Array.from({ length: 7 }, (_, i) => `<path d="M546 ${34 + i * 63} h160" stroke="#2a4a55" stroke-width="3"/>`).join('');
@@ -183,6 +192,7 @@
     // the loft bedroom
     o += '<rect x="310" y="26" width="236" height="170" fill="#f7a1c4"/><path d="M342 160 v-90 a34 34 0 0 1 68 0 v90Z" fill="#a9e1ef" stroke="#fff" stroke-width="6"/><path d="M376 46 v114 M342 110 h68" stroke="#fff" stroke-width="3"/>';
     o += '<rect x="428" y="54" width="70" height="56" rx="6" fill="#fff" stroke="#fff" stroke-width="5"/><rect x="433" y="59" width="60" height="46" rx="4" fill="#d6f1f7"/><rect x="424" y="112" width="80" height="10" fill="#fff"/><path d="M432 122 v38 M496 122 v38" stroke="#fff" stroke-width="5"/>';
+    o += '<rect x="316" y="118" width="24" height="56" rx="8" fill="#fff"/><path d="M320 122 v48 M326 122 v48 M332 122 v48" stroke="#111" stroke-width="2.6"/><g fill="#e5b84a"><rect x="596" y="150" width="30" height="10" rx="3"/><rect x="598" y="128" width="26" height="24" rx="6"/><rect x="598" y="160" width="4" height="34"/><rect x="620" y="160" width="4" height="34"/></g>';
     o += '<g data-act="bed" class="dh-tap"><rect x="334" y="146" width="202" height="30" rx="4" fill="#22242b"/><rect x="340" y="140" width="190" height="16" rx="6" fill="#ff9cc7"/><rect x="346" y="132" width="40" height="14" rx="5" fill="#fff"/><rect x="334" y="112" width="12" height="64" rx="3" fill="#22242b"/><rect x="334" y="172" width="8" height="22" fill="#22242b"/><rect x="528" y="172" width="8" height="22" fill="#22242b"/></g>';
     o += `<g data-act="lamp" class="dh-tap"><circle id="dh-glow" cx="566" cy="112" r="40" fill="#fff3a8" opacity="${lampOn ? 0.55 : 0}"/><rect x="548" y="150" width="38" height="44" rx="4" fill="#ff8fc0"/><path d="M567 150 v-26" stroke="#ff4fa0" stroke-width="4"/><path d="M552 124 h30 l-6 -20 h-18Z" fill="${lampOn ? '#fff7c2' : '#fff'}" stroke="#e5b84a" stroke-width="2" id="dh-shade"/></g>`;
     // the top tower and the big curved roof
@@ -196,7 +206,7 @@
   }
   // in front of the friends: the hot tub's side, the bathtub's side and the garage doors
   function foreground(s) {
-    let o = '<g data-act="hottub" class="dh-tap"><rect x="94" y="384" width="156" height="44" rx="6" fill="#36c5d6" stroke="#1f9fb0" stroke-width="3"/><rect x="100" y="378" width="144" height="12" rx="5" fill="#9ff0f7"/><rect x="150" y="372" width="50" height="16" rx="5" fill="#ff7ab3"/><g id="dh-bub" opacity="0"><circle cx="128" cy="372" r="6" fill="#fff"/><circle cx="170" cy="364" r="5" fill="#fff"/><circle cx="212" cy="370" r="7" fill="#fff"/></g></g>';
+    let o = '<g data-act="hottub" class="dh-tap"><rect x="94" y="378" width="166" height="50" rx="4" fill="#2fb3e0" stroke="#ff4f9a" stroke-width="5"/><rect x="100" y="382" width="154" height="10" rx="3" fill="#8fe0fb"/><path d="M220 428 v-14 h14 v-12 h14 v-12 h12" fill="none" stroke="#9fe6fb" stroke-width="5"/><g fill="#ffd23a"><ellipse cx="128" cy="378" rx="9" ry="6"/><circle cx="134" cy="371" r="4.5"/><ellipse cx="168" cy="379" rx="8" ry="5.5"/><circle cx="174" cy="372" r="4"/></g><path d="M138 371 l4 1 M177 372 l4 1" stroke="#f08a1c" stroke-width="2.4"/><g id="dh-bub" opacity="0"><circle cx="128" cy="372" r="6" fill="#fff"/><circle cx="170" cy="364" r="5" fill="#fff"/><circle cx="212" cy="370" r="7" fill="#fff"/></g></g>';
     o += '<g data-act="tub" class="dh-tap"><path d="M106 584 h112 q0 34 -26 38 h-60 q-26 -4 -26 -38Z" fill="#fff" stroke="#cfcfcf" stroke-width="2"/><path d="M118 622 l-6 14 M206 622 l6 14" stroke="#22242b" stroke-width="5" stroke-linecap="round"/><g id="dh-tubb" opacity="0"><circle cx="134" cy="580" r="7" fill="#fff" stroke="#bfe9ef"/><circle cx="160" cy="574" r="9" fill="#fff" stroke="#bfe9ef"/><circle cx="188" cy="580" r="7" fill="#fff" stroke="#bfe9ef"/></g></g>';
     const door = (x, flip) => `<g class="dh-door" style="transform-box:fill-box;transform-origin:${flip ? 'right' : 'left'} center;transform:scaleX(${s.doors ? 0.08 : 1})"><rect x="${x}" y="660" width="112" height="206" fill="#e9b97c" stroke="#b9844b" stroke-width="3"/>
       ${Array.from({ length: 6 }, (_, i) => `<path d="M${x + 4 + i * 18} 662 v202" stroke="#d9a466" stroke-width="2"/>`).join('')}<rect x="${x + 14}" y="676" width="84" height="26" fill="#6d4a2e"/><path d="M${x + 8} 712 h96 v146 h-96Z M${x + 8} 712 L${x + 104} 858 M${x + 104} 712 L${x + 8} 858" stroke="#c98f52" stroke-width="7" fill="none"/>
@@ -206,7 +216,7 @@
   }
   // the elevator car (drawn over the shaft, under the friends)
   const carY = () => ELEV.ys[st().elev];
-  const carSvg = y => `<g data-act="elev" class="dh-tap" id="dh-car" transform="translate(0,${y - 832})"><rect x="320" y="716" width="80" height="116" fill="#ff7ab3" opacity=".35"/><rect x="320" y="708" width="80" height="10" fill="#22242b"/><rect x="318" y="828" width="84" height="10" fill="#22242b"/><path d="M322 716 v112 M398 716 v112" stroke="#22242b" stroke-width="4"/><circle cx="360" cy="728" r="9" fill="#fff"/><path d="M355 731 l5 -7 l5 7Z" fill="#ff3b6b" transform="${st().up ? '' : 'rotate(180 360 728)'}"/></g>`;
+  const carSvg = y => `<g data-act="elev" class="dh-tap" id="dh-car" transform="translate(0,${y - 832})"><rect x="320" y="716" width="80" height="116" fill="#fff" opacity=".01"/><rect x="320" y="820" width="80" height="14" rx="2" fill="#22242b"/><rect x="376" y="806" width="18" height="16" fill="#22242b"/><circle cx="342" cy="808" r="9" fill="#fff" stroke="#22242b" stroke-width="2"/><path d="M337 811 l5 -7 l5 7Z" fill="#ff3b6b" transform="${st().up ? '' : 'rotate(180 342 808)'}"/></g>`;
 
   // the front, for the 3D view: one picture of the house without the friends
   D.frontSvg = () => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" width="800" height="900"><defs>${defs()}</defs>${houseSvg(Object.assign({}, st(), { doors: 0 }), true)}${carSvg(carY())}</svg>`;
@@ -285,7 +295,7 @@
   function tapFig(g, f) {
     const b = G.$('.dh-hop', g); b.classList.remove('jump'); void b.getBBox(); b.classList.add('jump');
     later(() => b.classList.remove('jump'), 700);
-    if (f.id === 'pua') G.sfx.squeak(); else if (f.id === 'heihei') G.sfx.whistle(); else if (f.id === 'kitty') G.sfx.meow(); else G.sfx.boop();
+    if (f.id === 'kitty') G.sfx.meow(); else G.sfx.boop();
     G.beep(G.T('doll.fig.' + f.id));
   }
   let lastSpot = 0;
@@ -311,7 +321,7 @@
       case 'lamp': s.lamp = s.lamp ? 0 : 1; G.persist(); G.sfx.click(); G.$('#dh-glow', svg).setAttribute('opacity', s.lamp ? 0.55 : 0); G.$('#dh-shade', svg).setAttribute('fill', s.lamp ? '#fff7c2' : '#fff'); return;
       case 'fire': s.fire = s.fire ? 0 : 1; G.persist(); if (s.fire) { G.sfx.crackle(); later(G.sfx.crackle, 700); } else G.sfx.whoosh(); G.$('#dh-fire', svg).setAttribute('opacity', s.fire ? 1 : 0); return;
       case 'stove': { const f = G.$('#dh-flame', svg), on = f.getAttribute('opacity') !== '1'; f.setAttribute('opacity', on ? 1 : 0); on ? G.sfx.sizzle() : G.sfx.click(); if (on) burst(G.pick(['🍳', '🥞', '🍲'])); return; }
-      case 'fridge': { const d = G.$('#dh-fdoor', svg), open = d.getAttribute('width') !== '10'; d.setAttribute('width', open ? 10 : 52); open ? G.sfx.open() : G.sfx.close(); if (open) burst(G.pick(['🥛', '🍓', '🧀', '🥕'])); return; }
+      case 'fridge': { const d = G.$('#dh-fdoor', svg), on = d.getAttribute('opacity') !== '0.8'; d.setAttribute('opacity', on ? 0.8 : 0); on ? G.sfx.chime() : G.sfx.click(); if (on) burst(G.pick(['🍪', '🥧', '🍕', '🧁'])); return; }
       case 'grill': G.sfx.sizzle(); burst(G.pick(['🌭', '🍔', '🌽', '💨'])); return;
       case 'mill': s.mill = s.mill ? 0 : 1; G.persist(); G.sfx.motor(0.8); return;
       case 'pouf': G.sfx.boing(); return;

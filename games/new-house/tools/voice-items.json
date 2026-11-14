@@ -1720,9 +1720,9 @@
   "say": "This is our big dollhouse!"
  },
  {
-  "hash": "pu6hd5",
-  "text": "Drag Moana and her friends into any room.",
-  "say": "Drag Moana and her friends into any room."
+  "hash": "wkjnme",
+  "text": "Drag Moana and her family and friends into any room.",
+  "say": "Drag Moana and her family and friends into any room."
  },
  {
   "hash": "f83fvl",
@@ -1820,69 +1820,14 @@
   "say": "Simea says: I want to ride the elevator!"
  },
  {
-  "hash": "1821e8d",
-  "text": "Oink oink!",
-  "say": "Oink oink!"
- },
- {
-  "hash": "2i8g2d",
-  "text": "Pua is happy.",
-  "say": "Pua is happy."
- },
- {
-  "hash": "1vq1cb4",
-  "text": "Pua wiggles his curly tail!",
-  "say": "Pua wiggles his curly tail!"
- },
- {
-  "hash": "1018eda",
-  "text": "Oink!",
-  "say": "Oink!"
- },
- {
-  "hash": "yl10x3",
-  "text": "Pua wants a snack.",
-  "say": "Pua wants a snack."
- },
- {
-  "hash": "7t0hcd",
-  "text": "Bawk bawk!",
-  "say": "Bawk bawk!"
- },
- {
-  "hash": "i3f836",
-  "text": "Heihei is confused.",
-  "say": "Heihei is confused."
- },
- {
-  "hash": "16uepyi",
-  "text": "Peck, peck, peck!",
-  "say": "Peck, peck, peck!"
- },
- {
-  "hash": "rp2gyl",
-  "text": "Heihei found a crumb.",
-  "say": "Heihei found a crumb."
- },
- {
-  "hash": "edm85a",
-  "text": "Bawk!",
-  "say": "Bawk!"
- },
- {
-  "hash": "h1hp4h",
-  "text": "Heihei bumped into the wall.",
-  "say": "Heihei bumped into the wall."
- },
- {
   "hash": "1k7dwo9",
   "text": "Moni says: This is the best adventure ever!",
   "say": "Moni says: This is the best adventure ever!"
  },
  {
-  "hash": "1vd7ij3",
-  "text": "Moni says: Moana, you are the greatest!",
-  "say": "Moni says: Moana, you are the greatest!"
+  "hash": "19q127c",
+  "text": "Moni says: Look, I drew a picture of Maui!",
+  "say": "Moni says: Look, I drew a picture of Maui!"
  },
  {
   "hash": "2zdazt",
@@ -1895,24 +1840,24 @@
   "say": "Even this elevator!"
  },
  {
-  "hash": "1mdeqf4",
-  "text": "Loto says: I have an idea for a new invention!",
-  "say": "Loto says: I have an idea for a new invention!"
+  "hash": "15oo5pu",
+  "text": "Loto says: Look at the little boat I made!",
+  "say": "Loto says: Look at the little boat I made!"
  },
  {
-  "hash": "5dgjch",
-  "text": "Kele says: Hmph.",
-  "say": "Kele says: Hmph."
+  "hash": "1xarl28",
+  "text": "Sina says: Welcome home, everybody!",
+  "say": "Sina says: Welcome home, everybody!"
  },
  {
-  "hash": "9mnqwg",
-  "text": "I just want a nap.",
-  "say": "I just want a nap."
+  "hash": "y95ua1",
+  "text": "Sina says: Who wants to help me make dinner?",
+  "say": "Sina says: Who wants to help me make dinner?"
  },
  {
-  "hash": "1axa4ih",
-  "text": "Kele says: Is there a garden in this house?",
-  "say": "Kele says: Is there a garden in this house?"
+  "hash": "vmh2st",
+  "text": "Sina says: Moana, Simea, time to wash your hands!",
+  "say": "Sina says: Moana, Simea, time to wash your hands!"
  },
  {
   "hash": "1654zul",
@@ -1935,9 +1880,9 @@
   "say": "The kitty is sleepy."
  },
  {
-  "hash": "10mo2vw",
-  "text": "Hot tub time!",
-  "say": "Hot tub time!"
+  "hash": "mnlzoa",
+  "text": "Swimming in the pool on the roof!",
+  "say": "Swimming in the pool on the roof!"
  },
  {
   "hash": "aijjf5",
@@ -1995,9 +1940,14 @@
   "say": "Up in the loft bedroom!"
  },
  {
-  "hash": "1eyr0pa",
-  "text": "Up on the roof by the hot tub!",
-  "say": "Up on the roof by the hot tub!"
+  "hash": "1iaz39w",
+  "text": "Up on the roof by the pool!",
+  "say": "Up on the roof by the pool!"
+ },
+ {
+  "hash": "76xxrj",
+  "text": "A comfy gold chair.",
+  "say": "A comfy gold chair."
  },
  {
   "hash": "1dc1t6h",
