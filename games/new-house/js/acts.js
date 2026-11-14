@@ -33,8 +33,9 @@
     ac: f => { G.sfx.whoosh(); puff(f, '💨', 4); },
     bins: f => { G.sfx.thump(); },
     car: f => { pulse(f, 1); G.sfx.honk(); },
-    volvo: f => { pulse(f, 1); G.sfx.honk(); },
-    ioniq: f => { pulse(f, 1); G.sfx.chime(); },
+    // the cars say their names (Snake and Elly) every time after the first hello
+    volvo: f => { pulse(f, 1); G.sfx.honk(); if (G.P().done.say_volvo) G.beep(G.T('act.volvoHi')); },
+    ioniq: f => { pulse(f, 1); G.sfx.chime(); if (G.P().done.say_ioniq) G.beep(G.T('act.ioniqHi')); },
     bike: f => { G.sfx.chime(); puff(f, '🔔', 1); },
     rocket: f => { pulse(f, 2.2); G.sfx.whoosh(); puff(f, '⭐', 5); },
     doorbell: f => { pulse(f, 0.6); G.sfx.doorbell(); },
@@ -100,6 +101,7 @@
       }
       if (d.sfx) { it.hop = 1; setTimeout(() => { it.hop = 0; }, 900); const n = G.rand(0, 7); d.sfx === 'note' ? G.sfx.note(n) : G.sfx[d.sfx](); return; }
       switch (d.tap) {
+        case 'dollhouse': G.sfx.sparkle(); G.dollhouse.open(); break;
         case 'lamp': it.on = !it.on; G.sfx.click(); G.persist(); break;
         case 'tv': it.on = !it.on; G.sfx.click(); break;
         case 'chest': it.on = !it.on; it.on ? G.sfx.open() : G.sfx.close(); break;

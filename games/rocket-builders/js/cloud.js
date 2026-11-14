@@ -89,6 +89,6 @@ window.CLOUD = (function () {
     }
   };
   let timer = null;
-  C.later = (ms = 4000) => { clearTimeout(timer); timer = setTimeout(() => C.sync(), ms); };
+  C.later = (ms = 4000) => { if (timer) return; timer = setTimeout(() => { timer = null; C.sync(); }, ms); };
   return C;
 })();

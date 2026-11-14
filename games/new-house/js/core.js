@@ -35,17 +35,31 @@ window.G = (function () {
       }
     } catch (e) { }
     G.save.settings = Object.assign({ sound: true, voice: true, music: true }, G.save.settings || {});
+    // Ask the browser not to clear this site's storage when the disk gets full.
+    try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) { }
   };
   let persistT = null;
-  G.persist = () => { clearTimeout(persistT); persistT = setTimeout(() => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.save)); } catch (e) { } }, 200); };
+  G.persistNow = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(G.save)); } catch (e) { } };
+  // Stamp what changed (the house, or the kid who is playing) so the cloud backup knows which copy is newer.
+  const seen = {};
+  const stamp = (k, o, baseline) => { if (!o) return; const t = o.touched; delete o.touched; const j = JSON.stringify(o); if (t !== undefined) o.touched = t; if (!baseline && seen[k] !== undefined && seen[k] !== j) o.touched = Date.now(); seen[k] = j; };
+  G.persist = () => {
+    clearTimeout(persistT);
+    persistT = setTimeout(() => {
+      stamp('house', G.save.house); stamp('kid', G.P());
+      G.persistNow();
+      if (window.CLOUD) CLOUD.later();
+    }, 200);
+  };
+  G.markSeen = () => { stamp('house', G.save.house, true); stamp('kid', G.P(), true); };
   G.P = () => G.save.profiles[G.save.current];
   G.kid = () => G.KIDS[G.save.current] || G.KIDS.mira;
   G.isLittle = () => G.kid().little;
   G.usePro = id => {
-    if (!G.save.profiles[id]) G.save.profiles[id] = G.defaultProfile(id);
+    if (!G.save.profiles[id]) { G.save.profiles[id] = G.defaultProfile(id); G.save.profiles[id].born = Date.now(); }
     const p = G.save.profiles[id], d = G.defaultProfile(id);
     for (const k in d) if (p[k] === undefined) p[k] = d[k];
-    G.save.current = id; G.persist();
+    G.save.current = id; G.markSeen(); G.persist();
   };
   G.addStars = (n, sx, sy) => {
     const p = G.P(); if (!p) return;

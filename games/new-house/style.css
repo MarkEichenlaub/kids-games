@@ -261,3 +261,12 @@ button { font-family: var(--font); cursor: pointer; border: none; color: inherit
 .scene-svg .dog.hop2 { animation: hop2 .35s 3; } @keyframes hop2 { 50% { transform: translateY(-26px); } }
 .scene-svg .flower { transition: opacity .3s; }
 .scene-svg .pup { transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); } .scene-svg .puppets.show .p0 { transform: translateY(-70px); } .scene-svg .puppets.show .p1 { transform: translateY(-70px); transition-delay: .9s; }
+
+/* the big dollhouse */
+.town.dollhouse { background: #fdf1e4; display: flex; align-items: center; justify-content: center; }
+.dh-svg { width: 100%; height: 100%; display: block; touch-action: none; user-select: none; }
+.dh-fig { cursor: grab; } .dh-fig.held { cursor: grabbing; filter: drop-shadow(0 8px 6px rgba(40,30,70,.35)); }
+.dh-tap { cursor: pointer; }
+.dh-hop.jump { animation: dhjump .6s ease-out; } @keyframes dhjump { 35% { transform: translateY(-26px); } 70% { transform: translateY(0); } 85% { transform: translateY(-6px); } }
+.dh-door { transition: transform .5s ease-in-out; }
+.rise circle { animation: dhrise 1.1s ease-out infinite; } @keyframes dhrise { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-30px); opacity: 0; } }

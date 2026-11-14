@@ -53,7 +53,7 @@
     // things in the house, said the first time you touch them
     act: {
       toilet: 'Flush!', fridge: 'The fridge keeps our food cold.', fire: 'A cozy fire!', stove: 'The stove is hot. Only grown-ups cook here.',
-      oven: 'Mmm, cookies!', car: 'Beep beep!', volvo: 'This is our silver Volvo. Beep beep!', ioniq: 'This is our blue Ioniq. It runs on electricity, so it is very quiet!', rocket: 'Look! Your rocket from Rocket Builders is parked in the garage!', opener: 'This button opens the big garage door.',
+      oven: 'Mmm, cookies!', car: 'Beep beep!', volvo: 'This is Snake, our silver Volvo. Beep beep!', ioniq: 'This is Elly, our blue Ioniq. She runs on electricity, so she is very quiet!', volvoHi: ['Hi, Snake!', 'Beep beep, Snake!', 'Snake is ready to go!'], ioniqHi: ['Hi, Elly!', 'Elly is so quiet!', 'Elly is charged up and ready!'], rocket: 'Look! Your rocket from Rocket Builders is parked in the garage!', opener: 'This button opens the big garage door.',
       closet: 'Time to dress up!', closetBig: 'So many clothes!', truck: 'That is the moving truck. It carried all our things to the new house!', heater: 'This tank keeps our water warm. It has its own little nook.',
       panel: 'This box has the switches for all the lights.', ac: 'The air conditioner hides in this white box. It keeps the house cool.', tub: 'Bubble bath!', washer: 'The washer makes our clothes clean.',
       dryer: 'The dryer makes our clothes warm and dry.', stones: 'Hop, hop, hop along the stepping stones!', linen: 'Towels and sheets live in this cabinet.', desk: 'A desk for drawing!', nook: 'This is where Mama works!', shower: 'The shower makes rain!',
@@ -115,6 +115,29 @@
       puppets: 'Puppet show! Roar, says the dragon. Hello, says the princess.',
       library: 'This is the library. It is a short walk from our house. Tap the doors to go inside!',
       libraryIn: 'Pick a book, and I will read it to you! Tap the arrow to turn the page.', libraryDone: 'What great books! You can borrow books here with a library card.',
+    },
+    // the big dollhouse in the play corner, with the Moana friends
+    doll: {
+      intro: 'This is our big dollhouse! Drag Moana and her friends into any room. Tap the elevator to make it go up and down.',
+      back: ['Dollhouse time!', 'Who wants to play in the dollhouse?', 'Let\'s play with Moana and her friends!'],
+      doors: 'The garage doors are open! Close them to hide someone inside.',
+      fig: {
+        moana: ['Moana says: Let\'s explore every room!', 'Moana says: I love the ocean, but I love this house too!', 'Moana says: Who wants to ride the elevator with me?'],
+        maui: ['Maui says: Hey! This house is almost as big as me!', 'Maui says: Watch me flex!', 'Maui says: Where is my fishhook? Oh, here it is!'],
+        simea: ['Simea says: Moana! Moana! Play with me!', 'Simea says: Can we have a sleepover up in the loft?', 'Simea says: I want to ride the elevator!'],
+        pua: ['Oink oink! Pua is happy.', 'Pua wiggles his curly tail!', 'Oink! Pua wants a snack.'],
+        heihei: ['Bawk bawk! Heihei is confused.', 'Peck, peck, peck! Heihei found a crumb.', 'Bawk! Heihei bumped into the wall.'],
+        moni: ['Moni says: This is the best adventure ever!', 'Moni says: Moana, you are the greatest!'],
+        loto: ['Loto says: I can fix anything. Even this elevator!', 'Loto says: I have an idea for a new invention!'],
+        kele: ['Kele says: Hmph. I just want a nap.', 'Kele says: Is there a garden in this house?'],
+        kitty: ['Meow! The kitty wants a pat.', 'Purr, purr. The kitty is sleepy.'],
+      },
+      spot: {
+        hottub: 'Splash! Hot tub time!', tub: 'Bubble bath time!', bed: 'Time for a nap. Shh!', sofa: 'Ahh, a comfy sofa.', mill: 'Tap the treadmill to make it go!',
+        garage: 'Into the garage! Close the doors to hide.', elev: 'Tap the elevator to go for a ride!', kitchen: 'Something yummy is cooking in the kitchen!',
+        balcony: 'Barbecue time! Tap the grill.', loft: 'Up in the loft bedroom!', spa: 'Up on the roof by the hot tub!', office: 'Time to work at the desk.',
+      },
+      elev: { up: 'Ding! The top floor!', mid: 'Ding! The kitchen floor!', down: 'Ding! The bottom floor!' },
     },
     // picture books: the library shelf, and the book corner at Maia's school
     theEnd: 'The end!',
@@ -201,7 +224,7 @@
     kitchen: 'This is the kitchen. Look at the big island with three stools!',
     pantry: 'This is the pantry. Snacks live in here!',
     powder: 'This is the little bathroom downstairs. It is next to the garage door.',
-    garage: 'This is the garage. Our two cars sleep in here, and the big door opens to the alley.',
+    garage: 'This is the garage. Our two cars, Snake and Elly, sleep in here, and the big door opens to the alley.',
     courtyard: 'This is the courtyard. It goes all along the side of the house. You can play outside here!',
     alley: 'This is the alley behind the house. The car drives in this way, and the moving truck is here!',
     landing: 'You are upstairs! Mama works at the little desk at the top of the stairs.',

@@ -129,6 +129,7 @@
         <p><b>Real photos.</b> <span id="photo-state"></span></p>
         <label>Family key <input type="text" id="key" placeholder="paste the link or key from What's Hiding?" autocomplete="off"></label>
         <p><b>Two players.</b> Arrow keys or taps move the kid who is playing. W, A, S and D move her sister. Space touches things.</p>
+        <p><b>Backup.</b> Stamps, stars, jobs and the decorating are backed up online and shared between computers: ${window.CLOUD ? CLOUD.status : 'off'}.</p>
         <p><b>Start over.</b></p>
         <div class="row"><button class="btn small" data-reset="mira">Mira's stamps and jobs</button><button class="btn small" data-reset="maia">Maia's stamps and jobs</button><button class="btn small" data-reset="house">The furniture and paint</button></div>
       </div></div>`);
@@ -148,7 +149,8 @@
       const b = e.target.closest('[data-reset]'); if (!b) return;
       if (b.dataset.sure !== '1') { b.dataset.sure = '1'; b.textContent = 'Tap again to erase'; return; }
       const what = b.dataset.reset;
-      if (what === 'house') G.save.house = Object.assign(G.defaultHouse(), { roomNames: h.roomNames }); else delete G.save.profiles[what];
+      const now = Date.now(); G.save.resets = G.save.resets || {}; G.save.resets[what] = now;
+      if (what === 'house') G.save.house = Object.assign(G.defaultHouse(), { roomNames: h.roomNames, born: now + 1 }); else delete G.save.profiles[what];
       G.persist(); b.textContent = 'Erased'; b.disabled = true;
       setTimeout(() => { G.closeModal(); G.go('title'); }, 600);
     });
@@ -158,7 +160,20 @@
     G.load(); G.initBeep();
     G.photosReady();
     window.addEventListener('hashchange', () => G.photosReady()); // Dad's key link, opened while the game is already up
-    G.facesReady().then(() => G.go('title'));
+    G.facesReady().then(() => {
+      G.go('title');
+      // pull in progress and decorating saved on other computers
+      if (window.CLOUD) {
+        G.markSeen();
+        CLOUD.onChange = what => {
+          if (G.current === 'title') G.go('title');
+          else if (G.current === 'world' && what === 'house' && G.W.rebuild) G.W.rebuild();
+          const p = G.P(); if (p) G.$$('.star-count').forEach(e => e.textContent = p.stars);
+        };
+        CLOUD.sync();
+        document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - CLOUD.lastSync > 60000) CLOUD.sync(); });
+      }
+    });
     document.addEventListener('pointerdown', () => G.audio(), true);
     document.addEventListener('contextmenu', e => e.preventDefault());
   };

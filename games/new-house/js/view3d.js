@@ -135,6 +135,18 @@
   }
   const fxKey = f => `${f.on ? 1 : 0}${f.duck ? 1 : 0}${f.wet ? 1 : 0}${f.alert ? 1 : 0}${f.hint ? 1 : 0}${f.t === 'planter' ? JSON.stringify(G.save.house.flowers[f.id] || 0) : ''}`;
 
+  // the dollhouse front: a picture of the play screen's house, made once
+  let dollTex = null;
+  const dollFront = () => {
+    if (dollTex) return dollTex;
+    dollTex = canvasTex(512, 576, (c, cv) => { c.fillStyle = '#ff9cc7'; c.fillRect(0, 0, cv.width, cv.height); if (dollTex && dollTex.userData.img) c.drawImage(dollTex.userData.img, 0, 0, cv.width, cv.height); });
+    if (G.dollhouse && G.dollhouse.frontSvg) {
+      const img = new Image(); img.onload = () => { dollTex.userData.img = img; repaint(dollTex); };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(G.dollhouse.frontSvg());
+    }
+    return dollTex;
+  };
+
   // ---------- furniture and toys ----------
   function buildItem(it) {
     const d = G.ITEMS[it.t]; if (!d) return null;
@@ -153,6 +165,10 @@
     else if (d.table) { const tb = d.table; g.add(block(tb.top[0], tb.top[1], tb.top[2], tb.top[3], 0.25, tb.col, tb.col, 2.3)); for (const sx of [0.15, tb.top[2] - 0.45]) for (const sy of [0.15, tb.top[3] - 0.45]) g.add(block(tb.top[0] + sx, tb.top[1] + sy, 0.3, 0.3, 2.3, tb.col, tb.col)); for (const [x, y] of tb.chairs) { g.add(block(x - 0.7, y - 0.7, 1.4, 1.4, 0.3, tb.chairCol, tb.chairCol, 1.3)); g.add(block(x + (x < 0 ? -0.75 : 0.5), y - 0.7, 0.25, 1.4, 1.6, tb.chairCol, tb.chairCol, 1.3)); g.add(cyl(x, y, 0.12, 1.3, '#b9763f')); } }
     else if (d.piano) { g.add(block(-w / 2, -h / 2, w, 2.2, 4.1, itemTop(it, { w, h: 2.2, draw: (c, ww, hh, tt, i2) => { c.translate(0, (h - 2.2) / 2); d.draw(c, w, h, tt, i2); } }, '#7a1820'), '#7a1820')); g.add(block(-1.3, h / 2 - 1.2, 2.6, 1.05, 1.6, '#1d1d21', '#1d1d21')); }
     else if (d.desk) { g.add(block(-w / 2, -h / 2, w, 1.9, 2.5, '#fbfaf7', '#fbfaf7')); g.add(block(-1, -h / 2 + 0.2, 2, 0.15, 1.3, '#22242b', '#22242b', 2.6)); g.add(cyl(0, h / 2 - 0.7, 0.65, 1.5, '#8a8f9a')); g.add(block(-0.6, h / 2 - 0.25, 1.2, 0.2, 1.7, '#8a8f9a', '#8a8f9a', 1.5)); }
+    else if (d.dollFront) { // our dollhouse: its real front, drawn the same way as the play screen
+      const H = d.tall || 4.5, sm = mat(side), front = new T.MeshBasicMaterial({ map: dollFront() }), top = new T.MeshBasicMaterial({ map: topTex() });
+      const m = new T.Mesh(new T.BoxGeometry(w, H, h), [sm, sm, top, sm, front, sm]); m.position.set(0, H / 2, 0); g.add(m);
+    }
     else if (d.round) g.add(cyl(0, 0, w / 2, d.round, side, 0, topTex()));
     else if (d.glow) { const on = it.on !== false; const m = new T.Mesh(new T.SphereGeometry(0.62, 16, 12), new T.MeshBasicMaterial({ color: on ? '#fff1b8' : '#e6dfd0' })); m.position.y = 0.62; g.add(m); }
     else if (t.startsWith('bed')) { g.add(block(-w / 2, -h / 2, w, h, 1.9, topTex(), '#ffffff')); g.add(block(-w / 2, -h / 2, w, 0.4, 3.4, '#d9b48a', '#d9b48a')); }

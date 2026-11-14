@@ -505,19 +505,49 @@
   "say": "Beep beep!"
  },
  {
-  "hash": "hr3buw",
-  "text": "This is our silver Volvo.",
-  "say": "This is our silver Volvo."
+  "hash": "t87w5g",
+  "text": "This is Snake, our silver Volvo.",
+  "say": "This is Snake, our silver Volvo."
  },
  {
-  "hash": "1q4amnz",
-  "text": "This is our blue Ioniq.",
-  "say": "This is our blue Ioniq."
+  "hash": "1s27ctn",
+  "text": "This is Elly, our blue Ioniq.",
+  "say": "This is Elly, our blue Ioniq."
  },
  {
-  "hash": "17wbxgh",
-  "text": "It runs on electricity, so it is very quiet!",
-  "say": "It runs on electricity, so it is very quiet!"
+  "hash": "1b3df2x",
+  "text": "She runs on electricity, so she is very quiet!",
+  "say": "She runs on electricity, so she is very quiet!"
+ },
+ {
+  "hash": "e6do1q",
+  "text": "Hi, Snake!",
+  "say": "Hi, Snake!"
+ },
+ {
+  "hash": "n3k57b",
+  "text": "Beep beep, Snake!",
+  "say": "Beep beep, Snake!"
+ },
+ {
+  "hash": "1g2pmxb",
+  "text": "Snake is ready to go!",
+  "say": "Snake is ready to go!"
+ },
+ {
+  "hash": "15q6tiw",
+  "text": "Hi, Elly!",
+  "say": "Hi, Elly!"
+ },
+ {
+  "hash": "1k5h1kd",
+  "text": "Elly is so quiet!",
+  "say": "Elly is so quiet!"
+ },
+ {
+  "hash": "c9xnz0",
+  "text": "Elly is charged up and ready!",
+  "say": "Elly is charged up and ready!"
  },
  {
   "hash": "1s2qsuu",
@@ -1685,6 +1715,316 @@
   "say": "You can borrow books here with a library card."
  },
  {
+  "hash": "1hhtshg",
+  "text": "This is our big dollhouse!",
+  "say": "This is our big dollhouse!"
+ },
+ {
+  "hash": "pu6hd5",
+  "text": "Drag Moana and her friends into any room.",
+  "say": "Drag Moana and her friends into any room."
+ },
+ {
+  "hash": "f83fvl",
+  "text": "Tap the elevator to make it go up and down.",
+  "say": "Tap the elevator to make it go up and down."
+ },
+ {
+  "hash": "1k69oqx",
+  "text": "Dollhouse time!",
+  "say": "Dollhouse time!"
+ },
+ {
+  "hash": "bxsi3c",
+  "text": "Who wants to play in the dollhouse?",
+  "say": "Who wants to play in the dollhouse?"
+ },
+ {
+  "hash": "r59rhf",
+  "text": "Let's play with Moana and her friends!",
+  "say": "Let's play with Moana and her friends!"
+ },
+ {
+  "hash": "18pxs9y",
+  "text": "The garage doors are open!",
+  "say": "The garage doors are open!"
+ },
+ {
+  "hash": "1cx8sx0",
+  "text": "Close them to hide someone inside.",
+  "say": "Close them to hide someone inside."
+ },
+ {
+  "hash": "11i6mo7",
+  "text": "Moana says: Let's explore every room!",
+  "say": "Moana says: Let's explore every room!"
+ },
+ {
+  "hash": "1cn9khj",
+  "text": "Moana says: I love the ocean, but I love this house too!",
+  "say": "Moana says: I love the ocean, but I love this house too!"
+ },
+ {
+  "hash": "11777gu",
+  "text": "Moana says: Who wants to ride the elevator with me?",
+  "say": "Moana says: Who wants to ride the elevator with me?"
+ },
+ {
+  "hash": "oqeiv9",
+  "text": "Maui says: Hey!",
+  "say": "Maui says: Hey!"
+ },
+ {
+  "hash": "bm34i5",
+  "text": "This house is almost as big as me!",
+  "say": "This house is almost as big as me!"
+ },
+ {
+  "hash": "1tauzph",
+  "text": "Maui says: Watch me flex!",
+  "say": "Maui says: Watch me flex!"
+ },
+ {
+  "hash": "2tzq9b",
+  "text": "Maui says: Where is my fishhook?",
+  "say": "Maui says: Where is my fishhook?"
+ },
+ {
+  "hash": "64ghar",
+  "text": "Oh, here it is!",
+  "say": "Oh, here it is!"
+ },
+ {
+  "hash": "12x763w",
+  "text": "Simea says: Moana!",
+  "say": "Simea says: Moana!"
+ },
+ {
+  "hash": "1vk9zrp",
+  "text": "Moana!",
+  "say": "Moana!"
+ },
+ {
+  "hash": "ccct01",
+  "text": "Play with me!",
+  "say": "Play with me!"
+ },
+ {
+  "hash": "1gn09za",
+  "text": "Simea says: Can we have a sleepover up in the loft?",
+  "say": "Simea says: Can we have a sleepover up in the loft?"
+ },
+ {
+  "hash": "rh9eoj",
+  "text": "Simea says: I want to ride the elevator!",
+  "say": "Simea says: I want to ride the elevator!"
+ },
+ {
+  "hash": "1821e8d",
+  "text": "Oink oink!",
+  "say": "Oink oink!"
+ },
+ {
+  "hash": "2i8g2d",
+  "text": "Pua is happy.",
+  "say": "Pua is happy."
+ },
+ {
+  "hash": "1vq1cb4",
+  "text": "Pua wiggles his curly tail!",
+  "say": "Pua wiggles his curly tail!"
+ },
+ {
+  "hash": "1018eda",
+  "text": "Oink!",
+  "say": "Oink!"
+ },
+ {
+  "hash": "yl10x3",
+  "text": "Pua wants a snack.",
+  "say": "Pua wants a snack."
+ },
+ {
+  "hash": "7t0hcd",
+  "text": "Bawk bawk!",
+  "say": "Bawk bawk!"
+ },
+ {
+  "hash": "i3f836",
+  "text": "Heihei is confused.",
+  "say": "Heihei is confused."
+ },
+ {
+  "hash": "16uepyi",
+  "text": "Peck, peck, peck!",
+  "say": "Peck, peck, peck!"
+ },
+ {
+  "hash": "rp2gyl",
+  "text": "Heihei found a crumb.",
+  "say": "Heihei found a crumb."
+ },
+ {
+  "hash": "edm85a",
+  "text": "Bawk!",
+  "say": "Bawk!"
+ },
+ {
+  "hash": "h1hp4h",
+  "text": "Heihei bumped into the wall.",
+  "say": "Heihei bumped into the wall."
+ },
+ {
+  "hash": "1k7dwo9",
+  "text": "Moni says: This is the best adventure ever!",
+  "say": "Moni says: This is the best adventure ever!"
+ },
+ {
+  "hash": "1vd7ij3",
+  "text": "Moni says: Moana, you are the greatest!",
+  "say": "Moni says: Moana, you are the greatest!"
+ },
+ {
+  "hash": "2zdazt",
+  "text": "Loto says: I can fix anything.",
+  "say": "Loto says: I can fix anything."
+ },
+ {
+  "hash": "1n3os5f",
+  "text": "Even this elevator!",
+  "say": "Even this elevator!"
+ },
+ {
+  "hash": "1mdeqf4",
+  "text": "Loto says: I have an idea for a new invention!",
+  "say": "Loto says: I have an idea for a new invention!"
+ },
+ {
+  "hash": "5dgjch",
+  "text": "Kele says: Hmph.",
+  "say": "Kele says: Hmph."
+ },
+ {
+  "hash": "9mnqwg",
+  "text": "I just want a nap.",
+  "say": "I just want a nap."
+ },
+ {
+  "hash": "1axa4ih",
+  "text": "Kele says: Is there a garden in this house?",
+  "say": "Kele says: Is there a garden in this house?"
+ },
+ {
+  "hash": "1654zul",
+  "text": "Meow!",
+  "say": "Meow!"
+ },
+ {
+  "hash": "y8036y",
+  "text": "The kitty wants a pat.",
+  "say": "The kitty wants a pat."
+ },
+ {
+  "hash": "grx2d",
+  "text": "Purr, purr.",
+  "say": "Purr, purr."
+ },
+ {
+  "hash": "1m74i9t",
+  "text": "The kitty is sleepy.",
+  "say": "The kitty is sleepy."
+ },
+ {
+  "hash": "10mo2vw",
+  "text": "Hot tub time!",
+  "say": "Hot tub time!"
+ },
+ {
+  "hash": "aijjf5",
+  "text": "Bubble bath time!",
+  "say": "Bubble bath time!"
+ },
+ {
+  "hash": "eooqvf",
+  "text": "Time for a nap.",
+  "say": "Time for a nap."
+ },
+ {
+  "hash": "qebw4i",
+  "text": "Ahh, a comfy sofa.",
+  "say": "Ahh, a comfy sofa."
+ },
+ {
+  "hash": "sx1pvv",
+  "text": "Tap the treadmill to make it go!",
+  "say": "Tap the treadmill to make it go!"
+ },
+ {
+  "hash": "trlhst",
+  "text": "Into the garage!",
+  "say": "Into the garage!"
+ },
+ {
+  "hash": "32xjy2",
+  "text": "Close the doors to hide.",
+  "say": "Close the doors to hide."
+ },
+ {
+  "hash": "1i89yre",
+  "text": "Tap the elevator to go for a ride!",
+  "say": "Tap the elevator to go for a ride!"
+ },
+ {
+  "hash": "kfuo5k",
+  "text": "Something yummy is cooking in the kitchen!",
+  "say": "Something yummy is cooking in the kitchen!"
+ },
+ {
+  "hash": "um3vsn",
+  "text": "Barbecue time!",
+  "say": "Barbecue time!"
+ },
+ {
+  "hash": "159j9nh",
+  "text": "Tap the grill.",
+  "say": "Tap the grill."
+ },
+ {
+  "hash": "4erz2n",
+  "text": "Up in the loft bedroom!",
+  "say": "Up in the loft bedroom!"
+ },
+ {
+  "hash": "1eyr0pa",
+  "text": "Up on the roof by the hot tub!",
+  "say": "Up on the roof by the hot tub!"
+ },
+ {
+  "hash": "1dc1t6h",
+  "text": "Time to work at the desk.",
+  "say": "Time to work at the desk."
+ },
+ {
+  "hash": "fuboh1",
+  "text": "Ding!",
+  "say": "Ding!"
+ },
+ {
+  "hash": "19h7d3h",
+  "text": "The top floor!",
+  "say": "The top floor!"
+ },
+ {
+  "hash": "1nm3hjm",
+  "text": "The kitchen floor!",
+  "say": "The kitchen floor!"
+ },
+ {
+  "hash": "i0zrvp",
+  "text": "The bottom floor!",
+  "say": "The bottom floor!"
+ },
+ {
   "hash": "g0k1u1",
   "text": "The end!",
   "say": "The end!"
@@ -2225,9 +2565,9 @@
   "say": "This is the garage."
  },
  {
-  "hash": "z2k9m2",
-  "text": "Our two cars sleep in here, and the big door opens to the alley.",
-  "say": "Our two cars sleep in here, and the big door opens to the alley."
+  "hash": "1oqz1or",
+  "text": "Our two cars, Snake and Elly, sleep in here, and the big door opens to the alley.",
+  "say": "Our two cars, Snake and Elly, sleep in here, and the big door opens to the alley."
  },
  {
   "hash": "1h3gjav",
