@@ -35,8 +35,8 @@ three.js in `vendor/`, MIT license).
   courtyard (Maia gets one built for her; Mira builds her own).
 - 17 tiny friends hide inside things around the house.
 - The dollhouse in the play corner is our KidKraft Shimmer Mansion, at its real size. Tap it to open it
-  full screen, drawn from the front (`js/dollhouse.js`): drag Moana, Maui, Simea, Pua, Heihei, Moni, Loto,
-  Kele and the kitty into any room, ride the elevator, open the garage's barn doors, light the fire and
+  full screen, drawn from the front (`js/dollhouse.js`): drag Moana, Maui, Simea, Loto, Moni, Sina (the Moana 2
+  figures the girls have) and the kitty into any room, ride the elevator, open the garage's barn doors, light the fire and
   the bedroom lamp, run the treadmill. Where everyone stands is saved with the house.
 - The cars in the garage are Snake (the Volvo) and Elly (the Ioniq).
 - Progress is backed up online (`js/cloud.js`, the same store as Rocket Builders) and shared between
